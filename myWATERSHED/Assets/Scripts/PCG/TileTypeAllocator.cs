@@ -1,33 +1,61 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
+
+public enum TileBaseType { Water, Land };
+public enum WaterTileClass { None, Shallow, Medium, Deep };
+public enum LandTileClass { Human, Nature };
 
 public class TileTypeAllocator : MonoBehaviour
 {
-    public static BaseTileType[,] BaseTypeMap;
+    public static TileBaseType[,] BaseTypeMap;
+    public static WaterTileClass[,] WaterClassMap;
+    public static LandTileClass[,] LandClassMap;
 
-    [HideInInspector]
-    public static float waterHeightThreshhold;
+    private static float waterHeightThreshhold;
+    private static float shallowWaterThreshold;
+    private static float deepWaterThreshold;
 
-    public static void AllocateBaseTypes(int size, float waterPercentage)
+    private static List<float> waterTileHeights = new List<float>();
+
+    public static void AllocateTileBaseTypes(int size, float waterPercentage)
     {
-        BaseTypeMap = new BaseTileType[size, size];
+        BaseTypeMap = new TileBaseType[size, size];
         DetermineWaterHeight(waterPercentage);
         SetBaseTypes(size);
+    }
 
-        // DEBUGS
-        //Debug.Log($"Water Height Threshold = {waterHeightThreshhold}");
-        //Debug.Log(BaseTypeMap.Length);
-        //foreach (BaseTileType b in BaseTypeMap) { Debug.Log(b); }
+    public static void AllocateTileClasses(int size)
+    {
+        WaterClassMap = new WaterTileClass[size, size];
+        DetermineWaterDepths();
+        SetWaterClassType(size);
     }
 
     private static void DetermineWaterHeight(float waterPercentage)
     {
-        float min = Min();
-        float max = Max();
+        List<float> heights = new List<float>();
+        foreach (float hValue in HeightmapGenerator.Heightmap)
+        { heights.Add(hValue); }
+
+        float min = Min(HeightmapGenerator.Heightmap[0,0], heights); 
+        float max = Max(HeightmapGenerator.Heightmap[0,0], heights);
         float difference = max - min;
         waterHeightThreshhold = min + difference * waterPercentage;
+    }
+
+    private static void DetermineWaterDepths()
+    {
+        float min = Min(waterTileHeights[0], waterTileHeights);
+        float max = Max(waterTileHeights[0], waterTileHeights);
+        float difference = max - min;
+        shallowWaterThreshold = max - (difference / 3.0f); // Hardcoded for first pass test
+        deepWaterThreshold = min + (difference / 3.0f);
+
+        Debug.Log($"Min = {min}");
+        Debug.Log($"Max = {max}");
+        Debug.Log($"Difference {difference}");
+        Debug.Log($"Shallow, Deep = {new Vector2(shallowWaterThreshold, deepWaterThreshold)}");
     }
 
     private static void SetBaseTypes(int size)
@@ -37,29 +65,68 @@ public class TileTypeAllocator : MonoBehaviour
             for (int y = 0; y < size; y++)
             {
                 if (HeightmapGenerator.Heightmap[x,y] < waterHeightThreshhold)
-                { BaseTypeMap[x, y] = BaseTileType.Water; } 
+                { 
+                    BaseTypeMap[x, y] = TileBaseType.Water;
+                    waterTileHeights.Add(HeightmapGenerator.Heightmap[x, y]);
+                } 
                 else if (HeightmapGenerator.Heightmap[x,y] > waterHeightThreshhold)
-                { BaseTypeMap[x, y] = BaseTileType.Land; }
+                { 
+                    BaseTypeMap[x, y] = TileBaseType.Land; 
+                }
                 else { Debug.LogError("Base Type could not be set."); }
             }
         }
     }
 
-    private static float Min()
+    private static void SetWaterClassType(int size)
     {
-        float min = HeightmapGenerator.Heightmap[0,0];
-        foreach (float hValue in HeightmapGenerator.Heightmap) 
-            if (hValue < min)
-                min = hValue;
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                if (BaseTypeMap[x,y] == TileBaseType.Water)
+                {
+                    if (HeightmapGenerator.Heightmap[x,y] <= deepWaterThreshold)
+                    {
+                        WaterClassMap[x, y] = WaterTileClass.Deep;
+                    }
+                    else if (HeightmapGenerator.Heightmap[x,y] >= shallowWaterThreshold)
+                    {
+                        WaterClassMap[x, y] = WaterTileClass.Shallow;
+                    }
+                    else
+                    {
+                        WaterClassMap[x, y] = WaterTileClass.Medium;
+                    }
+                }
+                else
+                {
+                    WaterClassMap[x, y] = WaterTileClass.None;
+                }
+            }
+        }
+    }
+
+    private static void SetLandClassType()
+    {
+
+    }
+
+    private static float Min(float firstValue, List<float> list)
+    {
+        float min = firstValue;
+        foreach (float value in list) 
+            if (value < min)
+                min = value;
             return min;
     }
 
-    private static float Max()
+    private static float Max(float firstValue, List<float> list)
     {
-        float max = HeightmapGenerator.Heightmap[0, 0];
-        foreach (float hValue in HeightmapGenerator.Heightmap)
-            if (hValue > max)
-                max = hValue;
+        float max = firstValue;
+        foreach (float value in list)
+            if (value > max)
+                max = value;
         return max;
     }
 }

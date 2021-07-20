@@ -4,20 +4,42 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public BaseTileType type;
+    public TileBaseType baseType;
+    public WaterTileClass wClass;
 
     [SerializeField]
     private Material mat0;
     [SerializeField]
     private Material mat1;
+    [SerializeField]
+    private Material mat2;
+    [SerializeField]
+    private Material mat3;
 
     public void SetTypeComponents()
     {
-        if ((int)type == 0)
+        if ((int)baseType == 0)
         {
             GetComponentInChildren<MeshRenderer>().material = mat0;
         }
-        else if ((int)type == 1)
+        else if ((int)baseType == 1)
+        {
+            GetComponentInChildren<MeshRenderer>().material = mat1;
+        }
+
+        if ((int)wClass == 1) // Shallow
+        {
+            GetComponentInChildren<MeshRenderer>().material = mat2;
+        }
+        else if ((int)wClass == 2) // Medium
+        {
+            GetComponentInChildren<MeshRenderer>().material = mat0;
+        }
+        else if ((int)wClass == 3) // Deep
+        {
+            GetComponentInChildren<MeshRenderer>().material = mat3;
+        }
+        else // None
         {
             GetComponentInChildren<MeshRenderer>().material = mat1;
         }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum BaseTileType { Water, Land };
 public enum WorldSize { XS, Small, Medium, Large, XL, TwoXL, ThreeXL}
 
 public class WorldGenerator : MonoBehaviour
@@ -39,14 +38,15 @@ public class WorldGenerator : MonoBehaviour
 
     public void GenerateWorld()
     {
-        DetermineSize();
+        DetermineWorldSize();
         HeightmapGenerator.CreateHeightmap((int)worldSize, seed, randomnessMagnitude, magnitudeReductionRate);
-        TileTypeAllocator.AllocateBaseTypes((int)size, waterPercentage);
+        TileTypeAllocator.AllocateTileBaseTypes((int)size, waterPercentage);
+        TileTypeAllocator.AllocateTileClasses((int)size);
         ResetWorld();
         StartCoroutine(WorldSetup());
     }
 
-    private void DetermineSize()
+    private void DetermineWorldSize()
     {
         if (worldSize == WorldSize.XS)           { size = 1.0f; }
         else if (worldSize == WorldSize.Small)   { size = 3.0f; }
@@ -88,7 +88,8 @@ public class WorldGenerator : MonoBehaviour
                 tiles.Add(new Vector2(x, y), cloneTile = Instantiate(tile, position, Quaternion.identity));
 
                 // Set the tile type and height 
-                cloneTile.GetComponent<Tile>().type = TileTypeAllocator.BaseTypeMap[x, y];
+                cloneTile.GetComponent<Tile>().baseType = TileTypeAllocator.BaseTypeMap[x, y];
+                cloneTile.GetComponent<Tile>().wClass = TileTypeAllocator.WaterClassMap[x, y];
                 cloneTile.GetComponent<Tile>().SetTypeComponents();
                 cloneTile.transform.localScale = new Vector3(1f, HeightmapGenerator.Heightmap[x, y], 1f);
                 cloneTile.transform.position = new Vector3(position.x, HeightmapGenerator.Heightmap[x, y] / 4, position.z);
