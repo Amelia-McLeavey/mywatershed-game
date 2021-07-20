@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  mat0: {fileID: 2100000, guid: ebf51c39a68afcb48b22e3aa3ec7574d, type: 2}
+  mat0: {fileID: 2100000, guid: 44e78b46389dbc248b6c61bae0c1a7cc, type: 2}
   mat1: {fileID: 2100000, guid: 0b437f138801e1843a97936cfa881430, type: 2}
 --- !u!1 &318592542243305567
 GameObject:

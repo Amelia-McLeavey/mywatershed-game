@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 public enum BaseTileType { Water, Land };
-public enum WorldSize { XS, Small, Medium, Large, XL}
+public enum WorldSize { XS, Small, Medium, Large, XL, TwoXL, ThreeXL}
 
 public class WorldGenerator : MonoBehaviour
 {
@@ -37,11 +37,12 @@ public class WorldGenerator : MonoBehaviour
 
     private Transform worldHolder;
 
-    private void Start()
+    public void GenerateWorld()
     {
         DetermineSize();
         HeightmapGenerator.CreateHeightmap((int)worldSize, seed, randomnessMagnitude, magnitudeReductionRate);
         TileTypeAllocator.AllocateBaseTypes((int)size, waterPercentage);
+        ResetWorld();
         StartCoroutine(WorldSetup());
     }
 
@@ -52,6 +53,15 @@ public class WorldGenerator : MonoBehaviour
         else if (worldSize == WorldSize.Medium)  { size = 5.0f; }
         else if (worldSize == WorldSize.Large)   { size = 9.0f; }
         else if (worldSize == WorldSize.XL)      { size = 17.0f; }
+        else if (worldSize == WorldSize.TwoXL)   { size = 33.0f; }
+        else if (worldSize == WorldSize.ThreeXL) { size = 65.0f; }
+    }
+
+    private void ResetWorld()
+    {
+        if (null != worldHolder)
+        { Destroy(worldHolder.gameObject); }
+        tiles.Clear();
     }
 
     public IEnumerator WorldSetup()
@@ -85,7 +95,7 @@ public class WorldGenerator : MonoBehaviour
 
                 cloneTile.transform.SetParent(worldHolder);
 
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(0.02f);
             }
         }
     }
