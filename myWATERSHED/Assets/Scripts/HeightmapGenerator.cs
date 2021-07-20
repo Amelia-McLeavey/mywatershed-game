@@ -26,7 +26,7 @@ public class HeightmapGenerator : MonoBehaviour
         SetRandomCornerSeeds();
         MidpointDisplacement();
 
-        foreach (float hValue in Heightmap) { Debug.Log(hValue); }
+        //foreach (float hValue in Heightmap) { Debug.Log(hValue); }
 
         return Heightmap;
     }
@@ -95,11 +95,11 @@ public class HeightmapGenerator : MonoBehaviour
         Heightmap[mx, my] = GetAvg4(top, bottom, left, right) + GetOffset();
     }
 
-    private static void NormalizeHeighmap()
-    {
-        float min = 0f;
-        float max = 14f;
-    }
+    //private static void NormalizeHeighmap()
+    //{
+    //    //float min = 0f;
+    //    //float max = 14f;
+    //}
 
     private static int GetMidpoint(int a, int b)
     {
