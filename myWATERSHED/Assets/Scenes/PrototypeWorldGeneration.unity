@@ -331,7 +331,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 86.6}
+  m_AnchoredPosition: {x: 0, y: 5.3}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &892816344
@@ -891,11 +891,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 169812595449646413, guid: 66498c3ee51b6034a8dbeb554fdab8db, type: 3}
-  worldSize: 3
-  waterPercentage: 0.6
-  randomnessMagnitude: 0.6
-  magnitudeReductionRate: 0.2
-  seed: 1680
+  worldSize: 7
+  totalWaterPercent: 0.66
+  shorlinePercent: 0.06
+  deepWaterPercent: 0.803
+  humanPopulation: 0.1
+  numberOfCreeks: 4
+  randomnessMagnitude: 1.17
+  magnitudeReductionRate: 0.589
+  seed: 1176
 --- !u!4 &1971862563
 Transform:
   m_ObjectHideFlags: 0

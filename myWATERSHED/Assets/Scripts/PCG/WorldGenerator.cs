@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum WorldSize { XS, Small, Medium, Large, XL, TwoXL, ThreeXL}
+public enum WorldSize { ONE, XXS, XS, S, M, L, XL, XXL, XXXL }
 
 public class WorldGenerator : MonoBehaviour
 {
@@ -15,7 +15,20 @@ public class WorldGenerator : MonoBehaviour
 
     [Range(0.05f, 0.95f)]
     [SerializeField]
-    private float waterPercentage;
+    private float totalWaterPercent;
+    [Range(0f, 1f)]
+    [SerializeField]
+    private float shorlinePercent;
+    [Range(0f, 1f)]
+    [SerializeField]
+    private float deepWaterPercent;
+    [Range(0.1f, 0.9f)]
+    [SerializeField]
+    private float humanPopulation;
+    [Range(0,5)]
+    [SerializeField]
+    private int numberOfCreeks;
+
     [SerializeField]
     private float randomnessMagnitude = 1.5f;
     [Range(0.01f, 0.99f)]
@@ -39,22 +52,25 @@ public class WorldGenerator : MonoBehaviour
     public void GenerateWorld()
     {
         DetermineWorldSize();
+
         HeightmapGenerator.CreateHeightmap((int)worldSize, seed, randomnessMagnitude, magnitudeReductionRate);
-        TileTypeAllocator.AllocateTileBaseTypes((int)size, waterPercentage);
-        TileTypeAllocator.AllocateTileClasses((int)size);
+        TileTypeAllocator.AllocateTileTypes((int)size, numberOfCreeks, totalWaterPercent, shorlinePercent, deepWaterPercent);
+
         ResetWorld();
-        StartCoroutine(WorldSetup());
+        WorldSetup();
     }
 
     private void DetermineWorldSize()
     {
-        if (worldSize == WorldSize.XS)           { size = 1.0f; }
-        else if (worldSize == WorldSize.Small)   { size = 3.0f; }
-        else if (worldSize == WorldSize.Medium)  { size = 5.0f; }
-        else if (worldSize == WorldSize.Large)   { size = 9.0f; }
-        else if (worldSize == WorldSize.XL)      { size = 17.0f; }
-        else if (worldSize == WorldSize.TwoXL)   { size = 33.0f; }
-        else if (worldSize == WorldSize.ThreeXL) { size = 65.0f; }
+        if (worldSize == WorldSize.ONE)           { size = 1.0f; } // DO NOT REMOVE
+        else if (worldSize == WorldSize.XXS)       { size = 3.0f; } // DO NOT REMOVE
+        else if (worldSize == WorldSize.XS)        { size = 5.0f; }
+        else if (worldSize == WorldSize.S)        { size = 9.0f; }
+        else if (worldSize == WorldSize.M)        { size = 17.0f; }
+        else if (worldSize == WorldSize.L)       { size = 33.0f; }
+        else if (worldSize == WorldSize.XL)      { size = 65.0f; }
+        else if (worldSize == WorldSize.XXL)     { size = 129.0f; }
+        else if (worldSize == WorldSize.XXXL)    { size = 257.0f; }
     }
 
     private void ResetWorld()
@@ -64,7 +80,7 @@ public class WorldGenerator : MonoBehaviour
         tiles.Clear();
     }
 
-    public IEnumerator WorldSetup()
+    public void WorldSetup()
     {
         columns = (int)size;
         rows = (int)size;
@@ -96,7 +112,7 @@ public class WorldGenerator : MonoBehaviour
 
                 cloneTile.transform.SetParent(worldHolder);
 
-                yield return new WaitForSeconds(0.02f);
+                //yield return new WaitForSeconds(0.002f);
             }
         }
     }
