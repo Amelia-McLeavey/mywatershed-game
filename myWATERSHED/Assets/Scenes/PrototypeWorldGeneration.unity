@@ -1194,7 +1194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77ef3cb7c32728c418bba281e95fd31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: 0
+  seed: 81
   tile: {fileID: 169812595449646413, guid: 66498c3ee51b6034a8dbeb554fdab8db, type: 3}
   worldSize: 6
 --- !u!4 &1971862563
@@ -1223,6 +1223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f95e063a817945442b4e92183d2f92d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_maxWaterTileHeight: 30
   m_rMinWidth: 3
   m_rMaxWidth: 6
   m_rTexture: 5

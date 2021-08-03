@@ -80,7 +80,7 @@ public class WorldGenerator : MonoBehaviour
                 tiles.Add(new Vector2(x, y), cloneTile = Instantiate(tile, position, Quaternion.identity));
 
                 // Set the tile type and height 
-                cloneTile.transform.localScale = new Vector3(1f, WaterGenerator.StreamMap[x, y], 1f);
+                cloneTile.transform.localScale = new Vector3(1f, WaterGenerator.StreamHeightmap[x, y], 1f);
 
                 cloneTile.transform.SetParent(worldHolder);
             }

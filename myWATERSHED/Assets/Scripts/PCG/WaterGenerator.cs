@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class WaterGenerator : MonoBehaviour
 {
-    public static float[,] StreamMap;
+    public static float[,] StreamHeightmap;
+
+    [SerializeField]
+    private float m_maxWaterTileHeight;
 
     [Header("RIVER SETTINGS")]
     [Range(1, 10)]
@@ -48,7 +51,6 @@ public class WaterGenerator : MonoBehaviour
     [SerializeField]
     private int m_cMaxWidth = 1;
 
-
     private int m_size;
     private readonly int m_left = -1;
     private readonly int m_right = 1;
@@ -67,7 +69,7 @@ public class WaterGenerator : MonoBehaviour
         // Initialization
         Random.InitState(seed);
         m_size = size;
-        StreamMap = new float[m_size, m_size];
+        StreamHeightmap = new float[m_size, m_size];
 
         ResetData();
 
@@ -97,7 +99,11 @@ public class WaterGenerator : MonoBehaviour
                 //case 5: CreateCreek(creekStartPositionsL, m_left); break;
             }
         }
+
+        SetHeights();
     }
+
+
 
     private void ResetData()
     {
@@ -109,11 +115,30 @@ public class WaterGenerator : MonoBehaviour
         creekStartPositionsL.Clear();
         creekStartPositionsR.Clear();
         creekStartPositionsRL.Clear();
-}
+    }
+
+    private void SetHeights()
+    {
+        for (int x = 0; x < m_size; x++)
+        {
+            float minDecriment = x * 0.30f;
+            float maxDecriment = x * 0.35f;
+            float minHeight = m_maxWaterTileHeight - maxDecriment;
+            float maxHeight = m_maxWaterTileHeight - minDecriment;
+
+            for (int y = 0; y < m_size; y++)
+            {
+                if (StreamHeightmap[x, y] != 0)
+                {
+                    StreamHeightmap[x, y] = Random.Range(minHeight, maxHeight);
+                }
+            }
+        }
+    }
 
     private void CreateRiver()
     {
-        // Initialization
+        // INITIALIZATION
         int yStart = 0;
         int minChange = 1;
         int maxChange = m_rMaxWidth - 3;
@@ -159,7 +184,7 @@ public class WaterGenerator : MonoBehaviour
             {
                 if (y >= yStart && y <= yStart + (streamWidth - 1))
                 {
-                    StreamMap[x, y] = 5f; // This is where the height is assigned
+                    StreamHeightmap[x, y] = 1;
 
                     if (x < m_size * 0.90f && x > m_size * 0.60f)
                     {
@@ -191,7 +216,7 @@ public class WaterGenerator : MonoBehaviour
 
     private void CreateBranch(List<Vector2> startPositions, int direction, int minOffset, int maxOffset)
     {
-
+        // INITIALIZATION
         int randomIndex = Random.Range(0, startPositions.Count);
         int xStart = (int)startPositions[randomIndex].x + 1;
         int yStart = (int)startPositions[randomIndex].y - 2;
@@ -237,7 +262,7 @@ public class WaterGenerator : MonoBehaviour
             {
                 if (y >= yStart && y <= yStart + (streamWidth - 1))
                 {
-                    StreamMap[x, y] = 3f; // This is where the height is assigned
+                    StreamHeightmap[x, y] = 1; 
 
                     if (direction == m_right)
                     {
@@ -270,16 +295,18 @@ public class WaterGenerator : MonoBehaviour
 
     private void CreateCreek(List<Vector2> startPositions, int direction)
     {
+        // INITIALIZATION
         int randomIndex = Random.Range(0, startPositions.Count);
         int xStart = (int)startPositions[randomIndex].x + 1;
         int yStart = (int)startPositions[randomIndex].y - 1;
         int streamWidth = m_cMaxWidth;
 
+        // DRAW FIRST ROW
         for (int y = yStart; y < m_size; y++)
         {
             if (y >= yStart && y <= yStart + (streamWidth - 1))
             {
-                StreamMap[xStart, y] = 1f;
+                StreamHeightmap[xStart, y] = 1f;
             }
         }
 
@@ -300,10 +327,11 @@ public class WaterGenerator : MonoBehaviour
                 {
                     if (y >= yStart && y <= yStart + (streamWidth - 1))
                     {
-                        StreamMap[x, y] = 1f;
+                        StreamHeightmap[x, y] = 1f;
                     }
                 }
             }
+            // [WIP]
             //if (direction == m_left)
             //{
             //    // DRAW Y DIMENSION
