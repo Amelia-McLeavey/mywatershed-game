@@ -50,15 +50,16 @@ public class HeightmapGenerator : MonoBehaviour
 
     private static void SetRandomCornerSeeds()
     {
-        Heightmap[0, 0] = GetRandom();
-        Heightmap[0, s_edgeLength - 1] = GetRandom();
-        Heightmap[s_edgeLength - 1, 0] = GetRandom();
-        Heightmap[s_edgeLength - 1, s_edgeLength - 1] = GetRandom();
+        float a = Heightmap[0, 0] = GetRandom(10f, 14f);
+        float b = Heightmap[0, s_edgeLength - 1] = GetRandom(10f, 14f);
+        float c = Heightmap[s_edgeLength - 1, 0] = GetRandom(10f, 14f);
+        float d = Heightmap[s_edgeLength - 1, s_edgeLength - 1] = GetRandom(0f, 3f);
+        Heightmap[((s_edgeLength - 1) / 2) + 1, ((s_edgeLength - 1) / 2) + 1] = GetAvg4(a, b, c, d) + GetOffset();
     }
 
-    private static float GetRandom()
+    private static float GetRandom(float min, float max)
     {
-        return Random.Range(0f, 14f);
+        return Random.Range(min, max);
     }
 
     private static void MidpointDisplacement()
@@ -108,7 +109,7 @@ public class HeightmapGenerator : MonoBehaviour
 
     private static float GetOffset()
     {
-        return GetRandom() * s_randomnessMagnitude;
+        return GetRandom(0f, 14f) * s_randomnessMagnitude;
     }
 
     private static float GetAvg2(float a, float b)

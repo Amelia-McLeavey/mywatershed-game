@@ -8,19 +8,19 @@ public class PrototypeController : MonoBehaviour
 {
     [SerializeField]
     private WorldGenerator worldGeneratorScript;
-    
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-        
-    }
 
     public void GenerateWorldOnClick()
     {
         worldGeneratorScript.GenerateWorld();
+    }
+
+    public void IncreaseSeedValue()
+    {
+        worldGeneratorScript.seed++;
+    }
+
+    public void DecreaseSeedValue()
+    {
+        worldGeneratorScript.seed--;
     }
 }

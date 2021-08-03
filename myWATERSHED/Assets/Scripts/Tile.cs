@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public TileBaseType baseType;
+    //public TileWaterType baseType;
     public WaterTileClass wClass;
 
     [SerializeField]
@@ -15,17 +15,24 @@ public class Tile : MonoBehaviour
     private Material mat2;
     [SerializeField]
     private Material mat3;
+    [SerializeField]
+    private Material flagMaterial;
+
+    public void Flag()
+    {
+        GetComponentInChildren<MeshRenderer>().material = flagMaterial;
+    }
 
     public void SetTypeComponents()
     {
-        if ((int)baseType == 0)
-        {
-            GetComponentInChildren<MeshRenderer>().material = mat0;
-        }
-        else if ((int)baseType == 1)
-        {
-            GetComponentInChildren<MeshRenderer>().material = mat1;
-        }
+        //if ((int)baseType == 0)
+        //{
+        //    GetComponentInChildren<MeshRenderer>().material = mat1;
+        //}
+        //else if ((int)baseType == 1)
+        //{
+        //    GetComponentInChildren<MeshRenderer>().material = mat0;
+        //}
 
         if ((int)wClass == 1) // Shallow
         {
