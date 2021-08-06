@@ -99,11 +99,8 @@ public class WaterGenerator : MonoBehaviour
                 //case 5: CreateCreek(creekStartPositionsL, m_left); break;
             }
         }
-
         SetHeights();
     }
-
-
 
     private void ResetData()
     {
@@ -131,6 +128,10 @@ public class WaterGenerator : MonoBehaviour
                 if (StreamHeightmap[x, y] != 0)
                 {
                     StreamHeightmap[x, y] = Random.Range(minHeight, maxHeight);
+                }
+                else
+                {
+                    StreamHeightmap[x, y] = 1f;
                 }
             }
         }
