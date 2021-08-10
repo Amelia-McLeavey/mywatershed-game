@@ -772,7 +772,7 @@ Transform:
   m_GameObject: {fileID: 946973410}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 1, z: 10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
@@ -1227,7 +1227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77ef3cb7c32728c418bba281e95fd31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Seed: 81
+  Seed: 170
   Size: 0
   tile: {fileID: 5504254332836856125, guid: 41f43ee003271f64bb05b63a09f383ff, type: 3}
   worldSize: 6
@@ -1258,18 +1258,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_maxWaterTileHeight: 30
-  m_rMinWidth: 3
-  m_rMaxWidth: 6
-  m_rTexture: 5
-  m_rCurvature: 4
+  m_startingYPosition: 21
+  m_rMinWidth: 4
+  m_rMaxWidth: 4
+  m_rTexture: 9
   m_branchCount: 2
-  m_bMinWidth: 5
-  m_bMaxWidth: 6
-  m_bTexture: 1
-  m_bCurvature: 4
-  m_creekCount: 2
-  m_cMinWidth: 3
-  m_cMaxWidth: 6
+  m_bMinWidth: 2
+  m_bMaxWidth: 2
+  m_bTexture: 5
 --- !u!1 &1992598769
 GameObject:
   m_ObjectHideFlags: 0
