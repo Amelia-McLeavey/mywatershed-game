@@ -53,7 +53,6 @@ public class WorldGenerator : MonoBehaviour
         else if (worldSize == WorldSize.L)    { Size = 33.0f; }
         else if (worldSize == WorldSize.XL)   { Size = 65.0f; }
         else if (worldSize == WorldSize.XXL)  { Size = 129.0f; }
-        else if (worldSize == WorldSize.XXXL) { Size = 257.0f; }
     }
 
     private void ResetWorld()
@@ -93,7 +92,7 @@ public class WorldGenerator : MonoBehaviour
                 Tile tileScript = cloneTile.GetComponent<Tile>();
                 tileScript.m_TileIndex = new Vector2(x, y);
 
-                if (WaterGenerator.StreamHeightmap[x,y] > 1)
+                if (WaterGenerator.StreamHeightmap[x, y] > 1)
                 {
                     tileScript.SetBaseType(BaseType.Water);
                 }
