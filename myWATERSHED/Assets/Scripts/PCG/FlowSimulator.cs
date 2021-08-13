@@ -7,7 +7,8 @@ public class FlowSimulator : MonoBehaviour
     [SerializeField]
     private float m_pulseSpeed;
 
-    private int m_size;
+    private int m_rows;
+    private int m_columns;
 
     private void OnEnable()
     {
@@ -21,11 +22,11 @@ public class FlowSimulator : MonoBehaviour
 
     public void FlowPulse()
     {
-        for (int x = 0; x < m_size; x++)
+        for (int x = 0; x < m_rows; x++)
         {
-            for (int y = 0; y < m_size; y++)
+            for (int y = 0; y < m_columns; y++)
             {
-                if (WorldGenerator.s_Tiles.TryGetValue(new Vector2(x, y), out GameObject value))
+                if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(x, y), out GameObject value))
                 {
                     // FLOW FOR WATER TILES
                     Tile tileScript = value.GetComponent<Tile>();
@@ -38,15 +39,16 @@ public class FlowSimulator : MonoBehaviour
         }
     }
 
-    private void InitializeFlow(int size)
+    private void InitializeFlow(int rows, int columns)
     {
-        m_size = size;
+        m_rows = rows;
+        m_columns = columns;
 
-        for (int x = 0; x < m_size; x++)
+        for (int x = 0; x < m_rows; x++)
         { 
-            for (int y = 0; y < m_size; y++)
+            for (int y = 0; y < m_columns; y++)
             {
-                if (WorldGenerator.s_Tiles.TryGetValue(new Vector2(x,y), out GameObject value)) 
+                if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(x,y), out GameObject value)) 
                 {
                     // FLOW FOR WATER TILES
                     Tile tileScript = value.GetComponent<Tile>();

@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class WaterGenerator : MonoBehaviour
 {
-    public static float[,] StreamHeightmap;
-
-    [SerializeField]
-    private float m_maxWaterTileHeight;
+    public static Dictionary<Vector2, BaseType> s_WaterTiles = new Dictionary<Vector2, BaseType>();
 
     [Header("RIVER SETTINGS")]
     [Range(3, 50)]
     [SerializeField]
-    private int m_startingYPosition = 3;
+    private int m_startingYPosition = 30;
     [Range(1, 5)]
     [SerializeField]
     private int m_rMinWidth = 4;
@@ -21,39 +18,41 @@ public class WaterGenerator : MonoBehaviour
     private int m_rMaxWidth = 4;
     [Range(1, 10)]
     [SerializeField]
-    private int m_rTexture = 1;
+    private int m_rTexture = 9;
 
     [Header("BRANCH SETTINGS")]
-    [Range(0, 3)]
+    [Range(0, 6)]
     [SerializeField]
-    private int m_branchCount;
+    private int m_branchCount = 3;
     [Range(1, 10)]
     [SerializeField]
-    private int m_bMinWidth = 1;
+    private int m_bMinWidth = 2;
     [Range(1, 10)]
     [SerializeField]
     private int m_bMaxWidth = 2;
     [Range(1, 10)]
     [SerializeField]
-    private int m_bTexture = 1;
+    private int m_bTexture = 5;
 
-    private int m_size;
-    private readonly Queue<int> widthChangeValues = new Queue<int>();
+    private int m_rows;
+    private int m_columns;
 
-    private readonly List<Vector2> branchStartPositionsL = new List<Vector2>();
-    private readonly List<Vector2> branchStartPosistionsR = new List<Vector2>();
+    private readonly Queue<int> m_widthChangeValues = new Queue<int>();
 
-    public void CreateWater(int size, int seed)
+    private readonly List<Vector2> m_branchStartPositionsL = new List<Vector2>();
+    private readonly List<Vector2> m_branchStartPosistionsR = new List<Vector2>();
+
+    public void CreateWater(int rows, int columns, int seed)
     {
         // INITIALIZATION
         Random.InitState(seed);
-        m_size = size;
-        StreamHeightmap = new float[m_size, m_size];
+        m_rows = rows;
+        m_columns = columns;
 
         // RESET DATA
-        widthChangeValues.Clear();
-        branchStartPositionsL.Clear();
-        branchStartPosistionsR.Clear();
+        m_widthChangeValues.Clear();
+        m_branchStartPositionsL.Clear();
+        m_branchStartPosistionsR.Clear();
 
         // GENERATION
         CreateRiver();
@@ -63,13 +62,11 @@ public class WaterGenerator : MonoBehaviour
             if (i != 0)
             {
                 if (i % 2 == 0)
-                    CreateBranch(branchStartPositionsL, 0, 0);
+                    CreateBranch(m_branchStartPositionsL, 0, 0);
                 else
-                    CreateBranch(branchStartPosistionsR, 1, 1);
+                    CreateBranch(m_branchStartPosistionsR, 1, 1);
             }
         }
-
-        SetHeights();
     }
 
     private void CreateRiver()
@@ -87,10 +84,10 @@ public class WaterGenerator : MonoBehaviour
         int streamWidth = lastStreamWidth;
 
         // DRAW X DIMENSION
-        for (int x = 0; x < m_size; x++)
+        for (int x = 0; x < m_rows; x++)
         {
             // DEFINE LINE
-            streamWidth = DefineWidth(streamWidth, minWidth, maxWidth);
+            streamWidth = DefineWidth(streamWidth, minWidth, maxWidth, m_rTexture);
             yStart = DefineCurvature(lastYStart, streamWidth, lastStreamWidth, minModifier, maxModifier, -1, 0);
 
             // CACHE VALUES
@@ -98,27 +95,28 @@ public class WaterGenerator : MonoBehaviour
             lastYStart = yStart;
            
             // DRAW Y DIMENSION
-            for (int y = 0; y < m_size; y++)
+            for (int y = 0; y < m_columns; y++)
             {
                 if (y >= yStart && y <= yStart + (streamWidth - 1))
                 {
-                    StreamHeightmap[x, y] = 1f;
+                    s_WaterTiles.Add(new Vector2(x, y), BaseType.Water);
+                    WorldGenerator.s_UndefinedTiles.Remove(new Vector2(x, y));
 
-                    if (x > m_size * 0.30f && x < m_size * 0.90f)
+                    if (x > m_rows * 0.30f && x < m_rows * 0.90f)
                     {
                         if (y == yStart)
                         {
-                            branchStartPositionsL.Add(new Vector2(x, y));
+                            m_branchStartPositionsL.Add(new Vector2(x, y));
                         }
                         if (y == yStart + (streamWidth - 1))
                         {
-                            branchStartPosistionsR.Add(new Vector2(x, y));
+                            m_branchStartPosistionsR.Add(new Vector2(x, y));
                         }
                     }
                 }
             }
         }
-        widthChangeValues.Clear();
+        m_widthChangeValues.Clear();
     }
 
     private void CreateBranch(List<Vector2> startPositions, int minModifier, int maxModifier)
@@ -139,53 +137,32 @@ public class WaterGenerator : MonoBehaviour
         for (int x = xStart; x > -1; x--)
         {
             // DEFINE LINE
-            streamWidth = DefineWidth(streamWidth, minWidth, maxWidth);
+            streamWidth = DefineWidth(streamWidth, minWidth, maxWidth, m_bTexture);
             yStart = DefineCurvature(lastYStart,streamWidth, lastStreamWidth, minModifier, maxModifier, 0, -1);
 
             // CACHE VALUES
             lastYStart = yStart;
-            lastStreamWidth = streamWidth;
+            lastStreamWidth = streamWidth; 
 
             // DRAW Y DIMENSION
-            for (int y = 0; y < m_size; y++)
+            for (int y = 0; y < m_columns; y++)
             {
                 if (y >= yStart && y <= yStart + (streamWidth - 1))
                 {
-                    StreamHeightmap[x, y] = 1f;
+                    if (s_WaterTiles.ContainsKey(new Vector2(x,y))) { break; }
+                    s_WaterTiles.Add(new Vector2(x, y), BaseType.Water);
+                    WorldGenerator.s_UndefinedTiles.Remove(new Vector2(x, y));
                 }
             }
         }
-        widthChangeValues.Clear();
+        m_widthChangeValues.Clear();
     }
 
-    private void SetHeights()
+    private int DefineWidth(int streamWidth, int minWidth, int maxWidth, int texture)
     {
-        for (int x = 0; x < m_size; x++)
-        {
-            float minDecriment = x * 0.30f;
-            float maxDecriment = x * 0.35f;
-            float minHeight = m_maxWaterTileHeight - maxDecriment;
-            float maxHeight = m_maxWaterTileHeight - minDecriment;
-
-            for (int y = 0; y < m_size; y++)
-            {
-                if (StreamHeightmap[x, y] != 0)
-                {
-                    StreamHeightmap[x, y] = Random.Range(minHeight, maxHeight);
-                }
-                else
-                {
-                    StreamHeightmap[x, y] = 1f;
-                }
-            }
-        }
-    }
-
-    private int DefineWidth(int streamWidth, int minWidth, int maxWidth)
-    {
-        CheckQueue(widthChangeValues);
-        int textureChangeValue = widthChangeValues.Dequeue();
-        if (textureChangeValue < m_rTexture)
+        CheckQueue(m_widthChangeValues);
+        int textureChangeValue = m_widthChangeValues.Dequeue();
+        if (textureChangeValue < texture)
         { 
             return Random.Range(minWidth, maxWidth + 1); 
         }

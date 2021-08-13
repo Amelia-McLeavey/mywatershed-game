@@ -14,7 +14,7 @@ public class PrototypeController : MonoBehaviour
     private FlowSimulator m_flowSimScript;
 
     [SerializeField]
-    private Camera camera;
+    private Camera m_camera;
 
     public void GenerateWorldOnClick()
     {
@@ -23,12 +23,12 @@ public class PrototypeController : MonoBehaviour
 
     public void IncreaseSeedValue()
     {
-        m_worldGenScript.Seed++;
+        m_worldGenScript.m_Seed++;
     }
 
     public void DecreaseSeedValue()
     {
-        m_worldGenScript.Seed--;
+        m_worldGenScript.m_Seed--;
     }
 
     private void Update()
@@ -37,7 +37,7 @@ public class PrototypeController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             // Create a ray from the point clicked on screen to the point in world space
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = m_camera.ScreenPointToRay(Input.mousePosition);
 
             // Pass ray into Raycast to get hit info
             if (Physics.Raycast(ray, out RaycastHit hit))
@@ -49,7 +49,7 @@ public class PrototypeController : MonoBehaviour
 
         if (Input.GetButtonDown("Jump"))
         {
-            m_flowSimScript.FlowPulse();
+            //m_flowSimScript.FlowPulse();
         }
 
         // CAMERA CONTROL

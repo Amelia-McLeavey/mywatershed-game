@@ -1,31 +1,26 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum WorldSize { ONE, XXS, XS, S, M, L, XL, XXL, XXXL }
-
-public enum BaseType { Land, Water }
+public enum BaseType { None, Land, Water }
 
 public class WorldGenerator : MonoBehaviour
 {
-    public int Seed;
+    public int m_Seed;
 
-    public static Dictionary<Vector2, GameObject> s_Tiles = new Dictionary<Vector2, GameObject>();
+    public static Dictionary<Vector2, BaseType> s_UndefinedTiles = new Dictionary<Vector2, BaseType>();
+    public static Dictionary<Vector2, GameObject> s_TilesDictonary = new Dictionary<Vector2, GameObject>();
 
-    public delegate void WorldGenerationComplete(int size);
+    public delegate void WorldGenerationComplete(int rowSize, int columnSize);
     public static event WorldGenerationComplete OnWorldGenerationComplete;
 
-    [HideInInspector]
-    public float Size = 0;
+    [SerializeField]
+    private GameObject m_tile;
 
     [SerializeField]
-    private GameObject tile;
-
+    private int m_rows = 0;
     [SerializeField]
-    private WorldSize worldSize;
+    private int m_columns = 0;
 
-    private int columns = 0;
-    private int rows = 0;
 
     private Vector2 tileStep = new Vector2(0.5f, 0.87f);
 
@@ -33,49 +28,51 @@ public class WorldGenerator : MonoBehaviour
 
     public void GenerateWorld()
     {
-        DetermineWorldSize();
-
-        GetComponent<WaterGenerator>().CreateWater((int)Size, Seed);
-
         ResetWorld();
+
+        GetComponent<WaterGenerator>().CreateWater(m_rows, m_columns, m_Seed);
+        GetComponent<HeightmapGenerator1>().SetHeights(m_rows, m_columns, m_Seed);
+        GetComponent<LandGenerator>().CreateLand(m_rows, m_columns, m_Seed);
+
+
         WorldSetup();
 
-        OnWorldGenerationComplete?.Invoke((int)Size);
-    }
-
-    private void DetermineWorldSize()
-    {
-        if (worldSize == WorldSize.ONE)       { Size = 1.0f; } // DO NOT REMOVE
-        else if (worldSize == WorldSize.XXS)  { Size = 3.0f; } // DO NOT REMOVE
-        else if (worldSize == WorldSize.XS)   { Size = 5.0f; }
-        else if (worldSize == WorldSize.S)    { Size = 9.0f; }
-        else if (worldSize == WorldSize.M)    { Size = 17.0f; }
-        else if (worldSize == WorldSize.L)    { Size = 33.0f; }
-        else if (worldSize == WorldSize.XL)   { Size = 65.0f; }
-        else if (worldSize == WorldSize.XXL)  { Size = 129.0f; }
+        OnWorldGenerationComplete?.Invoke(m_rows, m_columns);
     }
 
     private void ResetWorld()
     {
+        // DESTROY GAMEOBJECTS
         if (null != worldHolder)
         { Destroy(worldHolder.gameObject); }
-        s_Tiles.Clear();
+
+        // CLEAR DATA
+        s_UndefinedTiles.Clear();
+        s_TilesDictonary.Clear();
+        WaterGenerator.s_WaterTiles.Clear();
+        LandGenerator.s_LandTiles.Clear();
+
+        // RESETS
+        for (int x = 0; x < m_rows; x++)
+        {
+            for (int y = 0; y < m_columns; y++)
+            {
+                s_UndefinedTiles.Add(new Vector2(x, y), BaseType.None);
+            }
+        }
     }
 
     private void WorldSetup()
     {
-        rows = (int)Size;
-        columns = (int)Size;
-
         worldHolder = new GameObject("World").transform;
 
-         
-        for (int x = 0; x < rows; x++)
+        for (int x = 0; x < m_rows; x++)
         {
-            for (int y = 0; y < columns; y++)
+            for (int y = 0; y < m_columns; y++)
             {
-                GameObject cloneTile;
+                BaseType type = BaseType.None;
                 Vector3 position;
+                GameObject cloneTile;
 
                 // Adjust the position to compliment the hex tiles
                 if (y % 2 == 0)
@@ -84,24 +81,27 @@ public class WorldGenerator : MonoBehaviour
                 { position = new Vector3(x + tileStep.x, 0f, y * tileStep.y); }
 
                 // Instantiate the tile
-                s_Tiles.Add(new Vector2(x, y), cloneTile = Instantiate(tile, position, Quaternion.Euler(-90f, 0f, 0f)));
+                s_TilesDictonary.Add(new Vector2(x, y), cloneTile = Instantiate(m_tile, position, Quaternion.Euler(-90f, 0f, 0f)));
 
                 // Set the tile height.. Z because of the orientation of the asset
-                cloneTile.transform.localScale = new Vector3(1f, 1f, WaterGenerator.StreamHeightmap[x, y]);
+                cloneTile.transform.localScale = new Vector3(1f, 1f, HeightmapGenerator1.s_Heightmap[x, y]);
                 
+                // Set a reference for the tile's Index on Tile
                 Tile tileScript = cloneTile.GetComponent<Tile>();
                 tileScript.m_TileIndex = new Vector2(x, y);
 
-                if (WaterGenerator.StreamHeightmap[x, y] > 1)
+                // Set the tile type
+                if (WaterGenerator.s_WaterTiles.TryGetValue(new Vector2(x,y), out BaseType waterType)) 
                 {
-                    tileScript.SetBaseType(BaseType.Water);
+                    type = waterType;
                 }
-                else
+                else if (LandGenerator.s_LandTiles.TryGetValue(new Vector2(x, y), out BaseType landType))
                 {
-                    tileScript.SetBaseType(BaseType.Land);
+                    type = landType;
                 }
+                tileScript.SetBaseType(type);
 
-
+                // Parent
                 cloneTile.transform.SetParent(worldHolder);
             }
         }
