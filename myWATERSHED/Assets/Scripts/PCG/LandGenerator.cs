@@ -22,13 +22,13 @@ public class LandGenerator : MonoBehaviour
         m_definedNeighbourIndexes.Clear();
 
         FindNeighboursOfWater();
-        GetComponent<HeightmapGenerator1>().SetLandHeights(m_definedNeighbourIndexes);
+        GetComponent<HeightmapGenerator>().SetLandHeights(m_definedNeighbourIndexes);
         while (WorldGenerator.s_UndefinedTiles.Count > 0)
         {
             FindNeighboursOfLand();
-            GetComponent<HeightmapGenerator1>().SetLandHeights(m_definedNeighbourIndexes);
+            GetComponent<HeightmapGenerator>().SetLandHeights(m_definedNeighbourIndexes);
         }
-        HeightmapGenerator1.callCount = 0;
+        HeightmapGenerator.callCount = 0;
     }
 
     private void FindNeighboursOfWater()

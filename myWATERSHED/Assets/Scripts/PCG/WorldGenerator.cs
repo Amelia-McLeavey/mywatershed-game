@@ -31,7 +31,7 @@ public class WorldGenerator : MonoBehaviour
         ResetWorld();
 
         GetComponent<WaterGenerator>().CreateWater(m_rows, m_columns, m_Seed);
-        GetComponent<HeightmapGenerator1>().SetHeights(m_rows, m_columns, m_Seed);
+        GetComponent<HeightmapGenerator>().SetHeights(m_rows, m_columns, m_Seed);
         GetComponent<LandGenerator>().CreateLand(m_rows, m_columns, m_Seed);
 
 
@@ -84,7 +84,7 @@ public class WorldGenerator : MonoBehaviour
                 s_TilesDictonary.Add(new Vector2(x, y), cloneTile = Instantiate(m_tile, position, Quaternion.Euler(-90f, 0f, 0f)));
 
                 // Set the tile height.. Z because of the orientation of the asset
-                cloneTile.transform.localScale = new Vector3(1f, 1f, HeightmapGenerator1.s_Heightmap[x, y]);
+                cloneTile.transform.localScale = new Vector3(1f, 1f, HeightmapGenerator.s_Heightmap[x, y]);
                 
                 // Set a reference for the tile's Index on Tile
                 Tile tileScript = cloneTile.GetComponent<Tile>();
