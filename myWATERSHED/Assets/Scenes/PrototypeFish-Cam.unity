@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 144632850}
   - component: {fileID: 144632849}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: Background_Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -212,8 +212,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 144632848}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.9358, y: 0.82, z: 5.04}
-  m_LocalScale: {x: 35.867634, y: 17.079042, z: 1}
+  m_LocalPosition: {x: -0.8836, y: 0.82, z: 5.04}
+  m_LocalScale: {x: 57.296394, y: 17.079042, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 261500028}
   - component: {fileID: 261500027}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Water-Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -418,7 +418,7 @@ GameObject:
   - component: {fileID: 623147872}
   - component: {fileID: 623147871}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: Wave-Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
