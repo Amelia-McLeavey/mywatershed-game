@@ -6,6 +6,9 @@ using System.Linq;
 public class Tile : MonoBehaviour
 {
     public BaseType m_Basetype;
+    public ClassType m_ClassType;
+    public LandFamilyType m_LandFamilyType;
+    public WaterFamilyType m_WaterFamilyType;
 
     public Vector2 m_TileIndex;
 
@@ -15,6 +18,16 @@ public class Tile : MonoBehaviour
     private Material m_waterMaterial;
     [SerializeField] 
     private Material m_landMaterial;
+    [SerializeField]
+    private Material m_industrialMat;
+    [SerializeField]
+    private Material m_infrastructureMat;
+    [SerializeField]
+    private Material m_residentialMat;
+    [SerializeField]
+    private Material m_agricultureMat;
+    [SerializeField]
+    private Material m_recreationalMat;
 
     private float m_redValue;
 
@@ -43,6 +56,20 @@ public class Tile : MonoBehaviour
             m_meshRenderer.material = m_genericMaterial;
         }
         else { Debug.LogError("Failed to set a base type."); }
+    }
+
+    public void SetLandFamilyType(int enumIndex)
+    {
+        Debug.Log($"enum index = {enumIndex}");
+        switch (enumIndex) 
+        {
+            case 1: m_meshRenderer.material = m_industrialMat; break;
+            case 2: m_meshRenderer.material = m_infrastructureMat; break;
+            case 3: m_meshRenderer.material = m_residentialMat; break;
+            case 4: m_meshRenderer.material = m_agricultureMat; break;
+            case 5: m_meshRenderer.material = m_recreationalMat; break;
+            default: Debug.LogError("Could not assign new material"); break;
+        }
     }
 
     public void FindNeighbours()
@@ -85,10 +112,23 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void AffectTileVariables()
+    public void DirectEffect()
     {
         m_redValue = 255f / 255f;
         m_meshRenderer.material.color = new Color(m_redValue, 124f / 255f, 200f / 255f, 200f / 255f);
+    }
+
+    public void ChangeMaterial(LandFamilyType landFamilyType)
+    {
+        switch ((int)landFamilyType)
+        {
+            case 1: m_meshRenderer.material = m_industrialMat; break;
+            case 2: m_meshRenderer.material = m_infrastructureMat; break;
+            case 3: m_meshRenderer.material = m_residentialMat; break;
+            case 4: m_meshRenderer.material = m_agricultureMat; break;
+            case 5: m_meshRenderer.material = m_recreationalMat; break;
+            default: break;
+        }
     }
 
     public void SendInformationFlow()

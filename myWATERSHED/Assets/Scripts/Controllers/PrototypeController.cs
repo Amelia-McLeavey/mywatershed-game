@@ -6,7 +6,11 @@ using UnityEngine.EventSystems;
 
 public class PrototypeController : MonoBehaviour
 {
-    [SerializeField] private float m_cameraSpeed;
+    [SerializeField] 
+    private float m_cameraSpeed;
+
+    [SerializeField]
+    private LandFamilyType landFamilyType;
 
     [SerializeField]
     private WorldGenerator m_worldGenScript;
@@ -34,7 +38,7 @@ public class PrototypeController : MonoBehaviour
     private void Update()
     {
         // left mouse click
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             // Create a ray from the point clicked on screen to the point in world space
             Ray ray = m_camera.ScreenPointToRay(Input.mousePosition);
@@ -43,7 +47,8 @@ public class PrototypeController : MonoBehaviour
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
                 //Debug.Log("HIT");
-                hit.collider.gameObject.GetComponent<Tile>().AffectTileVariables();
+                //hit.collider.gameObject.GetComponent<Tile>().DirectEffect();
+                hit.collider.gameObject.GetComponent<Tile>().ChangeMaterial(landFamilyType);
             }
         }
 

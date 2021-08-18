@@ -11,7 +11,7 @@ public class LandGenerator : MonoBehaviour
     private int m_rows;
     private int m_columns;
 
-    private List<Vector2> m_definedNeighbourIndexes = new List<Vector2>();
+    private List<Vector2> m_definedNeighbourIndices = new List<Vector2>();
 
     public void CreateLand(int rows, int columns, int seed)
     {
@@ -19,14 +19,14 @@ public class LandGenerator : MonoBehaviour
         Random.InitState(seed);
         m_rows = rows;
         m_columns = columns;
-        m_definedNeighbourIndexes.Clear();
+        m_definedNeighbourIndices.Clear();
 
         FindNeighboursOfWater();
-        GetComponent<HeightmapGenerator>().SetLandHeights(m_definedNeighbourIndexes);
+        GetComponent<HeightmapGenerator>().SetLandHeights(m_definedNeighbourIndices);
         while (WorldGenerator.s_UndefinedTiles.Count > 0)
         {
             FindNeighboursOfLand();
-            GetComponent<HeightmapGenerator>().SetLandHeights(m_definedNeighbourIndexes);
+            GetComponent<HeightmapGenerator>().SetLandHeights(m_definedNeighbourIndices);
         }
         HeightmapGenerator.callCount = 0;
     }
@@ -48,9 +48,9 @@ public class LandGenerator : MonoBehaviour
     private void FindNeighboursOfLand()
     {
         // INITIALIZATION
-        Vector2[] definedLandIndexes = new Vector2[m_definedNeighbourIndexes.Count];
-        m_definedNeighbourIndexes.CopyTo(definedLandIndexes);
-        m_definedNeighbourIndexes.Clear();
+        Vector2[] definedLandIndexes = new Vector2[m_definedNeighbourIndices.Count];
+        m_definedNeighbourIndices.CopyTo(definedLandIndexes);
+        m_definedNeighbourIndices.Clear();
 
         foreach (Vector2 definedLandIndex in definedLandIndexes)
         {
@@ -60,17 +60,20 @@ public class LandGenerator : MonoBehaviour
 
     private void FindUndefinedNeighbours(Vector2 index)
     {
-        List<Vector2> neighbourIndexes = NeighbourUtility.GetNeighbours(index);
+        List<Vector2> neighbourIndices = NeighbourUtility.GetNeighbours(index);
 
-        foreach (Vector2 neighbourIndex in neighbourIndexes)
+        foreach (Vector2 neighbourIndex in neighbourIndices)
         {
             // Check if the tile has been assigned a BaseType
             if (!WaterGenerator.s_WaterTiles.ContainsKey(neighbourIndex) && !s_LandTiles.ContainsKey(neighbourIndex))
             {
-                m_definedNeighbourIndexes.Add(neighbourIndex);
-                s_LandTiles.Add(neighbourIndex, BaseType.Land);
-                WorldGenerator.s_UndefinedTiles.Remove(neighbourIndex);
+                if (neighbourIndex.x > -1 && neighbourIndex.x < m_rows && neighbourIndex.y > -1 && neighbourIndex.y < m_columns)
+                {
+                    m_definedNeighbourIndices.Add(neighbourIndex);
+                    s_LandTiles.Add(neighbourIndex, BaseType.Land);
+                    WorldGenerator.s_UndefinedTiles.Remove(neighbourIndex);
+                } 
             }
-        }
+        } 
     }
 }

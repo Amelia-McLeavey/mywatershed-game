@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BaseType { None, Land, Water }
-
 public class WorldGenerator : MonoBehaviour
 {
     public int m_Seed;
+    
 
     public static Dictionary<Vector2, BaseType> s_UndefinedTiles = new Dictionary<Vector2, BaseType>();
     public static Dictionary<Vector2, GameObject> s_TilesDictonary = new Dictionary<Vector2, GameObject>();
@@ -14,13 +13,12 @@ public class WorldGenerator : MonoBehaviour
     public static event WorldGenerationComplete OnWorldGenerationComplete;
 
     [SerializeField]
+    public int m_rows = 0;
+    [SerializeField]
+    public int m_columns = 0;
+
+    [SerializeField]
     private GameObject m_tile;
-
-    [SerializeField]
-    private int m_rows = 0;
-    [SerializeField]
-    private int m_columns = 0;
-
 
     private Vector2 tileStep = new Vector2(0.5f, 0.87f);
 
@@ -34,8 +32,9 @@ public class WorldGenerator : MonoBehaviour
         GetComponent<HeightmapGenerator>().SetHeights(m_rows, m_columns, m_Seed);
         GetComponent<LandGenerator>().CreateLand(m_rows, m_columns, m_Seed);
 
-
         WorldSetup();
+
+        GetComponent<TileTypeAllocator>().AllocateLand(m_Seed, m_rows, m_columns);
 
         OnWorldGenerationComplete?.Invoke(m_rows, m_columns);
     }
