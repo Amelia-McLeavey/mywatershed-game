@@ -46,7 +46,6 @@ public class LandGenerator : MonoBehaviour
                 }
             }
         }
-
     }
 
     private void FindNeighboursOfLand()

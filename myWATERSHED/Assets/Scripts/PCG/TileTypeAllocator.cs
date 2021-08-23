@@ -51,6 +51,8 @@ public class TileTypeAllocator : MonoBehaviour
     private int m_segments;
     [SerializeField]
     private int m_minimumArea;
+    [SerializeField]
+    private int m_maxForestDepthAlongRiver = 4;
 
     private List<Vector2> m_startingForestIndicies = new List<Vector2>();
 
@@ -62,7 +64,7 @@ public class TileTypeAllocator : MonoBehaviour
         Random.InitState(seed);
 
         AllocateNaturalStreamType();
-        AllocateForestType();
+        AllocateForestTypeAlongRiver(rows, columns);
         //SelectPoints();
         //IdentifyPoints();
         //AllocateRemainingTileTypes(rows, columns);
@@ -86,15 +88,18 @@ public class TileTypeAllocator : MonoBehaviour
             {
                 Material material = m_TileManager.ReturnTileType(PhysicalType.NaturalStream);
                 tileScript.SetMaterial(material);
+                tileScript.m_PhysicalType = PhysicalType.NaturalStream;
             }
         }
     }
 
-    private void AllocateForestType()
+    private void AllocateForestTypeAlongRiver(int rows, int columns)
     {
+        int _rows = rows;
+
         foreach (Vector2 index in m_startingForestIndicies)
         {
-            if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(index.x, index.y), out GameObject value))
+            if (WorldGenerator.s_TilesDictonary.TryGetValue(index, out GameObject value))
             {
                 Material material = m_TileManager.ReturnTileType(PhysicalType.Forest);
                 Tile tileScript = value.GetComponent<Tile>();
@@ -102,6 +107,43 @@ public class TileTypeAllocator : MonoBehaviour
                 tileScript.SetMaterial(material);
             }
         }
+
+        for (int i = 0; i < m_maxForestDepthAlongRiver; i++)
+        {
+            Vector2[] forestIndicies = new Vector2[m_startingForestIndicies.Count];
+            m_startingForestIndicies.CopyTo(forestIndicies);
+            m_startingForestIndicies.Clear();
+
+            foreach (Vector2 index in forestIndicies)
+            {
+                if (index.x < _rows * 0.30f)
+                {
+                    // Find all the un-typed neighbours of forest tiles
+                    List<Vector2> neighbourIndices = NeighbourUtility.GetNeighbours(index);
+
+                    foreach (Vector2 neighbourIndex in neighbourIndices)
+                    {
+                        if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbourIndex, out GameObject value))
+                        {
+                            if (neighbourIndex.x > -1 && neighbourIndex.x < rows && neighbourIndex.y > -1 && neighbourIndex.y < columns)
+                            {
+                                if (value.GetComponent<Tile>().m_PhysicalType == PhysicalType.None)
+                                {
+                                    Material material = m_TileManager.ReturnTileType(PhysicalType.Forest);
+                                    Tile tileScript = value.GetComponent<Tile>();
+                                    tileScript.m_PhysicalType = PhysicalType.Forest;
+                                    tileScript.SetMaterial(material);
+
+                                    m_startingForestIndicies.Add(neighbourIndex);
+                                }
+                            }
+                        }
+                    }
+                } 
+            }
+            _rows /= 2;
+        }
+        m_startingForestIndicies.Clear();
     }
 
     private void SelectPoints()

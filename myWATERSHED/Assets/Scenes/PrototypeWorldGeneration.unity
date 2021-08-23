@@ -3561,7 +3561,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77ef3cb7c32728c418bba281e95fd31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Seed: 182
+  m_Seed: 228
   m_rows: 120
   m_columns: 70
   m_tile: {fileID: 5504254332836856125, guid: 41f43ee003271f64bb05b63a09f383ff, type: 3}
@@ -3639,6 +3639,7 @@ MonoBehaviour:
   m_TileManager: {fileID: 1757957673}
   m_segments: 40
   m_minimumArea: 5
+  m_maxForestDepthAlongRiver: 4
 --- !u!1 &1992598769
 GameObject:
   m_ObjectHideFlags: 0
