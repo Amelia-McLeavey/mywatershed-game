@@ -54,7 +54,7 @@ public class FlowSimulator : MonoBehaviour
                     Tile tileScript = value.GetComponent<Tile>();
                     if (tileScript.m_Basetype == BaseType.Water)
                     {
-                        tileScript.FindNeighbours();
+                        tileScript.FindWaterNeighbours();
                     }
                 }
             }

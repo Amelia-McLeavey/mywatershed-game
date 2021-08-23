@@ -6,73 +6,45 @@ using System.Linq;
 public class Tile : MonoBehaviour
 {
     public BaseType m_Basetype;
-    public ClassType m_ClassType;
-    public LandFamilyType m_LandFamilyType;
-    public WaterFamilyType m_WaterFamilyType;
+    public PhysicalType m_PhysicalType;
 
     public Vector2 m_TileIndex;
 
-    [SerializeField]
-    private Material m_genericMaterial;
-    [SerializeField] 
-    private Material m_waterMaterial;
-    [SerializeField] 
-    private Material m_landMaterial;
-    [SerializeField]
-    private Material m_industrialMat;
-    [SerializeField]
-    private Material m_infrastructureMat;
-    [SerializeField]
-    private Material m_residentialMat;
-    [SerializeField]
-    private Material m_agricultureMat;
-    [SerializeField]
-    private Material m_recreationalMat;
-
+    // INFORMATION VARIABLES
     private float m_redValue;
 
     private List<float> m_colorInfoItems = new List<float>();
+
     private List<GameObject> m_senderNeighbours = new List<GameObject>();
     private List<GameObject> m_recieverNeighbours = new List<GameObject>();
 
     private MeshRenderer m_meshRenderer;
 
-    public void SetBaseType(BaseType baseType)
+    private void Awake()
     {
-        m_Basetype = baseType;
-
-        // SET MATERIAL
-        m_meshRenderer = GetComponentInChildren<MeshRenderer>();
-        if (m_Basetype == BaseType.Water)
-        {
-            m_meshRenderer.material = m_waterMaterial;
-        }
-        else if (m_Basetype == BaseType.Land)
-        {
-            m_meshRenderer.material = m_landMaterial;
-        }
-        else if (m_Basetype == BaseType.None)
-        {
-            m_meshRenderer.material = m_genericMaterial;
-        }
-        else { Debug.LogError("Failed to set a base type."); }
+        m_meshRenderer = GetComponent<MeshRenderer>();
     }
 
-    public void SetLandFamilyType(int enumIndex)
+    //public void SetLandFamilyType(int enumIndex)
+    //{
+    //    //Debug.Log($"enum index = {enumIndex}");
+    //    switch (enumIndex) 
+    //    {
+    //        case 1: m_meshRenderer.material = m_industrialMat; break;
+    //        case 2: m_meshRenderer.material = m_infrastructureMat; break;
+    //        case 3: m_meshRenderer.material = m_residentialMat; break;
+    //        case 4: m_meshRenderer.material = m_agricultureMat; break;
+    //        case 5: m_meshRenderer.material = m_recreationalMat; break;
+    //        default: Debug.LogError("Could not assign new material"); break;
+    //    }
+    //}
+
+    public void SetMaterial(Material material)
     {
-        Debug.Log($"enum index = {enumIndex}");
-        switch (enumIndex) 
-        {
-            case 1: m_meshRenderer.material = m_industrialMat; break;
-            case 2: m_meshRenderer.material = m_infrastructureMat; break;
-            case 3: m_meshRenderer.material = m_residentialMat; break;
-            case 4: m_meshRenderer.material = m_agricultureMat; break;
-            case 5: m_meshRenderer.material = m_recreationalMat; break;
-            default: Debug.LogError("Could not assign new material"); break;
-        }
+        m_meshRenderer.material = material;
     }
 
-    public void FindNeighbours()
+    public void FindWaterNeighbours()
     {
         List<Vector2> neighbourIndexes = NeighbourUtility.GetNeighbours(m_TileIndex);
 
@@ -118,18 +90,16 @@ public class Tile : MonoBehaviour
         m_meshRenderer.material.color = new Color(m_redValue, 124f / 255f, 200f / 255f, 200f / 255f);
     }
 
-    public void ChangeMaterial(LandFamilyType landFamilyType)
-    {
-        switch ((int)landFamilyType)
-        {
-            case 1: m_meshRenderer.material = m_industrialMat; break;
-            case 2: m_meshRenderer.material = m_infrastructureMat; break;
-            case 3: m_meshRenderer.material = m_residentialMat; break;
-            case 4: m_meshRenderer.material = m_agricultureMat; break;
-            case 5: m_meshRenderer.material = m_recreationalMat; break;
-            default: break;
-        }
-    }
+    //public void ChangeMaterial(UrbanFamilyType landFamilyType)
+    //{
+    //    switch ((int)landFamilyType)
+    //    {
+    //        case 1: m_meshRenderer.material = m_industrialMat; break;
+    //        case 2: m_meshRenderer.material = m_infrastructureMat; break;
+    //        case 3: m_meshRenderer.material = m_residentialMat; break;
+    //        default: break;
+    //    }
+    //}
 
     public void SendInformationFlow()
     {

@@ -23,6 +23,9 @@ public class LandGenerator : MonoBehaviour
 
         FindNeighboursOfWater();
         GetComponent<HeightmapGenerator>().SetLandHeights(m_definedNeighbourIndices);
+        // Store the Water Neighours in a list on TileTypeAllocator for later use.
+        GetComponent<TileTypeAllocator>().InitializeForestTiles(m_definedNeighbourIndices);
+
         while (WorldGenerator.s_UndefinedTiles.Count > 0)
         {
             FindNeighboursOfLand();
@@ -43,6 +46,7 @@ public class LandGenerator : MonoBehaviour
                 }
             }
         }
+
     }
 
     private void FindNeighboursOfLand()
