@@ -17,9 +17,7 @@ public enum WaterFamilyType { None, Static, Dynamic }
 public enum PhysicalType 
 { 
     None, 
-    Agriculture, 
-    BeachBluff, 
-    Cemetary, 
+    Agriculture,  
     Commercial,
     EngineeredReservoir, 
     EngineeredStream, 
@@ -52,12 +50,20 @@ public class TileTypeAllocator : MonoBehaviour
     [SerializeField]
     private int m_minimumArea;
     [SerializeField]
+    private int m_minimumGolfArea;
+    [Range(0, 5)]
+    [SerializeField]
     private int m_maxForestDepthAlongRiver = 4;
+    [Range(6, 10)]
+    [SerializeField]
+    private int m_golfCourseCount = 6;
+
+    private float m_infrastructurePercent = 0.09f;
+    private float m_residentialPercent = 0.13f;
+    private float m_ruralPercent = 0.43f;
+    private float m_naturalPercent = 0.22f;
 
     private List<Vector2> m_startingForestIndicies = new List<Vector2>();
-
-    private Vector2[] m_points;
-
 
     public void AllocateTypes(int seed, int rows, int columns)
     {
@@ -65,8 +71,8 @@ public class TileTypeAllocator : MonoBehaviour
 
         AllocateNaturalStreamType();
         AllocateForestTypeAlongRiver(rows, columns);
-        //SelectPoints();
-        //IdentifyPoints();
+        AllocateGolfType();
+        AllocateTypesWithLargePercentageCover(rows);
         //AllocateRemainingTileTypes(rows, columns);
     }
 
@@ -80,13 +86,14 @@ public class TileTypeAllocator : MonoBehaviour
 
     private void AllocateNaturalStreamType()
     {
+        Material material = m_TileManager.ReturnTileType(PhysicalType.NaturalStream);
+
         foreach (KeyValuePair<Vector2, GameObject> tile in WorldGenerator.s_TilesDictonary)
         {
             Tile tileScript = tile.Value.GetComponent<Tile>();
 
             if (tileScript.m_Basetype == BaseType.Water)
             {
-                Material material = m_TileManager.ReturnTileType(PhysicalType.NaturalStream);
                 tileScript.SetMaterial(material);
                 tileScript.m_PhysicalType = PhysicalType.NaturalStream;
             }
@@ -96,12 +103,12 @@ public class TileTypeAllocator : MonoBehaviour
     private void AllocateForestTypeAlongRiver(int rows, int columns)
     {
         int _rows = rows;
+        Material material = m_TileManager.ReturnTileType(PhysicalType.Forest);
 
         foreach (Vector2 index in m_startingForestIndicies)
         {
             if (WorldGenerator.s_TilesDictonary.TryGetValue(index, out GameObject value))
             {
-                Material material = m_TileManager.ReturnTileType(PhysicalType.Forest);
                 Tile tileScript = value.GetComponent<Tile>();
                 tileScript.m_PhysicalType = PhysicalType.Forest;
                 tileScript.SetMaterial(material);
@@ -129,7 +136,6 @@ public class TileTypeAllocator : MonoBehaviour
                             {
                                 if (value.GetComponent<Tile>().m_PhysicalType == PhysicalType.None)
                                 {
-                                    Material material = m_TileManager.ReturnTileType(PhysicalType.Forest);
                                     Tile tileScript = value.GetComponent<Tile>();
                                     tileScript.m_PhysicalType = PhysicalType.Forest;
                                     tileScript.SetMaterial(material);
@@ -146,51 +152,193 @@ public class TileTypeAllocator : MonoBehaviour
         m_startingForestIndicies.Clear();
     }
 
-    private void SelectPoints()
+    private void AllocateGolfType()
     {
-        m_points = new Vector2[m_segments];
-        Vector2[] tiles = new Vector2[LandGenerator.s_LandTiles.Count];
-        List<Vector2> tilesList = new List<Vector2>();
+        // DEFINE TILE SET
+        List<Vector2> tileSet = new List<Vector2>();
 
-        LandGenerator.s_LandTiles.Keys.CopyTo(tiles, 0);
-
-        foreach (Vector2 tile in tiles)
+        foreach (KeyValuePair<Vector2, GameObject> tile in WorldGenerator.s_TilesDictonary)
         {
-            tilesList.Add(tile);
-        }
-
-        for (int i = 0; i < m_segments; i++)
-        {
-            if (tilesList.Count < 1) { break; } else
+            if (tile.Value.GetComponent<Tile>().m_PhysicalType == PhysicalType.None)
             {
-                int index = Random.Range(0, tilesList.Count - 1);
-                m_points[i] = tilesList[index];
-
-                for (int x = (int)m_points[i].x - (m_minimumArea / 2); x < (int)m_points[i].x + (m_minimumArea / 2); x++)
+                if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(tile.Key.x, tile.Key.y - 4), out GameObject valueA))
                 {
-                    for (int y = (int)m_points[i].y - (m_minimumArea / 2); y < (int)m_points[i].y + (m_minimumArea / 2); y++)
+                    if (valueA.GetComponent<Tile>().m_PhysicalType == PhysicalType.NaturalStream ||
+                        valueA.GetComponent<Tile>().m_PhysicalType == PhysicalType.Forest)
                     {
-                        if (tilesList.Contains(new Vector2(x, y)))
+                        tileSet.Add(tile.Key);
+                    }
+                }
+                else if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(tile.Key.x, tile.Key.y + 4), out GameObject valueB))
+                {
+                    if (valueB.GetComponent<Tile>().m_PhysicalType == PhysicalType.NaturalStream ||
+                        valueB.GetComponent<Tile>().m_PhysicalType == PhysicalType.Forest)
+                    {
+                        tileSet.Add(tile.Key);
+                    }
+                }
+            }
+        }
+        //Debug.Log($"TTA Vector2 tileSet COUNT = {tileSet.Count}");
+        // SELECT INITIAL TILES
+        Vector2[] initialTiles = new Vector2[m_golfCourseCount];
+
+        for (int i = 0; i < m_golfCourseCount; i++)
+        {
+            if (tileSet.Count < 1) { break; } else
+            {
+                int index = Random.Range(0, tileSet.Count - 1);
+                initialTiles[i] = tileSet[index];
+
+                for (int x = (int)initialTiles[i].x - (m_minimumGolfArea / 2); x < (int)initialTiles[i].x + (m_minimumGolfArea / 2); x++)
+                {
+                    for (int y = (int)initialTiles[i].y - (m_minimumGolfArea / 2); y < (int)initialTiles[i].y + (m_minimumGolfArea / 2); y++)
+                    {
+                        if (tileSet.Contains(new Vector2(x, y)))
                         {
-                            tilesList.Remove(new Vector2(x, y));
+                            tileSet.Remove(new Vector2(x, y));
                         }
                     }
                 }
             }
         }
+        //Debug.Log($"TTA Vector2 initialTiles COUNT = {initialTiles.Length}");
+        // TYPE TILES
+        Material material = m_TileManager.ReturnTileType(PhysicalType.GolfCourse);
+
+        foreach (Vector2 tile in initialTiles)
+        {
+            // Type initial tiles
+            if (WorldGenerator.s_TilesDictonary.TryGetValue(tile, out GameObject value))
+            {
+                Tile tileScript = value.GetComponent<Tile>();
+                tileScript.m_PhysicalType = PhysicalType.GolfCourse;
+                tileScript.SetMaterial(material);
+            }
+            // Type surrounding tiles
+            List<Vector2> neighbourIndices = NeighbourUtility.GetNeighbours(tile);
+
+            foreach (Vector2 neighbourIndex in neighbourIndices)
+            {
+                if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbourIndex, out GameObject nValue))
+                {
+                    Tile tileScript = nValue.GetComponent<Tile>();
+                    if (tileScript.m_PhysicalType == PhysicalType.None || tileScript.m_PhysicalType == PhysicalType.Forest)
+                    {
+                        tileScript.m_PhysicalType = PhysicalType.GolfCourse;
+                        tileScript.SetMaterial(material);
+                    } 
+                }
+            }
+            // Type extra tiles
+            for (int i = 0; i < 3; i++)
+            {
+                int index = Random.Range(0, neighbourIndices.Count);
+
+                List<Vector2> extraNeighbourIndicies = NeighbourUtility.GetNeighbours(neighbourIndices[index]);
+
+                foreach (Vector2 extraNeighbourIndex in extraNeighbourIndicies)
+                {
+                    if (WorldGenerator.s_TilesDictonary.TryGetValue(extraNeighbourIndex, out GameObject eValue))
+                    {
+                        Tile tileScript = eValue.GetComponent<Tile>();
+                        if (tileScript.m_PhysicalType == PhysicalType.None || tileScript.m_PhysicalType == PhysicalType.Forest)
+                        {
+                            tileScript.m_PhysicalType = PhysicalType.GolfCourse;
+                            tileScript.SetMaterial(material);
+                        }
+                    }
+                }
+                neighbourIndices.RemoveAt(index);
+            }
+        }
     }
 
-
-
-    private void IdentifyPoints()
+    private void AllocateTypesWithLargePercentageCover(in int rows)
     {
-        foreach (Vector2 point in m_points)
-        {
-            int randomType = Random.Range(1, 4);
+        // DEFINE TILE SET
+        List<Vector2> tileSet = new List<Vector2>();
 
-            if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(point.x, point.y), out GameObject value))
+        foreach (KeyValuePair<Vector2, GameObject> tile in WorldGenerator.s_TilesDictonary)
+        {
+            if (tile.Value.GetComponent<Tile>().m_PhysicalType == PhysicalType.None)
             {
-                //value.GetComponent<Tile>().SetLandFamilyType(randomType);
+                tileSet.Add(tile.Key);
+            }
+        }
+
+        // SELECT INITIAL TILES
+        Vector2[] initialTiles = new Vector2[m_segments];
+
+        for (int i = 0; i < m_segments; i++)
+        {
+            if (tileSet.Count < 1) { break; } else
+            {
+                int index = Random.Range(0, tileSet.Count);
+                initialTiles[i] = tileSet[index];
+
+                for (int x = (int)initialTiles[i].x - (m_minimumArea / 2); x < (int)initialTiles[i].x + (m_minimumArea / 2); x++)
+                {
+                    for (int y = (int)initialTiles[i].y - (m_minimumArea / 2); y < (int)initialTiles[i].y + (m_minimumArea / 2); y++)
+                    {
+                        if (tileSet.Contains(new Vector2(x, y)))
+                        {
+                            tileSet.Remove(new Vector2(x, y));
+                        }
+                    }
+                }
+            }
+        }
+
+        // TYPE TILES
+        // Set materials
+        Material infrastructureMaterial = m_TileManager.ReturnTileType(PhysicalType.Commercial);
+        Material residentialMaterial = m_TileManager.ReturnTileType(PhysicalType.LowMidDensity);
+        Material ruralMaterial = m_TileManager.ReturnTileType(PhysicalType.Agriculture);
+        Material naturalMaterial = m_TileManager.ReturnTileType(PhysicalType.Successional);
+
+        // Determine number of initial tiles per type
+        int infrastructureTileCount = (int)(m_segments * m_infrastructurePercent);
+        int residentialTileCount = (int)(m_segments * m_residentialPercent);
+        int ruralTileCount = (int)(m_segments * m_ruralPercent);
+        int naturalTileCount = (int)(m_segments * m_naturalPercent);
+
+        // Store data
+        int[] typeAmounts = new int[] { infrastructureTileCount, residentialTileCount, ruralTileCount, naturalTileCount };
+        List<int> tileHat = new List<int>();
+
+        // Populate the list
+        while (tileHat.Count < m_segments)
+        {
+            for (int i = 0; i < typeAmounts.Length; i++)
+            {
+                for (int a = 0; a < typeAmounts[i]; a++)
+                {
+                    tileHat.Add(i);
+                }
+            }
+        }
+
+        float infrastructureChance;
+        float residentialChance;
+        float ruralChance;
+        float naturalChance;
+
+        foreach (Vector2 tile in initialTiles)
+        {
+            if (tile.x < rows / 2)
+            {
+                infrastructureChance = 0.01f;
+                residentialChance = 0.01f;
+                ruralChance = 0.55f;
+                naturalChance = 0.40f;
+            } 
+            else if (tile.x > rows / 2)
+            {
+                infrastructureChance = 0.01f;
+                residentialChance = 0.01f;
+                ruralChance = 0.55f;
+                naturalChance = 0.40f;
             }
         }
     }

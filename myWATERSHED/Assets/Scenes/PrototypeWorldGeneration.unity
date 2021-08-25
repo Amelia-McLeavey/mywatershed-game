@@ -3340,8 +3340,6 @@ MonoBehaviour:
   m_testMaterials:
   - {fileID: 2100000, guid: da34ad07863d5d34db54e2a1432e9248, type: 2}
   - {fileID: 2100000, guid: be5866a5fa565fc4a9ab8c8a70b77456, type: 2}
-  - {fileID: 2100000, guid: 0b0b001e6c0c8bc4b98af58fb2c1f0a7, type: 2}
-  - {fileID: 2100000, guid: 5c6c6fce5686f3d42993ab92bd74a99c, type: 2}
   - {fileID: 2100000, guid: a06e11fe7b5bdef469d1845e5cc6de8b, type: 2}
   - {fileID: 2100000, guid: 08b5eea57b5981449b71c4e2c2a80407, type: 2}
   - {fileID: 2100000, guid: 6f01ecdecf6b90847a64f51f4a36770f, type: 2}
@@ -3561,7 +3559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77ef3cb7c32728c418bba281e95fd31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Seed: 228
+  m_Seed: 231
   m_rows: 120
   m_columns: 70
   m_tile: {fileID: 5504254332836856125, guid: 41f43ee003271f64bb05b63a09f383ff, type: 3}
@@ -3639,7 +3637,9 @@ MonoBehaviour:
   m_TileManager: {fileID: 1757957673}
   m_segments: 40
   m_minimumArea: 5
-  m_maxForestDepthAlongRiver: 4
+  m_minimumGolfArea: 0
+  m_maxForestDepthAlongRiver: 2
+  m_golfCourseCount: 6
 --- !u!1 &1992598769
 GameObject:
   m_ObjectHideFlags: 0

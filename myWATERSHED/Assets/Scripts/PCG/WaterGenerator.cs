@@ -13,7 +13,7 @@ public class WaterGenerator : MonoBehaviour
     [Range(1, 5)]
     [SerializeField]
     private int m_rMinWidth = 4;
-    [Range(1, 5)]
+    [Range(1, 5)] 
     [SerializeField]
     private int m_rMaxWidth = 4;
     [Range(1, 10)]
