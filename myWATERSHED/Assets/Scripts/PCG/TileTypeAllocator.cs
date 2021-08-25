@@ -2,48 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BaseType { None, Land, Water }
-
-// LAND TYPES
-public enum LandClassType { None, Urban, Rural, Natural }
-public enum UrbanFamilyType { None, Infrastructure, Residential, Recreational }
-
-
-// WATER TYPES
-public enum WaterClassType { None, Natural, Human }
-public enum WaterFamilyType { None, Static, Dynamic }
-
-// PHYSICAL TYPES
-public enum PhysicalType 
-{ 
-    None, 
-    Agriculture,  
-    Commercial,
-    EngineeredReservoir, 
-    EngineeredStream, 
-    EstateResidential,
-    Forest,
-    GolfCourse,
-    HighDensity,
-    Highway,
-    Industrial,
-    Institutional,
-    LowMidDensity,
-    Meadow,
-    NaturalReservoir,
-    NaturalStream,
-    RecreationCentreSpace,
-    Successional,
-    UrbanOpenSpace,
-    Vacant,
-    Wetland
-}
-
 public class TileTypeAllocator : MonoBehaviour
 {
     public TileManager m_TileManager;
-
-    public static Dictionary<Vector2, UrbanFamilyType> s_LandFamilyTiles = new Dictionary<Vector2, UrbanFamilyType>();
 
     [SerializeField]
     private int m_segments;
@@ -58,10 +19,10 @@ public class TileTypeAllocator : MonoBehaviour
     [SerializeField]
     private int m_golfCourseCount = 6;
 
-    private float m_infrastructurePercent = 0.09f;
-    private float m_residentialPercent = 0.13f;
-    private float m_ruralPercent = 0.43f;
-    private float m_naturalPercent = 0.22f;
+    private readonly float m_infrastructurePercent = 0.10f;
+    private readonly float m_residentialPercent = 0.15f;
+    private readonly float m_ruralPercent = 0.43f;
+    private readonly float m_naturalPercent = 0.33f;
 
     private List<Vector2> m_startingForestIndicies = new List<Vector2>();
 
@@ -73,7 +34,6 @@ public class TileTypeAllocator : MonoBehaviour
         AllocateForestTypeAlongRiver(rows, columns);
         AllocateGolfType();
         AllocateTypesWithLargePercentageCover(rows);
-        //AllocateRemainingTileTypes(rows, columns);
     }
 
     public void InitializeForestTiles(List<Vector2> indices)
@@ -267,19 +227,19 @@ public class TileTypeAllocator : MonoBehaviour
             }
         }
 
-        // SELECT INITIAL TILES
-        Vector2[] initialTiles = new Vector2[m_segments];
+        // SELECT INITIAL TILE POINTS
+        Vector2[] initialPoints = new Vector2[m_segments];
 
         for (int i = 0; i < m_segments; i++)
         {
             if (tileSet.Count < 1) { break; } else
             {
                 int index = Random.Range(0, tileSet.Count);
-                initialTiles[i] = tileSet[index];
+                initialPoints[i] = tileSet[index];
 
-                for (int x = (int)initialTiles[i].x - (m_minimumArea / 2); x < (int)initialTiles[i].x + (m_minimumArea / 2); x++)
+                for (int x = (int)initialPoints[i].x - (m_minimumArea / 2); x < (int)initialPoints[i].x + (m_minimumArea / 2); x++)
                 {
-                    for (int y = (int)initialTiles[i].y - (m_minimumArea / 2); y < (int)initialTiles[i].y + (m_minimumArea / 2); y++)
+                    for (int y = (int)initialPoints[i].y - (m_minimumArea / 2); y < (int)initialPoints[i].y + (m_minimumArea / 2); y++)
                     {
                         if (tileSet.Contains(new Vector2(x, y)))
                         {
@@ -290,21 +250,35 @@ public class TileTypeAllocator : MonoBehaviour
             }
         }
 
-        // TYPE TILES
+        // TYPE INITIAL TILES
+        // Set Type 
+        PhysicalType[] physicalTypes = new PhysicalType[]
+        {
+            PhysicalType.Commercial,
+            PhysicalType.LowMidDensity,
+            PhysicalType.Agriculture,
+            PhysicalType.Successional
+        };
+
         // Set materials
-        Material infrastructureMaterial = m_TileManager.ReturnTileType(PhysicalType.Commercial);
-        Material residentialMaterial = m_TileManager.ReturnTileType(PhysicalType.LowMidDensity);
-        Material ruralMaterial = m_TileManager.ReturnTileType(PhysicalType.Agriculture);
-        Material naturalMaterial = m_TileManager.ReturnTileType(PhysicalType.Successional);
+        Material[] materials = new Material[]
+        {
+            m_TileManager.ReturnTileType(PhysicalType.Commercial),
+            m_TileManager.ReturnTileType(PhysicalType.LowMidDensity),
+            m_TileManager.ReturnTileType(PhysicalType.Agriculture),
+            m_TileManager.ReturnTileType(PhysicalType.Successional)
+        };
 
         // Determine number of initial tiles per type
-        int infrastructureTileCount = (int)(m_segments * m_infrastructurePercent);
-        int residentialTileCount = (int)(m_segments * m_residentialPercent);
-        int ruralTileCount = (int)(m_segments * m_ruralPercent);
-        int naturalTileCount = (int)(m_segments * m_naturalPercent);
+        int[] typeAmounts = new int[] 
+        {
+            (int)(m_segments * m_infrastructurePercent),
+            (int)(m_segments * m_residentialPercent),
+            (int)(m_segments * m_ruralPercent),
+            (int)(m_segments * m_naturalPercent)
+        };
 
         // Store data
-        int[] typeAmounts = new int[] { infrastructureTileCount, residentialTileCount, ruralTileCount, naturalTileCount };
         List<int> tileHat = new List<int>();
 
         // Populate the list
@@ -319,40 +293,79 @@ public class TileTypeAllocator : MonoBehaviour
             }
         }
 
-        float infrastructureChance;
-        float residentialChance;
-        float ruralChance;
-        float naturalChance;
+        float[] typeChances = new float[6];
 
-        foreach (Vector2 tile in initialTiles)
+        List<GameObject> initialTiles = new List<GameObject>();
+
+        foreach (Vector2 initialPoint in initialPoints)
         {
-            if (tile.x < rows / 2)
+            // Determine percent split
+            if (initialPoint.x < rows / 2)
             {
-                infrastructureChance = 0.01f;
-                residentialChance = 0.01f;
-                ruralChance = 0.55f;
-                naturalChance = 0.40f;
+                typeChances[0] = 0.02f; // 2 %
+                typeChances[1] = 0.04f; // 2 %
+                typeChances[2] = 0.60f; // 56 %
+                typeChances[3] = 1.00f; // 40 %
             } 
-            else if (tile.x > rows / 2)
+            else if (initialPoint.x > rows / 2)
             {
-                infrastructureChance = 0.01f;
-                residentialChance = 0.01f;
-                ruralChance = 0.55f;
-                naturalChance = 0.40f;
+                typeChances[0] = 0.34f; // 34 %
+                typeChances[1] = 0.98f; // 64 %
+                typeChances[2] = 0.99f; // 1 %
+                typeChances[3] = 1.00f; // 1 %
+            }
+
+            float rng = Random.Range(0f, 1f);
+            float previousValue = 0;
+
+            for (int i = 0; i < typeChances.Length; i++)
+            {
+                if (rng > previousValue && rng < typeChances[i])
+                {
+                    if (tileHat.Contains(i))
+                    {
+                        if (WorldGenerator.s_TilesDictonary.TryGetValue(initialPoint, out GameObject value))
+                        {
+                            value.GetComponent<Tile>().SetMaterial(materials[i]);
+                            value.GetComponent<Tile>().m_PhysicalType = physicalTypes[i]; 
+                            initialTiles.Add(value);
+                            tileHat.Remove(i);
+                            break;
+                        }
+                    }
+                }
+                previousValue = typeChances[i];
             }
         }
-    }
+        tileHat.Clear();
 
-
-
-    private void AllocateRemainingTileTypes(int rows, int columns)
-    {
-        for (int x = 0; x < rows; x++)
+        // TYPE REMAINING TILES
+        // For each tile on the map that is not yet typed
+        foreach (KeyValuePair<Vector2, GameObject> currentTile in WorldGenerator.s_TilesDictonary)
         {
-            for (int y = 0; y > columns; y++)
+            Tile tileScript = currentTile.Value.GetComponent<Tile>();
+            if (tileScript.m_PhysicalType == PhysicalType.None)
             {
+                float distanceToNearestPoint = 1000f;
+                GameObject nearestTile = currentTile.Value;
+                // Find the difference between it and each initial point
+                foreach (GameObject initialTile in initialTiles)
+                {
+                    Vector2 index = initialTile.GetComponent<Tile>().m_TileIndex;
+                    Vector2 difference =  index - currentTile.Key;
+                    float distance = difference.magnitude;
 
+                    // Store the point as nearest if it is closer than the last found nearest point
+                    if (distance < distanceToNearestPoint)
+                    {
+                        nearestTile = initialTile;
+                        distanceToNearestPoint = distance;
+                    }
+                }
+                tileScript.m_PhysicalType = nearestTile.GetComponent<Tile>().m_PhysicalType;
+                tileScript.SetMaterial(m_TileManager.ReturnTileType(tileScript.m_PhysicalType));
             }
         }
+        initialTiles.Clear();
     }
 }
