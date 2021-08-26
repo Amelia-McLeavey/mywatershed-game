@@ -109,7 +109,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Basetype: 0
+  m_ClassType: 0
+  m_LandFamilyType: 0
+  m_WaterFamilyType: 0
   m_TileIndex: {x: 0, y: 0}
   m_genericMaterial: {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_waterMaterial: {fileID: 2100000, guid: 702aca49b71dc9b45aa05602ef41bbcb, type: 2}
   m_landMaterial: {fileID: 2100000, guid: 0b437f138801e1843a97936cfa881430, type: 2}
+  m_industrialMat: {fileID: 2100000, guid: f87972dc804c4934593459126422cd18, type: 2}
+  m_infrastructureMat: {fileID: 2100000, guid: c046e776a5cd63f4b8f57a758ab04378, type: 2}
+  m_residentialMat: {fileID: 2100000, guid: 44e78b46389dbc248b6c61bae0c1a7cc, type: 2}
+  m_agricultureMat: {fileID: 2100000, guid: 04eed36e9172d004e9d5f39308e49e52, type: 2}
+  m_recreationalMat: {fileID: 2100000, guid: 30ddfcb97ed0f4844a95c0fd9895ef27, type: 2}
