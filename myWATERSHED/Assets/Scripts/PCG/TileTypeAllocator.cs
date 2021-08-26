@@ -15,6 +15,12 @@ public class TileTypeAllocator : MonoBehaviour
     [Range(6, 10)]
     [SerializeField]
     private int m_golfCourseCount = 6;
+    [Range(5, 10)]
+    [SerializeField]
+    private int m_naturalReservoirCount = 5;
+    [Range(0, 10)]
+    [SerializeField]
+    private int m_engineeredReservoirCount = 2;
     [SerializeField]
     private int m_industrialSpaceCount = 100;
     [SerializeField]
@@ -25,6 +31,8 @@ public class TileTypeAllocator : MonoBehaviour
     private int m_urbanHouseSpaceCount = 400;
     [SerializeField]
     private int m_ruralHouseSpaceCount = 4;
+    [SerializeField]
+    private int m_naturalLandSegmentCount = 80;
     [Range(1, 5)]
     [SerializeField]
     private int m_industrialSpaceSize = 2;
@@ -39,6 +47,9 @@ public class TileTypeAllocator : MonoBehaviour
     private readonly int m_minVacantArea = 1;
     private readonly int m_minUrbanHouseArea = 1;
     private readonly int m_minRuralHouseArea = 7;
+    private readonly int m_minNaturalLandArea = 3;
+    private readonly int m_minNatResArea = 3;
+    private readonly int m_minEngResArea = 3;
 
     private readonly float m_infrastructurePercent = 0.10f;
     private readonly float m_residentialPercent = 0.15f;
@@ -58,6 +69,8 @@ public class TileTypeAllocator : MonoBehaviour
         AllocateInfrastructureTypes();
         AllocateResidentialTypes();
         AllocateRuralTypes();
+        AllocateNaturalLandTypes();
+        AllocateReservoirTypes();
     }
 
     public void InitializeForestTiles(List<Vector2> indices)
@@ -214,7 +227,7 @@ public class TileTypeAllocator : MonoBehaviour
             PhysicalType.Commercial,
             PhysicalType.HighDensity,
             PhysicalType.Agriculture,
-            PhysicalType.Successional
+            PhysicalType.Forest
         };
         // Set materials
         Material[] materials = new Material[]
@@ -222,7 +235,7 @@ public class TileTypeAllocator : MonoBehaviour
             m_TileManager.ReturnTileType(PhysicalType.Commercial),
             m_TileManager.ReturnTileType(PhysicalType.HighDensity),
             m_TileManager.ReturnTileType(PhysicalType.Agriculture),
-            m_TileManager.ReturnTileType(PhysicalType.Successional)
+            m_TileManager.ReturnTileType(PhysicalType.Forest)
         };
         // Determine number of initial tiles per type
         int[] typeAmounts = new int[] 
@@ -431,11 +444,100 @@ public class TileTypeAllocator : MonoBehaviour
             TypeInitialTiles(initialPoint, PhysicalType.EstateResidential, material);
             TypeSurroundingTilesV4(initialPoint, PhysicalType.EstateResidential, material, PhysicalType.Agriculture);
         }
+
+        ruralTileSet.Clear();
     }
 
-    ////////////////////////
-    //// HELPER METHODS ////
-    ////////////////////////
+    private void AllocateNaturalLandTypes()
+    {
+        // DEFINE TILE SET
+        List<Vector2> naturalLandlTileSet = DefineTileSet(PhysicalType.Forest);
+
+        // SELECT INITIAL TILE POINTS 
+        Vector2[] initialTilePoints = SelectInitialTilePoints(naturalLandlTileSet, m_naturalLandSegmentCount, m_minNaturalLandArea);
+
+        // TYPE TILES
+        Material material = m_TileManager.ReturnTileType(PhysicalType.Meadow);
+        foreach (Vector2 initialPoint in initialTilePoints)
+        {
+            TypeInitialTiles(initialPoint, PhysicalType.Meadow, material);
+            TypeSurroundingTilesV4(initialPoint, PhysicalType.Meadow, material, PhysicalType.Forest);
+        }
+
+        naturalLandlTileSet.Clear();
+
+        // DEFINE TILE SET FOR SUCCESSIONAL
+        List<Vector2> successionalLandlTileSet = DefineTileSet(PhysicalType.Meadow);
+
+        Material successionalMaterial = m_TileManager.ReturnTileType(PhysicalType.Successional);
+
+        foreach (Vector2 tilePoint in successionalLandlTileSet)
+        {
+            float rng = Random.Range(0f, 1f);
+            if (rng < 0.02)
+            {
+                // Type initial tiles
+                if (WorldGenerator.s_TilesDictonary.TryGetValue(tilePoint, out GameObject value))
+                {
+                    Tile tileScript = value.GetComponent<Tile>();
+                    tileScript.m_PhysicalType = PhysicalType.Successional;
+                    tileScript.SetMaterial(successionalMaterial);
+                }
+            }
+        }
+    }
+
+    private void AllocateReservoirTypes()
+    {
+        // DEFINE NATURAL RESERVOIR TILE SET
+        List<Vector2> tileSet1 = DefineTileSet(PhysicalType.Forest);
+        List<Vector2> tileSet2 = DefineTileSet(PhysicalType.Meadow);
+        List<Vector2> reservoirTileSet = new List<Vector2>();
+        foreach (Vector2 tile in tileSet1)
+        {
+            reservoirTileSet.Add(tile);
+        }
+        foreach (Vector2 tile in tileSet2)
+        {
+            reservoirTileSet.Add(tile);
+        }
+        tileSet1.Clear();
+        tileSet2.Clear();
+
+        // SELECT INITIAL TILE POINTS
+        Vector2[] initialTilePoints1 = SelectInitialTilePoints(reservoirTileSet, m_naturalReservoirCount, m_minNatResArea);
+
+        // TYPE TILES
+        Material material = m_TileManager.ReturnTileType(PhysicalType.NaturalReservoir);
+
+        foreach (Vector2 initialPoint in initialTilePoints1)
+        {
+            TypeInitialTiles(initialPoint, PhysicalType.NaturalReservoir, material);
+            TypeSurroundingTilesV3(initialPoint, PhysicalType.NaturalReservoir, material, PhysicalType.Forest, PhysicalType.Meadow);
+        }
+
+        reservoirTileSet.Clear();
+
+        // DEFINE ENGINEERED RESERVOIR TILE SET
+        reservoirTileSet = DefineTileSet(PhysicalType.Agriculture);
+
+        // SELECT INITIAL TILE POINTS
+        Vector2[] initialTilePoints2 = SelectInitialTilePoints(reservoirTileSet, m_engineeredReservoirCount, m_minEngResArea);
+
+        // TYPE TILES
+        material = m_TileManager.ReturnTileType(PhysicalType.EngineeredReservoir);
+
+        foreach (Vector2 initialPoint in initialTilePoints2)
+        {
+            TypeInitialTiles(initialPoint, PhysicalType.EngineeredReservoir, material);
+            TypeSurroundingTilesV3(initialPoint, PhysicalType.EngineeredReservoir, material, PhysicalType.Agriculture, PhysicalType.LowMidDensity);
+        }
+
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////
+    //// HELPER METHODS ///////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /// <summary>
     /// Creates a set of tiles from the Tile Dictonary using a PhysicalType to specify
@@ -610,9 +712,9 @@ public class TileTypeAllocator : MonoBehaviour
     /// <param name="type"></param>
     /// <param name="material"></param>
     /// <param name="checkAgainstType1"></param>
-    private void TypeSurroundingTilesV3(Vector2 initialPoint, PhysicalType type, Material material, PhysicalType checkAgainstType1)
+    private void TypeSurroundingTilesV3(Vector2 initialPoint, PhysicalType type, Material material, PhysicalType checkAgainstType1, PhysicalType checkAgainstType2)
     {
-        List<Vector2> neighbourIndices = TypeNeighbouringTiles(initialPoint, type, material, checkAgainstType1, checkAgainstType1, checkAgainstType1);
+        List<Vector2> neighbourIndices = TypeNeighbouringTiles(initialPoint, type, material, checkAgainstType1, checkAgainstType2, checkAgainstType2);
 
         // Type extra tiles
         for (int i = 0; i < 2; i++)
@@ -658,26 +760,31 @@ public class TileTypeAllocator : MonoBehaviour
 
             for (int s = 0; s < someNeighbourAmount - 1; s++)
             {
-                int randomInitialNeighbourIndex = Random.Range(0, nextNeighbourIndicies.Count);
-
-                List<Vector2> currentNeighbourIndicies = NeighbourUtility.GetNeighbours(nextNeighbourIndicies[randomInitialNeighbourIndex]);
-
-                foreach (Vector2 currentNeighbourIndex in currentNeighbourIndicies)
+                if (nextNeighbourIndicies.Count <= 0) break; else
                 {
-                    if (WorldGenerator.s_TilesDictonary.TryGetValue(currentNeighbourIndex, out GameObject eValue))
+                    int randomInitialNeighbourIndex = Random.Range(0, nextNeighbourIndicies.Count);
+
+                    List<Vector2> currentNeighbourIndicies = NeighbourUtility.GetNeighbours(nextNeighbourIndicies[randomInitialNeighbourIndex]);
+
+                    foreach (Vector2 currentNeighbourIndex in currentNeighbourIndicies)
                     {
-                        Tile tileScript = eValue.GetComponent<Tile>();
-                        if (tileScript.m_PhysicalType == checkAgainstType1)
+                        if (WorldGenerator.s_TilesDictonary.TryGetValue(currentNeighbourIndex, out GameObject eValue))
                         {
-                            tileScript.m_PhysicalType = type;
-                            tileScript.SetMaterial(material);
-                            nextNeighbourIndicies.Add(currentNeighbourIndex);
+                            Tile tileScript = eValue.GetComponent<Tile>();
+                            if (tileScript.m_PhysicalType == checkAgainstType1)
+                            {
+                                tileScript.m_PhysicalType = type;
+                                tileScript.SetMaterial(material);
+                                nextNeighbourIndicies.Add(currentNeighbourIndex);
+                            }
                         }
                     }
-                }
-                // So that the same index is not chosen in the next iteration
-                nextNeighbourIndicies.RemoveAt(randomInitialNeighbourIndex);
+                    // So that the same index is not chosen in the next iteration
+                    nextNeighbourIndicies.RemoveAt(randomInitialNeighbourIndex);
+                }    
             }
         }
+        nextNeighbourIndicies.Clear();
+        initialNeighbourIndices.Clear();
     }
 }
