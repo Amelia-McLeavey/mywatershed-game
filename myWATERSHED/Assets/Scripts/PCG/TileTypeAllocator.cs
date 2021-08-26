@@ -21,6 +21,9 @@ public class TileTypeAllocator : MonoBehaviour
     [Range(0, 10)]
     [SerializeField]
     private int m_engineeredReservoirCount = 2;
+    [Range(1, 5)]
+    [SerializeField]
+    private int m_highwayCount = 2;
     [SerializeField]
     private int m_industrialSpaceCount = 100;
     [SerializeField]
@@ -71,6 +74,7 @@ public class TileTypeAllocator : MonoBehaviour
         AllocateRuralTypes();
         AllocateNaturalLandTypes();
         AllocateReservoirTypes();
+        AllocateHighway(rows, columns);
     }
 
     public void InitializeForestTiles(List<Vector2> indices)
@@ -532,8 +536,39 @@ public class TileTypeAllocator : MonoBehaviour
             TypeInitialTiles(initialPoint, PhysicalType.EngineeredReservoir, material);
             TypeSurroundingTilesV3(initialPoint, PhysicalType.EngineeredReservoir, material, PhysicalType.Agriculture, PhysicalType.LowMidDensity);
         }
-
     }
+
+    private void AllocateHighway(int rows, int columns)
+    {
+        Material material = m_TileManager.ReturnTileType(PhysicalType.Highway);
+
+        // HORIZONTAL
+        for (int c = 0; c < m_highwayCount; c++)
+        {
+            int xStart = Random.Range((int)(rows * 0.75f), rows);
+            float percentageChage = Random.Range(0.1f, 0.4f);
+
+            for (int y = 0; y < columns; y++)
+            {
+                if (y % 2 == 1)
+                { 
+                    float rng = Random.Range(0f, 1f);
+                    if (rng < percentageChage)
+                    {
+                        xStart--;
+                    }
+                }
+                if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(xStart, y), out GameObject value))
+                {
+                    Tile tileScript = value.GetComponent<Tile>();
+                    tileScript.m_PhysicalType = PhysicalType.GolfCourse;
+                    tileScript.SetMaterial(material);
+                }
+            }
+        }
+    }
+
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
     //// HELPER METHODS ///////////////////////////////////////////////////////////////////////////////////
