@@ -319,7 +319,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Generate Map
+  m_Text: Start
 --- !u!222 &843173570
 CanvasRenderer:
   m_ObjectHideFlags: 0
