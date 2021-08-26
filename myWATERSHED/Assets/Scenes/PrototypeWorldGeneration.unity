@@ -3395,7 +3395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77ef3cb7c32728c418bba281e95fd31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Seed: 231
+  m_Seed: 235
   m_rows: 120
   m_columns: 70
   m_tile: {fileID: 5504254332836856125, guid: 41f43ee003271f64bb05b63a09f383ff, type: 3}
@@ -3472,10 +3472,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TileManager: {fileID: 1757957673}
   m_segments: 80
-  m_minimumArea: 3
-  m_minimumGolfArea: 0
+  m_minArea: 3
+  m_minGolfArea: 3
+  m_minCommericalArea: 3
+  m_minInstitutionalArea: 3
+  m_minVacantArea: 1
   m_maxForestDepthAlongRiver: 2
   m_golfCourseCount: 6
+  m_commercialSpaceCount: 6
+  m_institutionCount: 6
+  m_vacantSpaceCount: 6
 --- !u!1 &1992598769
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,15 +9,30 @@ public class TileTypeAllocator : MonoBehaviour
     [SerializeField]
     private int m_segments;
     [SerializeField]
-    private int m_minimumArea;
+    private int m_minArea;
     [SerializeField]
-    private int m_minimumGolfArea;
+    private int m_minGolfArea;
+    [SerializeField]
+    private int m_minCommericalArea;
+    [SerializeField]
+    private int m_minInstitutionalArea;
+    [SerializeField]
+    private int m_minVacantArea;
     [Range(0, 5)]
     [SerializeField]
     private int m_maxForestDepthAlongRiver = 4;
     [Range(6, 10)]
     [SerializeField]
     private int m_golfCourseCount = 6;
+    [Range(2, 10)]
+    [SerializeField]
+    private int m_commercialSpaceCount = 6;
+    [Range(2, 10)]
+    [SerializeField]
+    private int m_institutionCount = 6;
+    [Range(2, 10)]
+    [SerializeField]
+    private int m_vacantSpaceCount = 6;
 
     private readonly float m_infrastructurePercent = 0.10f;
     private readonly float m_residentialPercent = 0.15f;
@@ -34,6 +49,7 @@ public class TileTypeAllocator : MonoBehaviour
         AllocateForestTypeAlongRiver(rows, columns);
         AllocateGolfType();
         AllocateTypesWithLargePercentageCover(rows);
+        AllocateInfrastructureTypes(rows);
     }
 
     public void InitializeForestTiles(List<Vector2> indices)
@@ -139,57 +155,18 @@ public class TileTypeAllocator : MonoBehaviour
                 }
             }
         }
-        //Debug.Log($"TTA Vector2 tileSet COUNT = {tileSet.Count}");
+
         // SELECT INITIAL TILES
-        Vector2[] initialTiles = new Vector2[m_golfCourseCount];
+        Vector2[] initialPoints = SelectInitialTilePoints(tileSet, m_golfCourseCount, m_minGolfArea);
 
-        for (int i = 0; i < m_golfCourseCount; i++)
-        {
-            if (tileSet.Count < 1) { break; } else
-            {
-                int index = Random.Range(0, tileSet.Count - 1);
-                initialTiles[i] = tileSet[index];
-
-                for (int x = (int)initialTiles[i].x - (m_minimumGolfArea / 2); x < (int)initialTiles[i].x + (m_minimumGolfArea / 2); x++)
-                {
-                    for (int y = (int)initialTiles[i].y - (m_minimumGolfArea / 2); y < (int)initialTiles[i].y + (m_minimumGolfArea / 2); y++)
-                    {
-                        if (tileSet.Contains(new Vector2(x, y)))
-                        {
-                            tileSet.Remove(new Vector2(x, y));
-                        }
-                    }
-                }
-            }
-        }
-        //Debug.Log($"TTA Vector2 initialTiles COUNT = {initialTiles.Length}");
         // TYPE TILES
         Material material = m_TileManager.ReturnTileType(PhysicalType.GolfCourse);
 
-        foreach (Vector2 tile in initialTiles)
+        foreach (Vector2 initialPoint in initialPoints)
         {
-            // Type initial tiles
-            if (WorldGenerator.s_TilesDictonary.TryGetValue(tile, out GameObject value))
-            {
-                Tile tileScript = value.GetComponent<Tile>();
-                tileScript.m_PhysicalType = PhysicalType.GolfCourse;
-                tileScript.SetMaterial(material);
-            }
-            // Type surrounding tiles
-            List<Vector2> neighbourIndices = NeighbourUtility.GetNeighbours(tile);
+            TypeInitialTiles(initialPoint, PhysicalType.GolfCourse, material);
 
-            foreach (Vector2 neighbourIndex in neighbourIndices)
-            {
-                if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbourIndex, out GameObject nValue))
-                {
-                    Tile tileScript = nValue.GetComponent<Tile>();
-                    if (tileScript.m_PhysicalType == PhysicalType.None || tileScript.m_PhysicalType == PhysicalType.Forest)
-                    {
-                        tileScript.m_PhysicalType = PhysicalType.GolfCourse;
-                        tileScript.SetMaterial(material);
-                    } 
-                }
-            }
+            List<Vector2> neighbourIndices = TypeSurroundingTilesV1(initialPoint, PhysicalType.GolfCourse, material, PhysicalType.None, PhysicalType.Forest);
             // Type extra tiles
             for (int i = 0; i < 3; i++)
             {
@@ -217,58 +194,28 @@ public class TileTypeAllocator : MonoBehaviour
     private void AllocateTypesWithLargePercentageCover(in int rows)
     {
         // DEFINE TILE SET
-        List<Vector2> tileSet = new List<Vector2>();
-
-        foreach (KeyValuePair<Vector2, GameObject> tile in WorldGenerator.s_TilesDictonary)
-        {
-            if (tile.Value.GetComponent<Tile>().m_PhysicalType == PhysicalType.None)
-            {
-                tileSet.Add(tile.Key);
-            }
-        }
+        List<Vector2> tileSet = DefineTileSet(PhysicalType.None);
 
         // SELECT INITIAL TILE POINTS
-        Vector2[] initialPoints = new Vector2[m_segments];
-
-        for (int i = 0; i < m_segments; i++)
-        {
-            if (tileSet.Count < 1) { break; } else
-            {
-                int index = Random.Range(0, tileSet.Count);
-                initialPoints[i] = tileSet[index];
-
-                for (int x = (int)initialPoints[i].x - (m_minimumArea / 2); x < (int)initialPoints[i].x + (m_minimumArea / 2); x++)
-                {
-                    for (int y = (int)initialPoints[i].y - (m_minimumArea / 2); y < (int)initialPoints[i].y + (m_minimumArea / 2); y++)
-                    {
-                        if (tileSet.Contains(new Vector2(x, y)))
-                        {
-                            tileSet.Remove(new Vector2(x, y));
-                        }
-                    }
-                }
-            }
-        }
+        Vector2[] initialPoints = SelectInitialTilePoints(tileSet, m_segments, m_minArea);
 
         // TYPE INITIAL TILES
         // Set Type 
         PhysicalType[] physicalTypes = new PhysicalType[]
         {
-            PhysicalType.Commercial,
+            PhysicalType.Industrial,
             PhysicalType.LowMidDensity,
             PhysicalType.Agriculture,
             PhysicalType.Successional
         };
-
         // Set materials
         Material[] materials = new Material[]
         {
-            m_TileManager.ReturnTileType(PhysicalType.Commercial),
+            m_TileManager.ReturnTileType(PhysicalType.Industrial),
             m_TileManager.ReturnTileType(PhysicalType.LowMidDensity),
             m_TileManager.ReturnTileType(PhysicalType.Agriculture),
             m_TileManager.ReturnTileType(PhysicalType.Successional)
         };
-
         // Determine number of initial tiles per type
         int[] typeAmounts = new int[] 
         {
@@ -277,10 +224,8 @@ public class TileTypeAllocator : MonoBehaviour
             (int)(m_segments * m_ruralPercent),
             (int)(m_segments * m_naturalPercent)
         };
-
         // Store data
         List<int> tileHat = new List<int>();
-
         // Populate the list
         while (tileHat.Count < m_segments)
         {
@@ -292,8 +237,8 @@ public class TileTypeAllocator : MonoBehaviour
                 }
             }
         }
-
-        float[] typeChances = new float[6];
+        // Create a list for corresponding chances to type
+        float[] typeChances = new float[4];
 
         List<GameObject> initialTiles = new List<GameObject>();
 
@@ -304,14 +249,14 @@ public class TileTypeAllocator : MonoBehaviour
             {
                 typeChances[0] = 0.02f; // 2 %
                 typeChances[1] = 0.04f; // 2 %
-                typeChances[2] = 0.60f; // 56 %
+                typeChances[2] = 0.65f; // 56 %
                 typeChances[3] = 1.00f; // 40 %
             } 
             else if (initialPoint.x > rows / 2)
             {
                 typeChances[0] = 0.34f; // 34 %
                 typeChances[1] = 0.98f; // 64 %
-                typeChances[2] = 0.99f; // 1 %
+                typeChances[2] = 0.98f; // 1 %
                 typeChances[3] = 1.00f; // 1 %
             }
 
@@ -352,7 +297,7 @@ public class TileTypeAllocator : MonoBehaviour
                 foreach (GameObject initialTile in initialTiles)
                 {
                     Vector2 index = initialTile.GetComponent<Tile>().m_TileIndex;
-                    Vector2 difference =  index - currentTile.Key;
+                    Vector2 difference = index - currentTile.Key;
                     float distance = difference.magnitude;
 
                     // Store the point as nearest if it is closer than the last found nearest point
@@ -367,5 +312,159 @@ public class TileTypeAllocator : MonoBehaviour
             }
         }
         initialTiles.Clear();
+    }
+
+    private void AllocateInfrastructureTypes(in int rows)
+    {
+        // DEFINE TILE SET
+        List<Vector2> tileSet = DefineTileSet(PhysicalType.Industrial);
+
+        // SELECT INITIAL TILE POINTS
+        List<Vector2[]> arrays = new List<Vector2[]> 
+        {
+            SelectInitialTilePoints(tileSet, m_commercialSpaceCount, m_minCommericalArea),
+            SelectInitialTilePoints(tileSet, m_institutionCount, m_minInstitutionalArea),
+            SelectInitialTilePoints(tileSet, m_vacantSpaceCount, m_minVacantArea)
+
+        };
+
+        // TYPE TILES
+        // Set Type 
+        PhysicalType[] physicalTypes = new PhysicalType[]
+        {
+            PhysicalType.Commercial,
+            PhysicalType.Institutional,
+            PhysicalType.Vacant
+          
+        };
+        // Set Materials
+        Material[] materials = new Material[] 
+        {
+            m_TileManager.ReturnTileType(PhysicalType.Commercial),
+            m_TileManager.ReturnTileType(PhysicalType.Institutional),
+            m_TileManager.ReturnTileType(PhysicalType.Vacant)
+
+        };
+
+        // Iterate through arrays
+        for (int i = 0; i < arrays.Count; i++)
+        {
+            foreach (Vector2 initialPoint in arrays[i])
+            {
+                TypeInitialTiles(initialPoint, physicalTypes[i], materials[i]);
+
+                TypeSurroundingTilesV1(initialPoint, physicalTypes[i], materials[i], PhysicalType.Industrial, PhysicalType.Forest);
+            
+                //// HERE ////
+            }
+        }
+    }
+
+    ////////////////////////
+    //// HELPER METHODS ////
+    ////////////////////////
+
+    /// <summary>
+    /// Creates a set of tiles from the Tile Dictonary using a PhysicalType to specify
+    /// </summary>
+    /// <param name="physicalType"></param>
+    /// <returns>Vector2 List</returns>
+    private List<Vector2> DefineTileSet(PhysicalType physicalType)
+    {
+        List<Vector2> tileSet = new List<Vector2>();
+
+        foreach (KeyValuePair<Vector2, GameObject> tile in WorldGenerator.s_TilesDictonary)
+        {
+            if (tile.Value.GetComponent<Tile>().m_PhysicalType == physicalType)
+            {
+                tileSet.Add(tile.Key);
+            }
+        }
+        return tileSet;
+    }
+
+    /// <summary>
+    /// Selects initial points and creates a buffer around them
+    /// where no other points can be selected from.
+    /// </summary>
+    /// <param name="tileSet"></param>
+    /// <param name="segmentCount"></param>
+    /// <param name="minimumArea"></param>
+    /// <returns> Vector2[] Array </returns>
+    private Vector2[] SelectInitialTilePoints(List<Vector2> tileSet, int segmentCount, int minimumArea)
+    {
+        Vector2[] initialPoints = new Vector2[segmentCount];
+
+        for (int i = 0; i < segmentCount; i++)
+        {
+            if (tileSet.Count < 1) { break; } else
+            {
+                int index = Random.Range(0, tileSet.Count);
+                initialPoints[i] = tileSet[index];
+
+                for (int x = (int)initialPoints[i].x - (minimumArea / 2); x < (int)initialPoints[i].x + (minimumArea / 2); x++)
+                {
+                    for (int y = (int)initialPoints[i].y - (minimumArea / 2); y < (int)initialPoints[i].y + (minimumArea / 2); y++)
+                    {
+                        if (tileSet.Contains(new Vector2(x, y)))
+                        {
+                            tileSet.Remove(new Vector2(x, y));
+                        }
+                    }
+                }
+            }
+        }
+        return initialPoints;
+    }
+
+    /// <summary>
+    /// Assigns a final type and material to a Tile GameObject at the given position.
+    /// </summary>
+    /// <param name="initialPoint"></param>
+    /// <param name="physicalType"></param>
+    /// <param name="material"></param>
+    private void TypeInitialTiles(Vector2 initialPoint, PhysicalType physicalType, Material material)
+    {
+        // Type initial tiles
+        if (WorldGenerator.s_TilesDictonary.TryGetValue(initialPoint, out GameObject value))
+        {
+            Tile tileScript = value.GetComponent<Tile>();
+            tileScript.m_PhysicalType = physicalType;
+            tileScript.SetMaterial(material);
+        }
+    }
+
+    /// <summary>
+    /// Assigns a final type and material to each of the neighbouring Tile GameObjects of the initial where possible.
+    /// </summary>
+    /// <param name="initialPoint"></param>
+    /// <param name="type"></param>
+    /// <param name="material"></param>
+    /// <param name="checkAgainstType1"></param>
+    /// <param name="checkAgainstType2"></param>
+    /// <returns></returns>
+    private List<Vector2> TypeSurroundingTilesV1(Vector2 initialPoint, PhysicalType type, Material material, PhysicalType checkAgainstType1, PhysicalType checkAgainstType2)
+    {
+        List<Vector2> neighbourIndices = NeighbourUtility.GetNeighbours(initialPoint);
+
+        foreach (Vector2 neighbourIndex in neighbourIndices)
+        {
+            if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbourIndex, out GameObject nValue))
+            {
+                Tile tileScript = nValue.GetComponent<Tile>();
+                if (tileScript.m_PhysicalType == checkAgainstType1 || tileScript.m_PhysicalType == checkAgainstType2)
+                {
+                    tileScript.m_PhysicalType = type;
+                    tileScript.SetMaterial(material);
+                }
+            }
+        }
+        return neighbourIndices;
+    }
+
+    private List<Vector2> TypeSurroundingTilesV2(Vector2 initialPoint)
+    {
+        List<Vector2> neighbourIndices = NeighbourUtility.GetNeighbours(initialPoint);
+        return neighbourIndices;
     }
 }
