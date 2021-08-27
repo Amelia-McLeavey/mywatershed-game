@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class PrototypeController : MonoBehaviour
 {
-    [SerializeField] 
+    [SerializeField]
     private float m_cameraSpeed;
 
     [SerializeField]
@@ -20,9 +20,14 @@ public class PrototypeController : MonoBehaviour
     [SerializeField]
     private Camera m_camera;
 
+    [SerializeField]
+    private GameObject m_cameraContainer;
+
     public void GenerateWorldOnClick()
     {
         m_worldGenScript.GenerateWorld();
+        m_cameraContainer.transform.position = new Vector3(29, 22, 21);
+
     }
 
     public void IncreaseSeedValue()
@@ -57,7 +62,30 @@ public class PrototypeController : MonoBehaviour
             //m_flowSimScript.FlowPulse();
         }
 
+
+
+        if (Input.GetAxis("Horizontal") < 0)
+        {
+            //left
+            m_cameraContainer.transform.position = new Vector3(transform.position.x + (-1f * m_cameraSpeed), transform.position.y, transform.position.z);
+        }
+        if (Input.GetAxis("Horizontal") > 0)
+        {
+            //right
+
+        }
+
+        if (Input.GetAxis("Vertical") < 0)
+        {
+
+        }
+        if (Input.GetAxis("Vertical") > 0)
+        {
+
+        }
         // CAMERA CONTROL
+        //oh no 
+        //map to the mouse or wsad
     }
 
 }
