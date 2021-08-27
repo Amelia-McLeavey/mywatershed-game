@@ -41,16 +41,20 @@ public enum PhysicalType
 
 public class TileManager : MonoBehaviour
 {
-    [SerializeField]
-    private List<Material> m_testMaterials;
+    //[SerializeField]
+    //private List<Material> m_testMaterials;
+    //[SerializeField]
+    //private List<Material> m_baseMaterials;
 
     [SerializeField]
-    private List<Material> m_baseMaterials;
+    private List<Color> m_testColors;
+    [SerializeField]
+    private List<Color> m_baseColors;
 
     /// <summary>
-    /// Finds the corresponding material given a type.
+    /// Finds the corresponding colour given a type.
     /// </summary>
     /// <param name="physicalType"></param>
     /// <returns> Material </returns>
-    public Material ReturnTileType(PhysicalType physicalType) => m_testMaterials[(int)physicalType];
+    public Color ReturnTileType(PhysicalType physicalType) => m_testColors[(int)physicalType];
 }

@@ -25,9 +25,10 @@ public class Tile : MonoBehaviour
         m_meshRenderer = GetComponent<MeshRenderer>();
     }
 
-    public void SetMaterial(Material material)
+    public void SetTypeColor(Color colour)
     {
-        m_meshRenderer.material = material;
+        m_meshRenderer.materials[0].color = colour;
+        m_meshRenderer.materials[1].color = new Color(colour.r - 0.2f, colour.g - 0.2f, colour.b - 0.2f);
     }
 
     public void FindWaterNeighbours()
