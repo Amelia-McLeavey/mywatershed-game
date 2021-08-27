@@ -34,7 +34,7 @@ public class WorldGenerator : MonoBehaviour
 
         WorldSetup();
 
-        GetComponent<TileTypeAllocator>().AllocateLand(m_Seed, m_rows, m_columns);
+        GetComponent<TileTypeAllocator>().AllocateTypes(m_Seed, m_rows, m_columns);
 
         OnWorldGenerationComplete?.Invoke(m_rows, m_columns);
     }
@@ -98,7 +98,7 @@ public class WorldGenerator : MonoBehaviour
                 {
                     type = landType;
                 }
-                tileScript.SetBaseType(type);
+                tileScript.m_Basetype = type;
 
                 // Parent
                 cloneTile.transform.SetParent(worldHolder);
