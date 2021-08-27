@@ -24,6 +24,18 @@ public class TileTypeAllocator : MonoBehaviour
     [Range(1, 5)]
     [SerializeField]
     private int m_highwayCount = 2;
+    [Range(1, 20)]
+    [SerializeField]
+    private int m_stormwaterPondCount = 10;
+    [Range(1, 10)]
+    [SerializeField]
+    private int m_engineeredStreamCount = 4;
+    [Range(5, 20)]
+    [SerializeField]
+    private int m_wetlandCount = 7;
+    [Range(10, 30)]
+    [SerializeField]
+    private int m_recreationalSpaceCount = 20;
     [SerializeField]
     private int m_industrialSpaceCount = 100;
     [SerializeField]
@@ -43,7 +55,7 @@ public class TileTypeAllocator : MonoBehaviour
     [SerializeField]
     private int m_urbanHousingSpaceSize = 2;
 
-    private readonly int m_minArea = 3;
+    private readonly int m_minLargeCoverArea = 3;
     private readonly int m_minGolfArea = 3;
     private readonly int m_minIndustrialArea = 5;
     private readonly int m_minInstitutionalArea = 1;
@@ -53,6 +65,10 @@ public class TileTypeAllocator : MonoBehaviour
     private readonly int m_minNaturalLandArea = 3;
     private readonly int m_minNatResArea = 3;
     private readonly int m_minEngResArea = 3;
+    private readonly int m_minRecSpaceArea = 3;
+    private readonly int m_minWetlandSpaceArea = 1;
+    private readonly int m_minStormwaterSpaceArea = 1;
+    private readonly int m_minEngineeredStreamArea = 5;
 
     private readonly float m_infrastructurePercent = 0.10f;
     private readonly float m_residentialPercent = 0.15f;
@@ -75,6 +91,9 @@ public class TileTypeAllocator : MonoBehaviour
         AllocateNaturalLandTypes();
         AllocateReservoirTypes();
         AllocateHighway(rows, columns);
+        AllocateRecreationalTypes();
+        AllocateWetlandType();
+        AllocateEngineeredWaterTypes(rows, columns);
     }
 
     public void InitializeForestTiles(List<Vector2> indices)
@@ -222,7 +241,7 @@ public class TileTypeAllocator : MonoBehaviour
         List<Vector2> tileSet = DefineTileSet(PhysicalType.None);
 
         // SELECT INITIAL TILE POINTS
-        Vector2[] initialPoints = SelectInitialTilePoints(tileSet, m_segments, m_minArea);
+        Vector2[] initialPoints = SelectInitialTilePoints(tileSet, m_segments, m_minLargeCoverArea);
 
         // TYPE INITIAL TILES
         // Set Type 
@@ -270,14 +289,14 @@ public class TileTypeAllocator : MonoBehaviour
         foreach (Vector2 initialPoint in initialPoints)
         {
             // Determine percent split
-            if (initialPoint.x < rows * 0.70f)
+            if (initialPoint.x < rows * 0.60f)
             {
                 typeChances[0] = 0.02f; // 2 %
                 typeChances[1] = 0.04f; // 2 %
                 typeChances[2] = 0.65f; // 56 %
                 typeChances[3] = 1.00f; // 40 %
             } 
-            else if (initialPoint.x > rows * 0.70f)
+            else if (initialPoint.x > rows * 0.60f)
             {
                 typeChances[0] = 0.34f; // 34 %
                 typeChances[1] = 0.98f; // 64 %
@@ -568,7 +587,252 @@ public class TileTypeAllocator : MonoBehaviour
         }
     }
 
+    private void AllocateRecreationalTypes()
+    {
+        // DEFINE TILE SET
+        List<Vector2> resTileSet= DefineTileSet(PhysicalType.LowMidDensity);
 
+        // SELECT INITIAL TILE POINTS 
+        Vector2[] initialTilePoints = SelectInitialTilePoints(resTileSet, m_recreationalSpaceCount, m_minRecSpaceArea);
+
+        // TYPE TILES
+        Material material = m_TileManager.ReturnTileType(PhysicalType.UrbanOpenSpace);
+        foreach (Vector2 initialPoint in initialTilePoints)
+        {
+            TypeInitialTiles(initialPoint, PhysicalType.UrbanOpenSpace, material);
+            TypeSurroundingTilesV5(initialPoint, PhysicalType.UrbanOpenSpace, material, PhysicalType.LowMidDensity, PhysicalType.Industrial, PhysicalType.Commercial);
+        }
+
+        resTileSet.Clear();
+
+        // DEFINE TILE SET FOR REC CENTRE SPACES
+        List<Vector2> urbanOpenSpaceTileSet = DefineTileSet(PhysicalType.UrbanOpenSpace);
+
+        Material recMaterial = m_TileManager.ReturnTileType(PhysicalType.RecreationCentreSpace);
+
+        foreach (Vector2 tilePoint in urbanOpenSpaceTileSet)
+        {
+            float rng = Random.Range(0f, 1f);
+            if (rng < 0.10f)
+            {
+                // Type initial tiles
+                if (WorldGenerator.s_TilesDictonary.TryGetValue(tilePoint, out GameObject value))
+                {
+                    Tile tileScript = value.GetComponent<Tile>();
+                    tileScript.m_PhysicalType = PhysicalType.RecreationCentreSpace;
+                    tileScript.SetMaterial(recMaterial);
+                }
+            }
+        }
+    }
+
+    private void AllocateWetlandType()
+    {
+        // DEFINE WETLAND TILE SET
+        List<Vector2> tileSet1 = DefineTileSet(PhysicalType.NaturalReservoir);
+        List<Vector2> tileSet2 = DefineTileSet(PhysicalType.NaturalStream);
+        List<Vector2> wetlandTileSet = new List<Vector2>();
+        foreach (Vector2 tile in tileSet1)
+        {
+            if (WorldGenerator.s_TilesDictonary.TryGetValue(tile, out GameObject value1))
+            {
+                List<Vector2> neighbours = NeighbourUtility.GetNeighbours(tile);
+
+                bool valid = false;
+
+                foreach (Vector2 neighbour in neighbours)
+                {
+                    if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbour, out GameObject nValue1))
+                    {
+                        if (nValue1.GetComponent<Tile>().m_PhysicalType != value1.GetComponent<Tile>().m_PhysicalType)
+                        {
+                            valid = true;
+                        }
+                    }
+                }
+
+                if (valid)
+                {
+                    wetlandTileSet.Add(tile);
+                }
+            }
+        }
+
+        // SELECT FIRST ROUND OF INITIAL TILE POINTS 
+        Vector2[] initialTilePoints1 = SelectInitialTilePoints(wetlandTileSet, m_wetlandCount, m_minWetlandSpaceArea);
+
+        // CONTINUE DEFINING SET
+        foreach (Vector2 tile in tileSet2)
+        {
+            if (WorldGenerator.s_TilesDictonary.TryGetValue(tile, out GameObject value1))
+            {
+                List<Vector2> neighbours = NeighbourUtility.GetNeighbours(tile);
+
+                bool valid = false;
+
+                foreach (Vector2 neighbour in neighbours)
+                {
+                    if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbour, out GameObject nValue1))
+                    {
+                        if (nValue1.GetComponent<Tile>().m_PhysicalType != value1.GetComponent<Tile>().m_PhysicalType)
+                        {
+                            valid = true;
+                        }
+                    }
+                }
+
+                if (valid)
+                {
+                    wetlandTileSet.Add(tile);
+                }
+            }
+        }
+        tileSet1.Clear();
+        tileSet2.Clear();
+
+        // SELECT SECOND ROUND OF INITIAL TILE POINTS
+        Vector2[] initialTilePoints2 = SelectInitialTilePoints(wetlandTileSet, m_wetlandCount / 2, m_minWetlandSpaceArea);
+
+        // COMBINE INITIAL POINTS INTO ONE LIST
+        List<Vector2> initialTilePoints = new List<Vector2>();
+        foreach (Vector2 initialPoint1 in initialTilePoints1)
+        {
+            initialTilePoints.Add(initialPoint1);
+        }
+        foreach (Vector2 initialPoint2 in initialTilePoints2)
+        {
+            initialTilePoints.Add(initialPoint2);
+        }
+
+        // TYPE TILES
+        Material material = m_TileManager.ReturnTileType(PhysicalType.Wetland);
+        foreach (Vector2 initialPoint in initialTilePoints)
+        {
+            TypeInitialTiles(initialPoint, PhysicalType.Wetland, material);
+            TypeSurroundingTilesV3(initialPoint, PhysicalType.Wetland, material, PhysicalType.Forest, PhysicalType.Meadow);
+        }
+
+        wetlandTileSet.Clear();
+    }
+
+    private void AllocateEngineeredWaterTypes(in int rows, in int columns)
+    {
+        // STORMWATER MANAGEMENT
+        // DEFINE TILE SETS
+        List<Vector2> comTileSet = DefineTileSet(PhysicalType.LowMidDensity);
+        List<Vector2> resTileSet = DefineTileSet(PhysicalType.Industrial);
+        List<Vector2> stormwaterTileSet = new List<Vector2>();
+        foreach (Vector2 tile in comTileSet)
+        {
+            stormwaterTileSet.Add(tile);
+        }
+        foreach (Vector2 tile in resTileSet)
+        {
+            stormwaterTileSet.Add(tile);
+        }
+        comTileSet.Clear();
+        resTileSet.Clear();
+
+        // SELECT INITIAL TILE POINTS 
+        Vector2[] initialTilePoints1 = SelectInitialTilePoints(stormwaterTileSet, m_stormwaterPondCount, m_minStormwaterSpaceArea);
+
+        // TYPE TILES
+        Material resMaterial = m_TileManager.ReturnTileType(PhysicalType.EngineeredReservoir);
+        foreach (Vector2 initialPoint in initialTilePoints1)
+        {
+            TypeInitialTiles(initialPoint, PhysicalType.EngineeredReservoir, resMaterial);
+        }
+
+        stormwaterTileSet.Clear();
+
+        // ENGINEERED STREAM
+        // DEFINE TILE SET
+        List<Vector2> riverSet = DefineTileSet(PhysicalType.NaturalStream);
+        List<Vector2> engineeredStreamSet = new List<Vector2>();
+        foreach (Vector2 tile in riverSet)
+        {
+            if (WorldGenerator.s_TilesDictonary.TryGetValue(tile, out GameObject value1))
+            {
+                if (value1.GetComponent<Tile>().m_TileIndex.x > (int)(rows * 0.60f))
+                {
+                    List<Vector2> neighbours = NeighbourUtility.GetNeighbours(tile);
+
+                    bool valid = false;
+
+                    foreach (Vector2 neighbour in neighbours)
+                    {
+                        if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbour, out GameObject nValue1))
+                        {
+                            if (nValue1.GetComponent<Tile>().m_PhysicalType != value1.GetComponent<Tile>().m_PhysicalType)
+                            {
+                                valid = true;
+                            }
+                        }
+                    }
+
+                    if (valid)
+                    {
+                        engineeredStreamSet.Add(tile);
+                    }
+                }            
+            }
+        }
+
+        // SELECT INITIAL TILE POINTS 
+        Vector2[] initialTilePoints2 = SelectInitialTilePoints(engineeredStreamSet, m_engineeredStreamCount, m_minEngineeredStreamArea);
+
+        // TYPE TILES
+        Material streammMaterial = m_TileManager.ReturnTileType(PhysicalType.EngineeredStream);
+
+        foreach (Vector2 initialPoint in initialTilePoints2)
+        {
+            int xStart = (int)initialPoint.x;
+            int streamLength = Random.Range(5, 10);
+            float direction = Random.Range(-1f, 1f);
+
+            if (direction < 0f)
+            {
+                for (int y = (int)initialPoint.y; y > ((int)initialPoint.y - streamLength); y--)
+                {
+                    if (y % 2 == 1)
+                    {
+                        xStart--;
+                    }
+
+                    if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(xStart, y), out GameObject value))
+                    {
+                        Tile tileScript = value.GetComponent<Tile>();
+                        if (tileScript.m_PhysicalType != PhysicalType.NaturalStream)
+                        {
+                            tileScript.m_PhysicalType = PhysicalType.EngineeredStream;
+                            tileScript.SetMaterial(streammMaterial);
+                        }
+                    }
+                }
+            }
+            else if (direction > 0f)
+            {
+                for (int y = (int)initialPoint.y; y < ((int)initialPoint.y + streamLength); y++)
+                {
+                    if (y % 2 == 1)
+                    {
+                        xStart--;
+                    }
+
+                    if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(xStart, y), out GameObject value))
+                    {
+                        Tile tileScript = value.GetComponent<Tile>();
+                        if (tileScript.m_PhysicalType != PhysicalType.NaturalStream)
+                        {
+                            tileScript.m_PhysicalType = PhysicalType.EngineeredStream;
+                            tileScript.SetMaterial(streammMaterial);
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
     //// HELPER METHODS ///////////////////////////////////////////////////////////////////////////////////
@@ -817,6 +1081,85 @@ public class TileTypeAllocator : MonoBehaviour
                     // So that the same index is not chosen in the next iteration
                     nextNeighbourIndicies.RemoveAt(randomInitialNeighbourIndex);
                 }    
+            }
+        }
+        nextNeighbourIndicies.Clear();
+        initialNeighbourIndices.Clear();
+    }
+
+    /// <summary>
+    /// Assigns a final type and material where possible to some neighbours of some of the initial neighbour indicies of the initial tile point.
+    /// </summary>
+    /// <param name="initialPoint"></param>
+    /// <param name="type"></param>
+    /// <param name="material"></param>
+    /// <param name="checkAgainstType1"></param>
+    /// <param name="checkAgainstType2"></param>
+    /// <param name="checkAgainstType3"></param>
+    private void TypeSurroundingTilesV5(Vector2 initialPoint, PhysicalType type, Material material, PhysicalType checkAgainstType1, PhysicalType checkAgainstType2, PhysicalType checkAgainstType3)
+    {
+        List<Vector2> initialNeighbourIndices = TypeNeighbouringTiles(initialPoint, type, material, checkAgainstType1, checkAgainstType1, checkAgainstType1);
+        List<Vector2> nextNeighbourIndicies = initialNeighbourIndices;
+
+        int growthSize = 1;
+        for (int i = 0; i < growthSize; i++)
+        {
+            // Type some neighbours of some of the initial neighbour indicies
+            int someNeighbourAmount = 3;
+
+            for (int s = 0; s < someNeighbourAmount - 1; s++)
+            {
+                if (nextNeighbourIndicies.Count <= 0) break;
+                else
+                {
+                    int randomInitialNeighbourIndex = Random.Range(0, nextNeighbourIndicies.Count);
+
+                    List<Vector2> currentNeighbourIndicies = NeighbourUtility.GetNeighbours(nextNeighbourIndicies[randomInitialNeighbourIndex]);
+
+                    foreach (Vector2 currentNeighbourIndex in currentNeighbourIndicies)
+                    {
+                        if (WorldGenerator.s_TilesDictonary.TryGetValue(currentNeighbourIndex, out GameObject eValue))
+                        {
+                            Tile tileScript = eValue.GetComponent<Tile>();
+                            if (tileScript.m_PhysicalType == checkAgainstType1 || tileScript.m_PhysicalType == checkAgainstType2 || tileScript.m_PhysicalType == checkAgainstType3)
+                            {
+                                tileScript.m_PhysicalType = type;
+                                tileScript.SetMaterial(material);
+                                nextNeighbourIndicies.Add(currentNeighbourIndex);
+                            }
+                        }
+                    }
+
+                    int someCurrentNeighbourAmount = Random.Range(0, currentNeighbourIndicies.Count - 2);
+
+                    List<Vector2> selectedCurrentNeighbourIndicies = new List<Vector2>();
+
+                    for (int c = 0; c < someCurrentNeighbourAmount - 1; c++)
+                    {
+                        if (currentNeighbourIndicies.Count <= 0) break; else
+                        {
+                            int randomInitialCurrentNeighbourIndex = Random.Range(0, currentNeighbourIndicies.Count);
+                            selectedCurrentNeighbourIndicies.Add(currentNeighbourIndicies[randomInitialCurrentNeighbourIndex]);
+                        }
+                    }
+
+                    foreach (Vector2 selectedCurrentNeighbourIndex in selectedCurrentNeighbourIndicies)
+                    {
+                        if (WorldGenerator.s_TilesDictonary.TryGetValue(selectedCurrentNeighbourIndex, out GameObject eValue))
+                        {
+                            Tile tileScript = eValue.GetComponent<Tile>();
+                            if (tileScript.m_PhysicalType == checkAgainstType1 || tileScript.m_PhysicalType == checkAgainstType2 || tileScript.m_PhysicalType == checkAgainstType3)
+                            {
+                                tileScript.m_PhysicalType = type;
+                                tileScript.SetMaterial(material);
+                                nextNeighbourIndicies.Add(selectedCurrentNeighbourIndex);
+                            }
+                        }
+                    }
+                    // So that the same index is not chosen in the next iteration
+                    nextNeighbourIndicies.RemoveAt(randomInitialNeighbourIndex);
+
+                }
             }
         }
         nextNeighbourIndicies.Clear();
