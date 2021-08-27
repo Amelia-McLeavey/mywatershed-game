@@ -26,8 +26,7 @@ public class PrototypeController : MonoBehaviour
     public void GenerateWorldOnClick()
     {
         m_worldGenScript.GenerateWorld();
-        m_cameraContainer.transform.position = new Vector3(29, 22, 21);
-
+        m_cameraContainer.transform.position = new Vector3(20f, 20f, 20f);
     }
 
     public void IncreaseSeedValue()
@@ -62,30 +61,9 @@ public class PrototypeController : MonoBehaviour
             //m_flowSimScript.FlowPulse();
         }
 
+        // CAMERA MOVEMENT
+        Vector3 direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        m_cameraContainer.transform.position = Vector3.MoveTowards(m_cameraContainer.transform.position, m_cameraContainer.transform.position + direction, m_cameraSpeed);
 
-
-        if (Input.GetAxis("Horizontal") < 0)
-        {
-            //left
-            m_cameraContainer.transform.position = new Vector3(transform.position.x + (-1f * m_cameraSpeed), transform.position.y, transform.position.z);
-        }
-        if (Input.GetAxis("Horizontal") > 0)
-        {
-            //right
-
-        }
-
-        if (Input.GetAxis("Vertical") < 0)
-        {
-
-        }
-        if (Input.GetAxis("Vertical") > 0)
-        {
-
-        }
-        // CAMERA CONTROL
-        //oh no 
-        //map to the mouse or wsad
     }
-
 }
