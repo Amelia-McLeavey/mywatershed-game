@@ -5,7 +5,6 @@ public class WorldGenerator : MonoBehaviour
 {
     public int m_Seed;
     
-
     public static Dictionary<Vector2, BaseType> s_UndefinedTiles = new Dictionary<Vector2, BaseType>();
     public static Dictionary<Vector2, GameObject> s_TilesDictonary = new Dictionary<Vector2, GameObject>();
 
@@ -63,17 +62,20 @@ public class WorldGenerator : MonoBehaviour
 
     private void WorldSetup()
     {
+        // Create an object to hold the tiles
         worldHolder = new GameObject("World").transform;
 
+        // Iterate through 2 dimensions
         for (int x = 0; x < m_rows; x++)
         {
             for (int y = 0; y < m_columns; y++)
             {
+                // Initialization
                 BaseType type = BaseType.None;
                 Vector3 position;
                 GameObject cloneTile;
 
-                // Adjust the position to compliment the hex tiles
+                // Adjust the position of the cloneTile to compliment the hex tiles
                 if (y % 2 == 0)
                 { position = new Vector3(x, 0f, y * tileStep.y); }
                 else

@@ -106,14 +106,17 @@ public class TileTypeAllocator : MonoBehaviour
 
     private void AllocateNaturalStreamType()
     {
+        // INITIALIZATION
         Color colour = m_TileManager.ReturnTileType(PhysicalType.NaturalStream);
 
+        // Iterate through each tile within the tile dictonary
         foreach (KeyValuePair<Vector2, GameObject> tile in WorldGenerator.s_TilesDictonary)
         {
             Tile tileScript = tile.Value.GetComponent<Tile>();
-
+            // Check if the base type is water
             if (tileScript.m_Basetype == BaseType.Water)
             {
+                // Set physical type and colour
                 tileScript.SetTypeColor(colour);
                 tileScript.m_PhysicalType = PhysicalType.NaturalStream;
             }
@@ -122,44 +125,57 @@ public class TileTypeAllocator : MonoBehaviour
 
     private void AllocateForestTypeAlongRiver(int rows, int columns)
     {
+        // INITIALIZATION
         int _rows = rows;
         Color colour = m_TileManager.ReturnTileType(PhysicalType.Forest);
 
+        // Iterate through each index stored in the starting forest indicies. This creates the first forest outline along the river.
         foreach (Vector2 index in m_startingForestIndicies)
         {
+            // Check if the tile exists
             if (WorldGenerator.s_TilesDictonary.TryGetValue(index, out GameObject value))
             {
+                // Set type and colour 
                 Tile tileScript = value.GetComponent<Tile>();
                 tileScript.m_PhysicalType = PhysicalType.Forest;
                 tileScript.SetTypeColor(colour);
             }
         }
 
+        // Iterate through process of creating more forest outlines depending on set depth
         for (int i = 0; i < m_maxForestDepthAlongRiver; i++)
         {
+            // Copy the starting indices to a new list
             Vector2[] forestIndicies = new Vector2[m_startingForestIndicies.Count];
             m_startingForestIndicies.CopyTo(forestIndicies);
             m_startingForestIndicies.Clear();
 
             foreach (Vector2 index in forestIndicies)
             {
+                // Be selective of the rows to draw more forest on
                 if (index.x < _rows * 0.30f)
                 {
                     // Find all the un-typed neighbours of forest tiles
                     List<Vector2> neighbourIndices = NeighbourUtility.GetNeighbours(index);
 
+                    // Iterate through the found neighbour indicies 
                     foreach (Vector2 neighbourIndex in neighbourIndices)
                     {
+                        // Check if the tile exists
                         if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbourIndex, out GameObject value))
                         {
+                            // Check if the tile is within the bounds of the 2D array
                             if (neighbourIndex.x > -1 && neighbourIndex.x < rows && neighbourIndex.y > -1 && neighbourIndex.y < columns)
                             {
+                                // Check if the physical type is as desired
                                 if (value.GetComponent<Tile>().m_PhysicalType == PhysicalType.None)
                                 {
+                                    // Set type and colour 
                                     Tile tileScript = value.GetComponent<Tile>();
                                     tileScript.m_PhysicalType = PhysicalType.Forest;
                                     tileScript.SetTypeColor(colour);
 
+                                    // Add to list for next iteration
                                     m_startingForestIndicies.Add(neighbourIndex);
                                 }
                             }
@@ -167,20 +183,26 @@ public class TileTypeAllocator : MonoBehaviour
                     }
                 } 
             }
+            // Divde the rows for next iteration. This gives desired effect of forest getting thicker nearer to the river head.
             _rows /= 2;
         }
+        // Reset for next generation process
         m_startingForestIndicies.Clear();
     }
 
     private void AllocateGolfType()
     {
         // DEFINE TILE SET
+        // Initialize the set
         List<Vector2> tileSet = new List<Vector2>();
 
+        // Iterate through each tile within the tile dictonary
         foreach (KeyValuePair<Vector2, GameObject> tile in WorldGenerator.s_TilesDictonary)
         {
+            // Check if the physical type is as desired
             if (tile.Value.GetComponent<Tile>().m_PhysicalType == PhysicalType.None)
             {
+                // Check the neighbour 4 tiles to the left, if its a naturalstream or foest then add the current index to the tileset
                 if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(tile.Key.x, tile.Key.y - 4), out GameObject valueA))
                 {
                     if (valueA.GetComponent<Tile>().m_PhysicalType == PhysicalType.NaturalStream ||
@@ -189,6 +211,7 @@ public class TileTypeAllocator : MonoBehaviour
                         tileSet.Add(tile.Key);
                     }
                 }
+                // Check the neighbour 4 tiles to the right, if its a naturalstream or foest then add the current index to the tileset
                 else if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(tile.Key.x, tile.Key.y + 4), out GameObject valueB))
                 {
                     if (valueB.GetComponent<Tile>().m_PhysicalType == PhysicalType.NaturalStream ||
@@ -211,6 +234,7 @@ public class TileTypeAllocator : MonoBehaviour
             TypeInitialTiles(initialPoint, PhysicalType.GolfCourse, colour);
 
             List<Vector2> neighbourIndices = TypeNeighbouringTiles(initialPoint, PhysicalType.GolfCourse, colour, PhysicalType.None, PhysicalType.Forest, PhysicalType.Forest);
+           
             // Type extra tiles
             for (int i = 0; i < 3; i++)
             {
@@ -313,6 +337,7 @@ public class TileTypeAllocator : MonoBehaviour
                 {
                     if (tileHat.Contains(i))
                     {
+                        // Check if the tile exists
                         if (WorldGenerator.s_TilesDictonary.TryGetValue(initialPoint, out GameObject value))
                         {
                             value.GetComponent<Tile>().SetTypeColor(colours[i]);
@@ -642,8 +667,10 @@ public class TileTypeAllocator : MonoBehaviour
 
                 foreach (Vector2 neighbour in neighbours)
                 {
+                    // Check if the tile exists
                     if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbour, out GameObject nValue1))
                     {
+                        // Check if the physical type is different
                         if (nValue1.GetComponent<Tile>().m_PhysicalType != value1.GetComponent<Tile>().m_PhysicalType)
                         {
                             valid = true;
@@ -664,6 +691,7 @@ public class TileTypeAllocator : MonoBehaviour
         // CONTINUE DEFINING SET
         foreach (Vector2 tile in tileSet2)
         {
+            // Check if the tile exists
             if (WorldGenerator.s_TilesDictonary.TryGetValue(tile, out GameObject value1))
             {
                 List<Vector2> neighbours = NeighbourUtility.GetNeighbours(tile);
@@ -672,8 +700,10 @@ public class TileTypeAllocator : MonoBehaviour
 
                 foreach (Vector2 neighbour in neighbours)
                 {
+                    // Check if the tile exists
                     if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbour, out GameObject nValue1))
                     {
+                        // Check if the physical type is different
                         if (nValue1.GetComponent<Tile>().m_PhysicalType != value1.GetComponent<Tile>().m_PhysicalType)
                         {
                             valid = true;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class PrototypeController : MonoBehaviour
 {
@@ -24,6 +25,11 @@ public class PrototypeController : MonoBehaviour
     private int m_redDaceSpawnerCount;
     [SerializeField]
     private int m_infoSpreaderCount;
+
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
 
     public void GenerateWorldOnClick()
     {
@@ -47,8 +53,8 @@ public class PrototypeController : MonoBehaviour
 
     private void Update()
     {
-        // left mouse click
-        if (Input.GetMouseButton(1))
+        // TILE CLICKS
+        if (Input.GetMouseButton(1)) // left mouse click
         {
             // Create a ray from the point clicked on screen to the point in world space
             Ray ray = m_camera.ScreenPointToRay(Input.mousePosition);
@@ -61,6 +67,7 @@ public class PrototypeController : MonoBehaviour
             }
         }
 
+        // FLOW TEST
         if (Input.GetButtonDown("Jump"))
         {
             m_flowSimScript.FlowPulse();
@@ -71,6 +78,8 @@ public class PrototypeController : MonoBehaviour
         m_cameraContainer.transform.position = Vector3.MoveTowards(m_cameraContainer.transform.position, m_cameraContainer.transform.position + direction, m_cameraSpeed);
 
     }
+
+    ////////// THESE MEHTODS LIKELY TO BE TOSSED //////////
 
     private void RedDaceSpawn() 
     {
@@ -85,6 +94,7 @@ public class PrototypeController : MonoBehaviour
             }
         }
 
+        // Set a number of tiles to be spawners
         for (int i = 0; i < m_redDaceSpawnerCount; i++)
         {
             int randomIndex = Random.Range(0, tileSet.Count);
@@ -110,6 +120,7 @@ public class PrototypeController : MonoBehaviour
             }
         }
 
+        // Set a number of tiles to be spawners
         for (int i = 0; i < m_infoSpreaderCount; i++)
         {
             int randomIndex = Random.Range(0, tileSet.Count);

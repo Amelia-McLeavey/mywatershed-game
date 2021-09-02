@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class NeighbourUtility : MonoBehaviour
 {
+    /// <summary>
+    /// Finds each of a tile's 6 neighbour indices.
+    /// </summary>
+    /// <param name="baseIndex"></param>
+    /// <returns> Vector 2 List </returns>
     public static List<Vector2> GetNeighbours(Vector2 baseIndex)
     {
-        // Indexes for each of a tile's 6 neighbours
+        // Initialize indices for each of a tile's 6 neighbours.
         Vector2 tileUpIndex = new Vector2(baseIndex.x - 1, baseIndex.y);
         Vector2 tileDownIndex = new Vector2(baseIndex.x + 1, baseIndex.y);
         Vector2 tileUpLeftIndex;
@@ -31,6 +36,7 @@ public class NeighbourUtility : MonoBehaviour
             tileDownRightIndex = new Vector2(baseIndex.x + 1, baseIndex.y + 1);
         }
 
+        // Store the indicies in a list
         List<Vector2> neighbourIndexes = new List<Vector2>
         {
             tileUpLeftIndex, //////////// 0

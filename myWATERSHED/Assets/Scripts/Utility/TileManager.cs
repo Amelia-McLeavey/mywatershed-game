@@ -41,6 +41,7 @@ public enum PhysicalType
 
 public class TileManager : MonoBehaviour
 {
+    // References for tile base plane colors
     [SerializeField]
     private List<Color> m_testColors;
     [SerializeField]

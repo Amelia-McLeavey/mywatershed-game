@@ -61,9 +61,10 @@ public class WaterGenerator : MonoBehaviour
         {
             if (i != 0)
             {
+                // If the branch number is even, pass appropriate modifier: 0
                 if (i % 2 == 0)
                     CreateBranch(m_branchStartPositionsL, 0, 0);
-                else
+                else // if the branch number is odd, pass appropriate modifier: 1
                     CreateBranch(m_branchStartPosistionsR, 1, 1);
             }
         }
@@ -99,9 +100,11 @@ public class WaterGenerator : MonoBehaviour
             {
                 if (y >= yStart && y <= yStart + (streamWidth - 1))
                 {
+                    // Add to list of water tiles with appropriate type and remove from generic list
                     s_WaterTiles.Add(new Vector2(x, y), BaseType.Water);
                     WorldGenerator.s_UndefinedTiles.Remove(new Vector2(x, y));
 
+                    // Add tiles to list of potential branch start positions 
                     if (x > m_rows * 0.30f && x < m_rows * 0.90f)
                     {
                         if (y == yStart)
@@ -149,6 +152,7 @@ public class WaterGenerator : MonoBehaviour
             {
                 if (y >= yStart && y <= yStart + (streamWidth - 1))
                 {
+                    // Add to list of water tiles with appropriate type and remove from generic list
                     if (s_WaterTiles.ContainsKey(new Vector2(x,y))) { break; }
                     s_WaterTiles.Add(new Vector2(x, y), BaseType.Water);
                     WorldGenerator.s_UndefinedTiles.Remove(new Vector2(x, y));
@@ -158,6 +162,14 @@ public class WaterGenerator : MonoBehaviour
         m_widthChangeValues.Clear();
     }
 
+    /// <summary>
+    /// Sets the desired stream width with some degree of randomness.
+    /// </summary>
+    /// <param name="streamWidth"></param>
+    /// <param name="minWidth"></param>
+    /// <param name="maxWidth"></param>
+    /// <param name="texture"></param>
+    /// <returns></returns>
     private int DefineWidth(int streamWidth, int minWidth, int maxWidth, int texture)
     {
         CheckQueue(m_widthChangeValues);
@@ -172,6 +184,17 @@ public class WaterGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Changes the starting Y index for the row. 
+    /// </summary>
+    /// <param name="lastYStart"></param>
+    /// <param name="streamWidth"></param>
+    /// <param name="lastStreamWidth"></param>
+    /// <param name="minModifier"></param>
+    /// <param name="maxModifier"></param>
+    /// <param name="evenAdjustment"></param>
+    /// <param name="oddAdjustment"></param>
+    /// <returns></returns>
     private int DefineCurvature(int lastYStart, int streamWidth, int lastStreamWidth, int minModifier, int maxModifier, int evenAdjustment, int oddAdjustment)
     {
         int minYStart;
@@ -190,6 +213,7 @@ public class WaterGenerator : MonoBehaviour
         }
         return Random.Range(minYStart + minModifier, maxYStart + maxModifier);
     }
+
     private int SetMinStart(int lastYStart, int streamWidth, int adjustment)
     {
         return lastYStart - (streamWidth + adjustment);
@@ -216,6 +240,8 @@ public class WaterGenerator : MonoBehaviour
             return lastYStart + (lastStreamWidth + oddAdjustment);
         }
     }
+
+    // BELOW METHODS USED FOR SHUFFLING LISTS | RANDOMIZATION //
 
     private void CheckQueue(Queue<int> queue)
     {

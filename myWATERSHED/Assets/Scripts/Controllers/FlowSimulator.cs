@@ -20,6 +20,7 @@ public class FlowSimulator : MonoBehaviour
         WorldGenerator.OnWorldGenerationComplete -= InitializeFlow;
     }
 
+    // Sends the information 
     public void FlowPulse()
     {
         for (int x = 0; x < m_rows; x++)
@@ -48,6 +49,7 @@ public class FlowSimulator : MonoBehaviour
         }
     }
 
+    // Initializes tiles by having each find its neighbours
     private void InitializeFlow(int rows, int columns)
     {
         m_rows = rows;

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+// This script currently handles tile information.
+
 public class Tile : MonoBehaviour
 {
-
     public bool m_IsSpawner;
 
     public BaseType m_Basetype;
@@ -13,17 +14,19 @@ public class Tile : MonoBehaviour
 
     public Vector2 m_TileIndex;
 
-    public float newValue;
-
     // INFORMATION VARIABLES
-
+    [SerializeField]
+    public float newValue;
+    [SerializeField]
     public float saturation;
 
     private List<float> m_infoItems = new List<float>();
 
+    // NEIGHBOUR REFERENCES
     private List<GameObject> m_senderNeighbours = new List<GameObject>();
     private List<GameObject> m_recieverNeighbours = new List<GameObject>();
 
+    // COMPONENT REFERENCES
     private MeshRenderer m_meshRenderer;
 
     private void Awake()
@@ -31,6 +34,10 @@ public class Tile : MonoBehaviour
         m_meshRenderer = GetComponent<MeshRenderer>();
     }
 
+    /// <summary>
+    /// Set the colour of a tile's material based on given type.
+    /// </summary>
+    /// <param name="colour"></param>
     public void SetTypeColor(Color colour)
     {
         m_meshRenderer.materials[0].color = colour;
@@ -40,7 +47,7 @@ public class Tile : MonoBehaviour
 
     public void FindWaterNeighbours()
     {
-        // Find neighbours
+        // Find neighbours using this tile's index
         List<Vector2> neighbourIndexes = NeighbourUtility.GetNeighbours(m_TileIndex);
 
         // Separate neighbours by position and store
@@ -57,6 +64,7 @@ public class Tile : MonoBehaviour
             neighbourIndexes[5]  // 2
         };
 
+        // Add neighbours to the appropriate reference list
         foreach (Vector2 neighbourAboveIndex in neighbourAboveIndexes)
         {
             if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbourAboveIndex, out GameObject neighbourAbove))
@@ -81,7 +89,7 @@ public class Tile : MonoBehaviour
 
     public void FindLandNeighbours()
     {
-        // Find neighbours
+        // Find neighbours using this tile's index
         List<Vector2> neighbourIndexes = NeighbourUtility.GetNeighbours(m_TileIndex);
 
         // Select the neighbour with the lowest and highest height
@@ -108,6 +116,10 @@ public class Tile : MonoBehaviour
         m_senderNeighbours.Add(highestNeighbour);
     }
 
+    /// <summary>
+    /// Designates the tile as a spawner tile.
+    /// </summary>
+    /// <param name="value"></param>
     public void SetAsSpawner(bool value)
     {
         m_IsSpawner = value;
@@ -126,11 +138,15 @@ public class Tile : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Changes the colour of the clicked tile's edge. Can be used for showing selection.
+    /// </summary>
     public void DirectEffect()
     {
         m_meshRenderer.materials[1].color = Color.red;
     }
 
+    // Upon call in FlowSimulator script, cycles through each reciever and calls it to recieve information if not a spawner
     public void SendInformationFlow()
     {
         foreach (GameObject reciever in m_recieverNeighbours)
@@ -145,7 +161,10 @@ public class Tile : MonoBehaviour
 
     public void RecieveInformationFlow(float info)
     {
+        // For each call to this method, add the passed info to a list of info items
         m_infoItems.Add(info);
+
+        // Refresh the variables when the list of info items is equal to the expected number of senders
         if (m_infoItems.Count == m_senderNeighbours.Count)
         {
             RefreshVariables();
@@ -155,28 +174,24 @@ public class Tile : MonoBehaviour
 
     private void RefreshVariables()
     {
-        List<float> values = new List<float>();
-
-        foreach (float c in m_infoItems)
-        {
-            values.Add(c);
-        }
-
-        float infoSum = values.Sum();
+        // Calculate the sum of all the info
+        float infoSum = m_infoItems.Sum();
         float finalValue;
 
+        // Calculate the final value
         if (m_infoItems.Count > 1)
         { finalValue = infoSum / m_infoItems.Count; }
         else { finalValue = infoSum; }
 
         m_infoItems.Clear();
 
+        // Refresh variables
         saturation = finalValue;
         saturation = Mathf.Clamp(saturation, 0f, 100f);
         if (saturation < 1f) { saturation = 0f; }
         newValue = Mathf.Clamp(saturation * 2.55f, 0f, 255f);
 
-        // Refresh Variables and Apply Changes
+        // Apply visual changes
         m_meshRenderer.materials[1].color = new Color(newValue / 255f, 0f, 0f, m_meshRenderer.materials[1].color.a);
     }
 }
