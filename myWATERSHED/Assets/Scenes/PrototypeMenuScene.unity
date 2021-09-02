@@ -193,7 +193,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Using WASD or the keypad, move around the map after generating a system
+  m_Text: Using WASD or the keypad, move around the map after generating a system.
+    Press SPACE bar to simulate flow.
 --- !u!222 &3615862
 CanvasRenderer:
   m_ObjectHideFlags: 0
