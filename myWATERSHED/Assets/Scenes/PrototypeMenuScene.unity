@@ -312,7 +312,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 727047842}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 405ac982c02b79b4484570fe3a7faf88, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e01561f9d7186b47a5803a1a40d15c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &727047844
@@ -323,7 +323,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 727047842}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 372, y: 157, z: 22.036419}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -861,7 +861,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 727047843}
-        m_TargetAssemblyTypeName: ChangeScenewithButton, Assembly-CSharp
+        m_TargetAssemblyTypeName: ChangeScene, Assembly-CSharp
         m_MethodName: LoadScene
         m_Mode: 5
         m_Arguments:
