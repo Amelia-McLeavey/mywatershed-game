@@ -41,11 +41,6 @@ public enum PhysicalType
 
 public class TileManager : MonoBehaviour
 {
-    //[SerializeField]
-    //private List<Material> m_testMaterials;
-    //[SerializeField]
-    //private List<Material> m_baseMaterials;
-
     [SerializeField]
     private List<Color> m_testColors;
     [SerializeField]

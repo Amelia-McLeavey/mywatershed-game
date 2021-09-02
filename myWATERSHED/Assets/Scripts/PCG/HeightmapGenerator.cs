@@ -31,6 +31,7 @@ public class HeightmapGenerator : MonoBehaviour
     public void SetLandHeights(List<Vector2> definedNeighbours)
     {
         callCount++;
+
         foreach (Vector2 definedNeighbour in definedNeighbours)
         {
             if (definedNeighbour.x > -1 && definedNeighbour.x < m_rows && definedNeighbour.y > -1 && definedNeighbour.y < m_columns)

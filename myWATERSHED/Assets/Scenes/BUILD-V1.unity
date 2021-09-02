@@ -6701,11 +6701,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_cameraSpeed: 5
-  landFamilyType: 1
   m_worldGenScript: {fileID: 1971862562}
   m_flowSimScript: {fileID: 590772910}
   m_camera: {fileID: 963194227}
   m_cameraContainer: {fileID: 1670411932}
+  m_redDaceSpawnerCount: 5
+  m_infoSpreaderCount: 5
 --- !u!4 &1608270785
 Transform:
   m_ObjectHideFlags: 0

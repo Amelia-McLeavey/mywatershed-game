@@ -28,12 +28,21 @@ public class FlowSimulator : MonoBehaviour
             {
                 if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(x, y), out GameObject value))
                 {
-                    // FLOW FOR WATER TILES
+                    
                     Tile tileScript = value.GetComponent<Tile>();
+
+                    // FLOW FOR LAND TILES
+                    if (tileScript.m_Basetype == BaseType.Land)
+                    {
+                        tileScript.SendInformationFlow();
+                    }
+                    // FLOW FOR WATER TILES
                     if (tileScript.m_Basetype == BaseType.Water)
                     {
                         tileScript.SendInformationFlow();
                     }
+                    
+
                 }
             }
         }
@@ -52,9 +61,15 @@ public class FlowSimulator : MonoBehaviour
                 {
                     // FLOW FOR WATER TILES
                     Tile tileScript = value.GetComponent<Tile>();
+
                     if (tileScript.m_Basetype == BaseType.Water)
                     {
                         tileScript.FindWaterNeighbours();
+                    }
+
+                    if (tileScript.m_Basetype == BaseType.Land)
+                    {
+                        tileScript.FindLandNeighbours();
                     }
                 }
             }
