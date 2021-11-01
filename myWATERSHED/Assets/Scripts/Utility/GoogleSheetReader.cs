@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-
+using Newtonsoft.Json;
 
 using Google.Apis.Services;
 using Google.Apis.Auth.OAuth2;
@@ -28,11 +28,13 @@ class GoogleSheetReader : MonoBehaviour
         });
     }
 
-    public IList<IList<object>> getSheetRange(string sheetNameAndRange)
+    public static IList<IList<object>> getSheetRange(string sheetRange)
     {
         //access the google spreadsheet with the authentication key, using the sheet's id
-        SpreadsheetsResource.ValuesResource.GetRequest request = service.Spreadsheets.Values.Get(spreadsheetId, sheetNameAndRange);
+        SpreadsheetsResource.ValuesResource.GetRequest request = service.Spreadsheets.Values.Get(spreadsheetId, sheetRange);
+        request.ValueRenderOption = SpreadsheetsResource.ValuesResource.GetRequest.ValueRenderOptionEnum.UNFORMATTEDVALUE;
 
+        //return the spreadsheet in an ilist, each item in the ilist is a list with the values of each cell in a row
         ValueRange response = request.Execute();
         IList<IList<object>> values = response.Values;
         if (values != null && values.Count > 0)
@@ -45,28 +47,6 @@ class GoogleSheetReader : MonoBehaviour
             return null;
         }
     }
-
-
-
-    //https://sheets.googleapis.com/v4/spreadsheets/spreadsheetId?includeGridData=false
-    //https://sheets.googleapis.com/v4/spreadsheets/1O3UbAxylUPJallWONjJOvmxG6wuV95gh4YkUo1lSQzk?key=AIzaSyCrui6mxEduyXuBzJrRjv7qzph7Bxs74Gk
-    //https://docs.google.com/spreadsheets/d/{spreadsheetId}/gviz/tq
-    //https://docs.google.com/spreadsheets/d/1O3UbAxylUPJallWONjJOvmxG6wuV95gh4YkUo1lSQzk/qviz/tq?key=upheld-quasar-329704
-
-    //IEnumerator GetGoogleSheet()
-    //{
-    //    UnityWebRequest sheetAddress = UnityWebRequest.Get("https://spreadsheets.google.com/feeds/list/1O3UbAxylUPJallWONjJOvmxG6wuV95gh4YkUo1lSQzk/od6/public/values?alt=json");
-    //    yield return sheetAddress.SendWebRequest();
-
-    //    if(sheetAddress.isNetworkError || sheetAddress.isHttpError)
-    //    {
-    //        Debug.Log(" " + sheetAddress.error);
-    //    }
-
-    //    else
-    //    {
-    //        string sheetJson = sheetAddress.downloadHandler.text;
-    //    }
-    //}
-
 }
+
+
