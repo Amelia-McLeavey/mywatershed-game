@@ -110,7 +110,7 @@ public class TileTypeAllocator : MonoBehaviour
         Color colour = m_TileManager.ReturnTileType(PhysicalType.NaturalStream);
 
         // Iterate through each tile within the tile dictonary
-        foreach (KeyValuePair<Vector2, GameObject> tile in WorldGenerator.s_TilesDictonary)
+        foreach (KeyValuePair<Vector2, GameObject> tile in TileManager.s_TilesDictonary)
         {
             Tile tileScript = tile.Value.GetComponent<Tile>();
             // Check if the base type is water
@@ -133,7 +133,7 @@ public class TileTypeAllocator : MonoBehaviour
         foreach (Vector2 index in m_startingForestIndicies)
         {
             // Check if the tile exists
-            if (WorldGenerator.s_TilesDictonary.TryGetValue(index, out GameObject value))
+            if (TileManager.s_TilesDictonary.TryGetValue(index, out GameObject value))
             {
                 // Set type and colour 
                 Tile tileScript = value.GetComponent<Tile>();
@@ -156,13 +156,13 @@ public class TileTypeAllocator : MonoBehaviour
                 if (index.x < _rows * 0.30f)
                 {
                     // Find all the un-typed neighbours of forest tiles
-                    List<Vector2> neighbourIndices = NeighbourUtility.GetNeighbours(index);
+                    List<Vector2> neighbourIndices = NeighbourUtility.FindAllNeighbours(index);
 
                     // Iterate through the found neighbour indicies 
                     foreach (Vector2 neighbourIndex in neighbourIndices)
                     {
                         // Check if the tile exists
-                        if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbourIndex, out GameObject value))
+                        if (TileManager.s_TilesDictonary.TryGetValue(neighbourIndex, out GameObject value))
                         {
                             // Check if the tile is within the bounds of the 2D array
                             if (neighbourIndex.x > -1 && neighbourIndex.x < rows && neighbourIndex.y > -1 && neighbourIndex.y < columns)
@@ -197,13 +197,13 @@ public class TileTypeAllocator : MonoBehaviour
         List<Vector2> tileSet = new List<Vector2>();
 
         // Iterate through each tile within the tile dictonary
-        foreach (KeyValuePair<Vector2, GameObject> tile in WorldGenerator.s_TilesDictonary)
+        foreach (KeyValuePair<Vector2, GameObject> tile in TileManager.s_TilesDictonary)
         {
             // Check if the physical type is as desired
             if (tile.Value.GetComponent<Tile>().m_PhysicalType == PhysicalType.None)
             {
                 // Check the neighbour 4 tiles to the left, if its a naturalstream or foest then add the current index to the tileset
-                if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(tile.Key.x, tile.Key.y - 4), out GameObject valueA))
+                if (TileManager.s_TilesDictonary.TryGetValue(new Vector2(tile.Key.x, tile.Key.y - 4), out GameObject valueA))
                 {
                     if (valueA.GetComponent<Tile>().m_PhysicalType == PhysicalType.NaturalStream ||
                         valueA.GetComponent<Tile>().m_PhysicalType == PhysicalType.Forest)
@@ -212,7 +212,7 @@ public class TileTypeAllocator : MonoBehaviour
                     }
                 }
                 // Check the neighbour 4 tiles to the right, if its a naturalstream or foest then add the current index to the tileset
-                else if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(tile.Key.x, tile.Key.y + 4), out GameObject valueB))
+                else if (TileManager.s_TilesDictonary.TryGetValue(new Vector2(tile.Key.x, tile.Key.y + 4), out GameObject valueB))
                 {
                     if (valueB.GetComponent<Tile>().m_PhysicalType == PhysicalType.NaturalStream ||
                         valueB.GetComponent<Tile>().m_PhysicalType == PhysicalType.Forest)
@@ -240,11 +240,11 @@ public class TileTypeAllocator : MonoBehaviour
             {
                 int index = Random.Range(0, neighbourIndices.Count);
 
-                List<Vector2> extraNeighbourIndicies = NeighbourUtility.GetNeighbours(neighbourIndices[index]);
+                List<Vector2> extraNeighbourIndicies = NeighbourUtility.FindAllNeighbours(neighbourIndices[index]);
 
                 foreach (Vector2 extraNeighbourIndex in extraNeighbourIndicies)
                 {
-                    if (WorldGenerator.s_TilesDictonary.TryGetValue(extraNeighbourIndex, out GameObject eValue))
+                    if (TileManager.s_TilesDictonary.TryGetValue(extraNeighbourIndex, out GameObject eValue))
                     {
                         Tile tileScript = eValue.GetComponent<Tile>();
                         if (tileScript.m_PhysicalType == PhysicalType.None || tileScript.m_PhysicalType == PhysicalType.Forest)
@@ -338,7 +338,7 @@ public class TileTypeAllocator : MonoBehaviour
                     if (tileHat.Contains(i))
                     {
                         // Check if the tile exists
-                        if (WorldGenerator.s_TilesDictonary.TryGetValue(initialPoint, out GameObject value))
+                        if (TileManager.s_TilesDictonary.TryGetValue(initialPoint, out GameObject value))
                         {
                             value.GetComponent<Tile>().SetTypeColor(colours[i]);
                             value.GetComponent<Tile>().m_PhysicalType = physicalTypes[i]; 
@@ -355,7 +355,7 @@ public class TileTypeAllocator : MonoBehaviour
 
         // TYPE REMAINING TILES
         // For each tile on the map that is not yet typed
-        foreach (KeyValuePair<Vector2, GameObject> currentTile in WorldGenerator.s_TilesDictonary)
+        foreach (KeyValuePair<Vector2, GameObject> currentTile in TileManager.s_TilesDictonary)
         {
             Tile tileScript = currentTile.Value.GetComponent<Tile>();
             if (tileScript.m_PhysicalType == PhysicalType.None)
@@ -525,7 +525,7 @@ public class TileTypeAllocator : MonoBehaviour
             if (rng < 0.02)
             {
                 // Type initial tiles
-                if (WorldGenerator.s_TilesDictonary.TryGetValue(tilePoint, out GameObject value))
+                if (TileManager.s_TilesDictonary.TryGetValue(tilePoint, out GameObject value))
                 {
                     Tile tileScript = value.GetComponent<Tile>();
                     tileScript.m_PhysicalType = PhysicalType.Successional;
@@ -602,7 +602,7 @@ public class TileTypeAllocator : MonoBehaviour
                         xStart--;
                     }
                 }
-                if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(xStart, y), out GameObject value))
+                if (TileManager.s_TilesDictonary.TryGetValue(new Vector2(xStart, y), out GameObject value))
                 {
                     Tile tileScript = value.GetComponent<Tile>();
                     tileScript.m_PhysicalType = PhysicalType.GolfCourse;
@@ -641,7 +641,7 @@ public class TileTypeAllocator : MonoBehaviour
             if (rng < 0.10f)
             {
                 // Type initial tiles
-                if (WorldGenerator.s_TilesDictonary.TryGetValue(tilePoint, out GameObject value))
+                if (TileManager.s_TilesDictonary.TryGetValue(tilePoint, out GameObject value))
                 {
                     Tile tileScript = value.GetComponent<Tile>();
                     tileScript.m_PhysicalType = PhysicalType.RecreationCentreSpace;
@@ -659,16 +659,16 @@ public class TileTypeAllocator : MonoBehaviour
         List<Vector2> wetlandTileSet = new List<Vector2>();
         foreach (Vector2 tile in tileSet1)
         {
-            if (WorldGenerator.s_TilesDictonary.TryGetValue(tile, out GameObject value1))
+            if (TileManager.s_TilesDictonary.TryGetValue(tile, out GameObject value1))
             {
-                List<Vector2> neighbours = NeighbourUtility.GetNeighbours(tile);
+                List<Vector2> neighbours = NeighbourUtility.FindAllNeighbours(tile);
 
                 bool valid = false;
 
                 foreach (Vector2 neighbour in neighbours)
                 {
                     // Check if the tile exists
-                    if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbour, out GameObject nValue1))
+                    if (TileManager.s_TilesDictonary.TryGetValue(neighbour, out GameObject nValue1))
                     {
                         // Check if the physical type is different
                         if (nValue1.GetComponent<Tile>().m_PhysicalType != value1.GetComponent<Tile>().m_PhysicalType)
@@ -692,16 +692,16 @@ public class TileTypeAllocator : MonoBehaviour
         foreach (Vector2 tile in tileSet2)
         {
             // Check if the tile exists
-            if (WorldGenerator.s_TilesDictonary.TryGetValue(tile, out GameObject value1))
+            if (TileManager.s_TilesDictonary.TryGetValue(tile, out GameObject value1))
             {
-                List<Vector2> neighbours = NeighbourUtility.GetNeighbours(tile);
+                List<Vector2> neighbours = NeighbourUtility.FindAllNeighbours(tile);
 
                 bool valid = false;
 
                 foreach (Vector2 neighbour in neighbours)
                 {
                     // Check if the tile exists
-                    if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbour, out GameObject nValue1))
+                    if (TileManager.s_TilesDictonary.TryGetValue(neighbour, out GameObject nValue1))
                     {
                         // Check if the physical type is different
                         if (nValue1.GetComponent<Tile>().m_PhysicalType != value1.GetComponent<Tile>().m_PhysicalType)
@@ -781,17 +781,17 @@ public class TileTypeAllocator : MonoBehaviour
         List<Vector2> engineeredStreamSet = new List<Vector2>();
         foreach (Vector2 tile in riverSet)
         {
-            if (WorldGenerator.s_TilesDictonary.TryGetValue(tile, out GameObject value1))
+            if (TileManager.s_TilesDictonary.TryGetValue(tile, out GameObject value1))
             {
                 if (value1.GetComponent<Tile>().m_TileIndex.x > (int)(rows * 0.60f))
                 {
-                    List<Vector2> neighbours = NeighbourUtility.GetNeighbours(tile);
+                    List<Vector2> neighbours = NeighbourUtility.FindAllNeighbours(tile);
 
                     bool valid = false;
 
                     foreach (Vector2 neighbour in neighbours)
                     {
-                        if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbour, out GameObject nValue1))
+                        if (TileManager.s_TilesDictonary.TryGetValue(neighbour, out GameObject nValue1))
                         {
                             if (nValue1.GetComponent<Tile>().m_PhysicalType != value1.GetComponent<Tile>().m_PhysicalType)
                             {
@@ -829,7 +829,7 @@ public class TileTypeAllocator : MonoBehaviour
                         xStart--;
                     }
 
-                    if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(xStart, y), out GameObject value))
+                    if (TileManager.s_TilesDictonary.TryGetValue(new Vector2(xStart, y), out GameObject value))
                     {
                         Tile tileScript = value.GetComponent<Tile>();
                         if (tileScript.m_PhysicalType != PhysicalType.NaturalStream)
@@ -849,7 +849,7 @@ public class TileTypeAllocator : MonoBehaviour
                         xStart--;
                     }
 
-                    if (WorldGenerator.s_TilesDictonary.TryGetValue(new Vector2(xStart, y), out GameObject value))
+                    if (TileManager.s_TilesDictonary.TryGetValue(new Vector2(xStart, y), out GameObject value))
                     {
                         Tile tileScript = value.GetComponent<Tile>();
                         if (tileScript.m_PhysicalType != PhysicalType.NaturalStream)
@@ -877,7 +877,7 @@ public class TileTypeAllocator : MonoBehaviour
     {
         List<Vector2> tileSet = new List<Vector2>();
 
-        foreach (KeyValuePair<Vector2, GameObject> tile in WorldGenerator.s_TilesDictonary)
+        foreach (KeyValuePair<Vector2, GameObject> tile in TileManager.s_TilesDictonary)
         {
             if (tile.Value.GetComponent<Tile>().m_PhysicalType == physicalType)
             {
@@ -937,7 +937,7 @@ public class TileTypeAllocator : MonoBehaviour
     private void TypeInitialTiles(Vector2 initialPoint, PhysicalType physicalType, Color colour)
     {
         // Type initial tiles
-        if (WorldGenerator.s_TilesDictonary.TryGetValue(initialPoint, out GameObject value))
+        if (TileManager.s_TilesDictonary.TryGetValue(initialPoint, out GameObject value))
         {
             Tile tileScript = value.GetComponent<Tile>();
             tileScript.m_PhysicalType = physicalType;
@@ -956,11 +956,11 @@ public class TileTypeAllocator : MonoBehaviour
     /// <returns></returns>
     private List<Vector2> TypeNeighbouringTiles(Vector2 initialPoint, PhysicalType type, Color colour, PhysicalType checkAgainstType1, PhysicalType checkAgainstType2, PhysicalType checkAgainstType3)
     {
-        List<Vector2> neighbourIndices = NeighbourUtility.GetNeighbours(initialPoint);
+        List<Vector2> neighbourIndices = NeighbourUtility.FindAllNeighbours(initialPoint);
 
         foreach (Vector2 neighbourIndex in neighbourIndices)
         {
-            if (WorldGenerator.s_TilesDictonary.TryGetValue(neighbourIndex, out GameObject nValue))
+            if (TileManager.s_TilesDictonary.TryGetValue(neighbourIndex, out GameObject nValue))
             {
                 Tile tileScript = nValue.GetComponent<Tile>();
                 if (tileScript.m_PhysicalType == checkAgainstType1 || tileScript.m_PhysicalType == checkAgainstType2 || tileScript.m_PhysicalType == checkAgainstType3)
@@ -987,19 +987,19 @@ public class TileTypeAllocator : MonoBehaviour
         List<Vector2> additionalTileIndicies = new List<Vector2>();
 
         // Return the tile below [4] the initial point
-        additionalTileIndicies.Add(NeighbourUtility.GetNeighbours(initialPoint)[4]);
+        additionalTileIndicies.Add(NeighbourUtility.FindAllNeighbours(initialPoint)[4]);
 
         Vector2 neighbouBelowIndex = additionalTileIndicies[0];
 
         for (int i = 0; i < size - 1; i++)
         {
-            neighbouBelowIndex = NeighbourUtility.GetNeighbours(neighbouBelowIndex)[4];
+            neighbouBelowIndex = NeighbourUtility.FindAllNeighbours(neighbouBelowIndex)[4];
             additionalTileIndicies.Add(neighbouBelowIndex);
         }
 
         foreach (Vector2 index in additionalTileIndicies)
         {
-            if (WorldGenerator.s_TilesDictonary.TryGetValue(index, out GameObject nValue))
+            if (TileManager.s_TilesDictonary.TryGetValue(index, out GameObject nValue))
             {
                 Tile tileScript = nValue.GetComponent<Tile>();
                 if (tileScript.m_PhysicalType == checkAgainstType1 || tileScript.m_PhysicalType == checkAgainstType2)
@@ -1015,11 +1015,11 @@ public class TileTypeAllocator : MonoBehaviour
         {
             int index = Random.Range(0, additionalTileIndicies.Count);
 
-            List<Vector2> extraNeighbourIndicies = NeighbourUtility.GetNeighbours(additionalTileIndicies[index]);
+            List<Vector2> extraNeighbourIndicies = NeighbourUtility.FindAllNeighbours(additionalTileIndicies[index]);
 
             foreach (Vector2 extraNeighbourIndex in extraNeighbourIndicies)
             {
-                if (WorldGenerator.s_TilesDictonary.TryGetValue(extraNeighbourIndex, out GameObject eValue))
+                if (TileManager.s_TilesDictonary.TryGetValue(extraNeighbourIndex, out GameObject eValue))
                 {
                     Tile tileScript = eValue.GetComponent<Tile>();
                     if (tileScript.m_PhysicalType == checkAgainstType1 || tileScript.m_PhysicalType == checkAgainstType2)
@@ -1050,11 +1050,11 @@ public class TileTypeAllocator : MonoBehaviour
         {
             int index = Random.Range(0, neighbourIndices.Count);
 
-            List<Vector2> extraNeighbourIndicies = NeighbourUtility.GetNeighbours(neighbourIndices[index]);
+            List<Vector2> extraNeighbourIndicies = NeighbourUtility.FindAllNeighbours(neighbourIndices[index]);
 
             foreach (Vector2 extraNeighbourIndex in extraNeighbourIndicies)
             {
-                if (WorldGenerator.s_TilesDictonary.TryGetValue(extraNeighbourIndex, out GameObject eValue))
+                if (TileManager.s_TilesDictonary.TryGetValue(extraNeighbourIndex, out GameObject eValue))
                 {
                     Tile tileScript = eValue.GetComponent<Tile>();
                     if (tileScript.m_PhysicalType == checkAgainstType1)
@@ -1093,11 +1093,11 @@ public class TileTypeAllocator : MonoBehaviour
                 {
                     int randomInitialNeighbourIndex = Random.Range(0, nextNeighbourIndicies.Count);
 
-                    List<Vector2> currentNeighbourIndicies = NeighbourUtility.GetNeighbours(nextNeighbourIndicies[randomInitialNeighbourIndex]);
+                    List<Vector2> currentNeighbourIndicies = NeighbourUtility.FindAllNeighbours(nextNeighbourIndicies[randomInitialNeighbourIndex]);
 
                     foreach (Vector2 currentNeighbourIndex in currentNeighbourIndicies)
                     {
-                        if (WorldGenerator.s_TilesDictonary.TryGetValue(currentNeighbourIndex, out GameObject eValue))
+                        if (TileManager.s_TilesDictonary.TryGetValue(currentNeighbourIndex, out GameObject eValue))
                         {
                             Tile tileScript = eValue.GetComponent<Tile>();
                             if (tileScript.m_PhysicalType == checkAgainstType1)
@@ -1144,11 +1144,11 @@ public class TileTypeAllocator : MonoBehaviour
                 {
                     int randomInitialNeighbourIndex = Random.Range(0, nextNeighbourIndicies.Count);
 
-                    List<Vector2> currentNeighbourIndicies = NeighbourUtility.GetNeighbours(nextNeighbourIndicies[randomInitialNeighbourIndex]);
+                    List<Vector2> currentNeighbourIndicies = NeighbourUtility.FindAllNeighbours(nextNeighbourIndicies[randomInitialNeighbourIndex]);
 
                     foreach (Vector2 currentNeighbourIndex in currentNeighbourIndicies)
                     {
-                        if (WorldGenerator.s_TilesDictonary.TryGetValue(currentNeighbourIndex, out GameObject eValue))
+                        if (TileManager.s_TilesDictonary.TryGetValue(currentNeighbourIndex, out GameObject eValue))
                         {
                             Tile tileScript = eValue.GetComponent<Tile>();
                             if (tileScript.m_PhysicalType == checkAgainstType1 || tileScript.m_PhysicalType == checkAgainstType2 || tileScript.m_PhysicalType == checkAgainstType3)
@@ -1175,7 +1175,7 @@ public class TileTypeAllocator : MonoBehaviour
 
                     foreach (Vector2 selectedCurrentNeighbourIndex in selectedCurrentNeighbourIndicies)
                     {
-                        if (WorldGenerator.s_TilesDictonary.TryGetValue(selectedCurrentNeighbourIndex, out GameObject eValue))
+                        if (TileManager.s_TilesDictonary.TryGetValue(selectedCurrentNeighbourIndex, out GameObject eValue))
                         {
                             Tile tileScript = eValue.GetComponent<Tile>();
                             if (tileScript.m_PhysicalType == checkAgainstType1 || tileScript.m_PhysicalType == checkAgainstType2 || tileScript.m_PhysicalType == checkAgainstType3)

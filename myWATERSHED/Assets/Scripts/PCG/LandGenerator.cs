@@ -70,7 +70,7 @@ public class LandGenerator : MonoBehaviour
     private void FindUndefinedNeighbours(Vector2 index)
     {
         // Find all neighbours
-        List<Vector2> neighbourIndices = NeighbourUtility.GetNeighbours(index);
+        List<Vector2> neighbourIndices = NeighbourUtility.FindAllNeighbours(index);
 
         foreach (Vector2 neighbourIndex in neighbourIndices)
         {

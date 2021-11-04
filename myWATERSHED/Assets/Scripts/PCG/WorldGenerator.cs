@@ -6,7 +6,6 @@ public class WorldGenerator : MonoBehaviour
     public int m_Seed;
     
     public static Dictionary<Vector2, BaseType> s_UndefinedTiles = new Dictionary<Vector2, BaseType>();
-    public static Dictionary<Vector2, GameObject> s_TilesDictonary = new Dictionary<Vector2, GameObject>();
 
     public delegate void WorldGenerationComplete(int rowSize, int columnSize);
     public static event WorldGenerationComplete OnWorldGenerationComplete;
@@ -46,7 +45,7 @@ public class WorldGenerator : MonoBehaviour
 
         // CLEAR DATA
         s_UndefinedTiles.Clear();
-        s_TilesDictonary.Clear();
+        TileManager.s_TilesDictonary.Clear();
         WaterGenerator.s_WaterTiles.Clear();
         LandGenerator.s_LandTiles.Clear();
 
@@ -82,7 +81,7 @@ public class WorldGenerator : MonoBehaviour
                 { position = new Vector3(x + tileStep.x, 0f, y * tileStep.y); }
 
                 // Instantiate the tile
-                s_TilesDictonary.Add(new Vector2(x, y), cloneTile = Instantiate(m_tile, position, Quaternion.Euler(-90f, 0f, 0f)));
+                TileManager.s_TilesDictonary.Add(new Vector2(x, y), cloneTile = Instantiate(m_tile, position, Quaternion.Euler(-90f, 0f, 0f)));
 
                 // Set the tile height.. Z because of the orientation of the asset
                 cloneTile.transform.localScale = new Vector3(1f, 1f, HeightmapGenerator.s_Heightmap[x, y]);

@@ -41,6 +41,8 @@ public enum PhysicalType
 
 public class TileManager : MonoBehaviour
 {
+    public static Dictionary<Vector2, GameObject> s_TilesDictonary = new Dictionary<Vector2, GameObject>();
+
     // References for tile base plane colors
     [SerializeField]
     private List<Color> m_testColors;
