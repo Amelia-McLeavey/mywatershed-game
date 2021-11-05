@@ -6,6 +6,6 @@ using UnityEngine;
 
 public abstract class FlowStyle
 {
-    public abstract bool CanFlow(GameObject senderTile, GameObject receiverTile);
-    public abstract void Flow(GameObject senderTile, GameObject receiverTile);
+    public abstract bool CanFlow(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging);
+    public abstract void Flow(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging);
 }

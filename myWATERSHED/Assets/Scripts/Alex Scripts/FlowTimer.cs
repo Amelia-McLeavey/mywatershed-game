@@ -33,13 +33,14 @@ public class FlowTimer : MonoBehaviour
         return s_instance;
     }
 
-    //the main timer
+    // The timer event
     public event Action OnTimerTick;
 
     private IEnumerator Timer()
     {
         while (true)
         {
+            // Check that the flowTime variable is greater than 0, stop the program if so.
             Debug.Assert(m_flowTime > 0, "flowTime must be greater than 0.");
             yield return new WaitForSeconds(m_flowTime);
             OnTimerTick?.Invoke();

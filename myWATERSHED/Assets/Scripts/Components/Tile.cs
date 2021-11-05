@@ -12,7 +12,6 @@ public class Tile : MonoBehaviour
 
     public Vector2 m_TileIndex;
 
-    [HideInInspector]
     public List<GameObject> m_receiverNeighbours = new List<GameObject>();
 
     private MeshRenderer m_meshRenderer;

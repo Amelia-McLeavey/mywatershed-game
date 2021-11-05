@@ -9,20 +9,20 @@ public class FlowSimulator : MonoBehaviour
 
     private void OnEnable()
     {
-        WorldGenerator.OnWorldGenerationComplete += InitializeFlow;
+        SystemGenerator.OnSystemGenerationComplete += InitializeFlow;
         FlowTimer.Instance().OnTimerTick += SendWaterFlowPulse;
     }
 
     private void OnDisable()
     {
-        WorldGenerator.OnWorldGenerationComplete -= InitializeFlow;
+        SystemGenerator.OnSystemGenerationComplete -= InitializeFlow;
         FlowTimer.Instance().OnTimerTick -= SendWaterFlowPulse;
     }
 
     //The event system can call this method.
     public void SendWaterFlowPulse()
     {
-        Debug.Log("SEND FLOW");
+        //Debug.Log("SEND FLOW");
 
         FlowStyle flowStyle = new WaterFlowStyle();
 
@@ -34,21 +34,21 @@ public class FlowSimulator : MonoBehaviour
 
                 if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
                 {
-                    FlowPulse(value, flowStyle);
+                    FlowPulse(value, flowStyle, tileIndex);
                 }
             }
         }
     }
 
-    private void FlowPulse(GameObject senderTile, FlowStyle flowStyle)
+    private void FlowPulse(GameObject senderTile, FlowStyle flowStyle, Vector2 indexForDebugging)
     {
         List<GameObject> receiverTiles = GetRequiredNeighbours(senderTile);
 
         foreach (GameObject receiverTile in receiverTiles)
         {
-            if (flowStyle.CanFlow(senderTile, senderTile))
+            if (flowStyle.CanFlow(senderTile, receiverTile, indexForDebugging))
             {
-                flowStyle.Flow(senderTile, receiverTile);
+                flowStyle.Flow(senderTile, receiverTile, indexForDebugging);
             }
             else
             {
@@ -66,7 +66,7 @@ public class FlowSimulator : MonoBehaviour
     // Initializes tiles by finding the nieghbours of each tile that will receive information
     private void InitializeFlow(int rows, int columns)
     {
-        Debug.Log("ITIALIZE FLOW");
+        //Debug.Log("ITIALIZE FLOW");
 
         m_rows = rows;
         m_columns = columns;

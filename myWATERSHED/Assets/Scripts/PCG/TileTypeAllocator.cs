@@ -605,7 +605,7 @@ public class TileTypeAllocator : MonoBehaviour
                 if (TileManager.s_TilesDictonary.TryGetValue(new Vector2(xStart, y), out GameObject value))
                 {
                     Tile tileScript = value.GetComponent<Tile>();
-                    tileScript.m_PhysicalType = PhysicalType.GolfCourse;
+                    tileScript.m_PhysicalType = PhysicalType.Highway;
                     tileScript.SetTypeColor(colour);
                 }
             }
@@ -834,6 +834,7 @@ public class TileTypeAllocator : MonoBehaviour
                         Tile tileScript = value.GetComponent<Tile>();
                         if (tileScript.m_PhysicalType != PhysicalType.NaturalStream)
                         {
+                            tileScript.m_Basetype = BaseType.Water;
                             tileScript.m_PhysicalType = PhysicalType.EngineeredStream;
                             tileScript.SetTypeColor(streamColour);
                         }
@@ -854,6 +855,7 @@ public class TileTypeAllocator : MonoBehaviour
                         Tile tileScript = value.GetComponent<Tile>();
                         if (tileScript.m_PhysicalType != PhysicalType.NaturalStream)
                         {
+                            tileScript.m_Basetype = BaseType.Water;
                             tileScript.m_PhysicalType = PhysicalType.EngineeredStream;
                             tileScript.SetTypeColor(streamColour);
                         }
