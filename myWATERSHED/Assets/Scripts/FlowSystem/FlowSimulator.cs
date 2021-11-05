@@ -10,16 +10,20 @@ public class FlowSimulator : MonoBehaviour
     private void OnEnable()
     {
         WorldGenerator.OnWorldGenerationComplete += InitializeFlow;
+        FlowTimer.Instance().OnTimerTick += SendWaterFlowPulse;
     }
 
     private void OnDisable()
     {
         WorldGenerator.OnWorldGenerationComplete -= InitializeFlow;
+        FlowTimer.Instance().OnTimerTick -= SendWaterFlowPulse;
     }
 
     //The event system can call this method.
     public void SendWaterFlowPulse()
     {
+        Debug.Log("SEND FLOW");
+
         FlowStyle flowStyle = new WaterFlowStyle();
 
         for (int x = m_rows; x > 0; x--)
@@ -62,6 +66,8 @@ public class FlowSimulator : MonoBehaviour
     // Initializes tiles by finding the nieghbours of each tile that will receive information
     private void InitializeFlow(int rows, int columns)
     {
+        Debug.Log("ITIALIZE FLOW");
+
         m_rows = rows;
         m_columns = columns;
 
