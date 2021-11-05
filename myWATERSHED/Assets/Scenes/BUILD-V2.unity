@@ -6098,7 +6098,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1037668537}
   - component: {fileID: 1037668536}
-  - component: {fileID: 1037668535}
+  - component: {fileID: 1037668538}
   - component: {fileID: 1037668534}
   m_Layer: 0
   m_Name: Flow Simulator
@@ -6116,21 +6116,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1037668533}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e84b8efa600f4bb41abd14fa77a3e170, type: 3}
+  m_Script: {fileID: 11500000, guid: 59dca2fdc1968f4449bed15b8b3c9596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1037668535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1037668533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a65ff39369b760846bf8bb4e23517801, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_flowTime: 2
 --- !u!114 &1037668536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6157,6 +6146,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1037668538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1037668533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4029ab3f2578f6c40bb109e7c98a67dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1037761564
 GameObject:
   m_ObjectHideFlags: 0
