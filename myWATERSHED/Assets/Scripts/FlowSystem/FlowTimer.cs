@@ -8,6 +8,7 @@ public class FlowTimer : MonoBehaviour
     public float m_flowTime;
     public float m_summerLength; //the amount of time to elapse in seconds before switching to winter
     public bool isSummer; //keep it simple? a bool to track the season. if it's not summer (false) it's obv winter. shrug!
+    [SerializeField]CardManager cardManager;
 
     private static FlowTimer s_instance;
 
@@ -56,7 +57,7 @@ public class FlowTimer : MonoBehaviour
         Debug.Log("Change to Winter Mode");
 
         isSummer = false; //it's winter
-
+        cardManager.ShuffleDeal();
         /*
          
         pseudo for cards, prob want this to live in another script

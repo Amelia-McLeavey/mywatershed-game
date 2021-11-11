@@ -12,23 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f40f4ce8926a3e94281cae4464732277, type: 3}
   m_Name: SaltDecrease
   m_EditorClassIdentifier: 
-  name: 
-  description: 
-  quantityInDeck: 0
-  turbidity: 0
+  name: Salt Decrease
+  description: 5% decrease of salt use/year in affect
+  quantityInDeck: 2
+  turbidity: 0.05
   ctMax: 0
-  volunteers: 0
+  volunteers: -2
   waterTemp: 0
   landTemp: 0
   redsideDace: 0
   brownTrout: 0
   creekChub: 0
-  asphaltDensity: 0
-  pollution: 0
+  asphaltDensity: 5
+  pollution: -0.05
   sewage: 0
   waterDepth: 0
   sinuosity: 0
   landHeight: 0
   erosionRate: 0
   timeBeforeEffect: 0
-  effectDuration: 0
+  effectDuration: 10
