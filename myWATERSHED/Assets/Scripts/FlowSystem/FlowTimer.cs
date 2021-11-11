@@ -53,10 +53,20 @@ public class FlowTimer : MonoBehaviour
     }
 
     public void SeasonChange() {
+        Debug.Log("Change to Winter Mode");
 
         isSummer = false; //it's winter
-        //shuffle card deck and show player however many cards they get per winter turn
-        Debug.Log("Change to Winter Mode");
+
+        /*
+         
+        pseudo for cards, prob want this to live in another script
+
+        - shuffle card deck and show player however many cards they get per winter turn
+        - spawn X number of cards from scriptable object
+        - assign values to card obj from parser info
+        
+         */
+        
 
     }
 }
