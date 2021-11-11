@@ -6133,6 +6133,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_flowTime: 2
+  m_summerLength: 15
+  isSummer: 0
 --- !u!114 &1037668536
 MonoBehaviour:
   m_ObjectHideFlags: 0

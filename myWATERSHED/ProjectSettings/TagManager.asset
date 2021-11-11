@@ -3,7 +3,27 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Agriculture
+  - Commercial
+  - EngineeredReservoir
+  - EngineeredStream
+  - EstateResidential
+  - Forest
+  - GolfCourse
+  - HighDensity
+  - Highway
+  - Industrial
+  - Institutional
+  - LowMidDensity
+  - Meadow
+  - NaturalReservoir
+  - NaturalStream
+  - RecreationCentreSpace
+  - Successional
+  - UrbanOpenSpace
+  - Vacant
+  - Wetland
   layers:
   - Default
   - TransparentFX
