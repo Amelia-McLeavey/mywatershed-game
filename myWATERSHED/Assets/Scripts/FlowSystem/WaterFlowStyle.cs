@@ -12,17 +12,17 @@ public class WaterFlowStyle : FlowStyle
         Tile receiverTileScript = receiverTile.GetComponent<Tile>();
 
         // Check if any of the neighbouring tiles are able to recieve data
-        if (senderTileScript.m_Basetype == BaseType.Land)
+        if (receiverTileScript.m_PhysicalType == PhysicalType.Highway)
         {
-            return false;
+            return true;
         }
         else if (receiverTileScript.m_Basetype == BaseType.Water)
         {
             return true;
         }
-        else if (receiverTileScript.m_PhysicalType == PhysicalType.Highway)
+        else if (receiverTileScript.m_Basetype == BaseType.Land)
         {
-            return true;
+            return false;
         }
         else
         {
@@ -35,9 +35,13 @@ public class WaterFlowStyle : FlowStyle
         Debug.Assert(senderTile != null, $"senderTile is null at index {tileIndexForDebugging}");
         Debug.Assert(receiverTile != null, $"receiverTile is null at index {tileIndexForDebugging}");
 
-        Debug.Assert(senderTile.GetComponent<PollutionLevel>() != null, $"senderTile is missing a PoullutionLevel component at index {tileIndexForDebugging}"); 
-        senderTile.GetComponent<PollutionLevel>().m_PolutionLevel -= 1;
+        Debug.Assert(senderTile.GetComponent<InsectPopulation>() != null, $"senderTile is missing an InsectPopulation component at index {tileIndexForDebugging}");
+        senderTile.GetComponent<InsectPopulation>().m_InsectPopulation -= 1;
+        Debug.Assert(receiverTile.GetComponent<InsectPopulation>() != null, $"recieverTile is missing an InsectPopulation component at index {tileIndexForDebugging}");
+        receiverTile.GetComponent<InsectPopulation>().m_InsectPopulation += 1;
 
+        Debug.Assert(senderTile.GetComponent<PollutionLevel>() != null, $"senderTile is missing a PoullutionLevel component at index {tileIndexForDebugging}");
+        senderTile.GetComponent<PollutionLevel>().m_PolutionLevel -= 1;
         Debug.Assert(receiverTile.GetComponent<PollutionLevel>() != null, $"receiverTile is missing a PoullutionLevel component at index {tileIndexForDebugging}");
         receiverTile.GetComponent<PollutionLevel>().m_PolutionLevel += 1;
 

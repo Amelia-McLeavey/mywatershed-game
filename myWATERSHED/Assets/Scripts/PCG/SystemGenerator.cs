@@ -68,7 +68,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
-                currentTile.AddComponent(typeof(LandTemperature));
+                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.tag = "Agriculture";
@@ -77,7 +77,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
-                currentTile.AddComponent(typeof(LandTemperature));
+                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.tag = "Commercial";
@@ -120,7 +120,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
-                currentTile.AddComponent(typeof(LandTemperature));
+                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.tag = "EstateResidential";
@@ -129,7 +129,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
-                currentTile.AddComponent(typeof(LandTemperature));
+                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.tag = "Forest";
@@ -138,7 +138,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
-                currentTile.AddComponent(typeof(LandTemperature));
+                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.tag = "GolfCourse";
@@ -147,7 +147,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
-                currentTile.AddComponent(typeof(LandTemperature));
+                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.tag = "HighDensity";
@@ -156,31 +156,28 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
-                currentTile.AddComponent(typeof(LandTemperature));
+                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 // These variables need to be able to flow through Highway because Highway crosses water.
                 currentTile.AddComponent(typeof(BrownTroutPopulation));
                 currentTile.AddComponent(typeof(CreekChubPopulation));
                 currentTile.AddComponent(typeof(InsectPopulation));
-                currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(RateOfFlow));
                 currentTile.AddComponent(typeof(RedDacePopulation));
                 currentTile.AddComponent(typeof(RiparianLevel)); // How much does Shade effect the Riparian Level?
                 currentTile.AddComponent(typeof(RiverbedHealth));
-                currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.AddComponent(typeof(Sinuosity));
                 currentTile.AddComponent(typeof(ShadeCoverage));
                 currentTile.AddComponent(typeof(Turbidity));
                 currentTile.AddComponent(typeof(WaterDepth));
-                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.tag = "Highway";
                 break;
             case PhysicalType.Industrial:
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
-                currentTile.AddComponent(typeof(LandTemperature));
+                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.tag = "Industrial";
@@ -189,7 +186,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
-                currentTile.AddComponent(typeof(LandTemperature));
+                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.tag = "Institutional";
@@ -198,7 +195,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
-                currentTile.AddComponent(typeof(LandTemperature));
+                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.tag = "LowMidDensity";
@@ -207,7 +204,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
-                currentTile.AddComponent(typeof(LandTemperature));
+                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.tag = "Meadow";
@@ -250,7 +247,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
-                currentTile.AddComponent(typeof(LandTemperature));
+                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.tag = "RecreationCentreSpace";
@@ -259,7 +256,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
-                currentTile.AddComponent(typeof(LandTemperature));
+                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.tag = "Successional";
@@ -268,7 +265,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
-                currentTile.AddComponent(typeof(LandTemperature));
+                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.tag = "UrbanOpenSpace";
@@ -277,7 +274,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
-                currentTile.AddComponent(typeof(LandTemperature));
+                currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.tag = "Vacant";

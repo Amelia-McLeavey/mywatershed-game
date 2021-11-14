@@ -10,19 +10,40 @@ public class FlowSimulator : MonoBehaviour
     private void OnEnable()
     {
         SystemGenerator.OnSystemGenerationComplete += InitializeFlow;
+        FlowTimer.Instance().OnTimerTick += SendLandFlowPulse;
         FlowTimer.Instance().OnTimerTick += SendWaterFlowPulse;
     }
 
     private void OnDisable()
     {
         SystemGenerator.OnSystemGenerationComplete -= InitializeFlow;
+        FlowTimer.Instance().OnTimerTick -= SendLandFlowPulse;
         FlowTimer.Instance().OnTimerTick -= SendWaterFlowPulse;
     }
 
-    //The event system can call this method.
+    public void SendLandFlowPulse()
+    {
+        //Debug.Log("SEND LAND FLOW");
+
+        FlowStyle flowStyle = new LandFlowStyle();
+
+        for (int x = m_rows; x > 0; x--)
+        {
+            for (int y = m_columns; y > 0; y--)
+            {
+                Vector2 tileIndex = new Vector2(x, y);
+
+                if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
+                {
+                    FlowPulse(value, flowStyle, tileIndex);
+                }
+            }
+        }
+    }
+
     public void SendWaterFlowPulse()
     {
-        //Debug.Log("SEND FLOW");
+        //Debug.Log("SEND WATER FLOW");
 
         FlowStyle flowStyle = new WaterFlowStyle();
 
