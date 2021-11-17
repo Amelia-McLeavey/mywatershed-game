@@ -12,6 +12,7 @@ public class FlowSimulator : MonoBehaviour
         SystemGenerator.OnSystemGenerationComplete += InitializeFlow;
         FlowTimer.Instance().OnTimerTick += SendLandFlowPulse;
         FlowTimer.Instance().OnTimerTick += SendWaterFlowPulse;
+        FlowTimer.Instance().OnTimerTick += SendFishFlowPulse;
     }
 
     private void OnDisable()
@@ -19,6 +20,7 @@ public class FlowSimulator : MonoBehaviour
         SystemGenerator.OnSystemGenerationComplete -= InitializeFlow;
         FlowTimer.Instance().OnTimerTick -= SendLandFlowPulse;
         FlowTimer.Instance().OnTimerTick -= SendWaterFlowPulse;
+        FlowTimer.Instance().OnTimerTick -= SendFishFlowPulse;
     }
 
     public void SendLandFlowPulse()
@@ -35,7 +37,10 @@ public class FlowSimulator : MonoBehaviour
 
                 if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
                 {
-                    FlowPulse(value, flowStyle, tileIndex);
+                    if (value.GetComponent<Tile>().m_Basetype == BaseType.Land)
+                    {
+                        FlowPulse(value, flowStyle, tileIndex);
+                    }         
                 }
             }
         }
@@ -55,7 +60,33 @@ public class FlowSimulator : MonoBehaviour
 
                 if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
                 {
-                    FlowPulse(value, flowStyle, tileIndex);
+                    if (value.GetComponent<Tile>().m_Basetype == BaseType.Water)
+                    {
+                        FlowPulse(value, flowStyle, tileIndex);
+                    }
+                }
+            }
+        }
+    }
+
+    public void SendFishFlowPulse()
+    {
+        //Debug.Log("SEND LAND FLOW");
+
+        FlowStyle flowStyle = new FishFlowStyle();
+
+        for (int x = m_rows; x > 0; x--)
+        {
+            for (int y = m_columns; y > 0; y--)
+            {
+                Vector2 tileIndex = new Vector2(x, y);
+
+                if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
+                {
+                    if (value.GetComponent<Tile>().m_Basetype == BaseType.Water)
+                    {
+                        FlowPulse(value, flowStyle, tileIndex);
+                    }
                 }
             }
         }
@@ -83,7 +114,6 @@ public class FlowSimulator : MonoBehaviour
         return senderTile.GetComponent<Tile>().m_receiverNeighbours;
     }
      
-
     // Initializes tiles by finding the nieghbours of each tile that will receive information
     private void InitializeFlow(int rows, int columns)
     {
