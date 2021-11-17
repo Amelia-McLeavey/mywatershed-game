@@ -21,4 +21,14 @@ public class CardActor : MonoBehaviour
         // temperature -= card.variable.temperature; etc. etc.
         
     }
+
+    private void UpdateDurations() 
+    { 
+        // Check if any card have expired and if so dicard them
+    }
+
+    private void CardsInPlayUpdater()
+    {
+        // Apply the card actions
+    }
 }
