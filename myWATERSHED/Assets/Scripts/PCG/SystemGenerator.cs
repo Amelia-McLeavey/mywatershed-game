@@ -13,12 +13,23 @@ public class SystemGenerator : MonoBehaviour
 
     private void OnEnable()
     {
-        WorldGenerator.OnWorldGenerationComplete += AddComponentsToTileObjects;
+        WorldGenerator.OnWorldGenerationComplete += GenerateSystem;
     }
 
     private void OnDisable()
     {
-        WorldGenerator.OnWorldGenerationComplete -= AddComponentsToTileObjects;
+        WorldGenerator.OnWorldGenerationComplete -= GenerateSystem;
+    }
+
+    public void GenerateSystem(int rows, int columns)
+    {
+        m_rows = rows;
+        m_columns = columns;
+
+        AddComponentsToTileObjects();
+        InitializeSenderOnlyRiverTiles();
+
+        OnSystemGenerationComplete?.Invoke(m_rows, m_columns);
     }
 
     /// <summary>
@@ -26,11 +37,8 @@ public class SystemGenerator : MonoBehaviour
     /// </summary>
     /// <param name="rows"></param>
     /// <param name="columns"></param>
-    public void AddComponentsToTileObjects(int rows, int columns)
+    private void AddComponentsToTileObjects()
     {
-        m_rows = rows;
-        m_columns = columns;
-
         for (int x = 0; x < m_rows; x++)
         {
             for (int y = 0; y < m_columns; y++)
@@ -43,19 +51,62 @@ public class SystemGenerator : MonoBehaviour
                 }
             }
         }
-
-        OnSystemGenerationComplete?.Invoke(m_rows, m_columns);
     }
 
-    //// Please search for a tile's implemented set of components using CTRL+I 
-    ////    then type in name of physical tile type.
-    //// This setup allows for individualization of component setup per tile type.
-    /// <summary>
-    /// Adds the appropriate script Components depending on the PhysicalType of the current tile.
-    /// </summary>
-    /// <param name="currentTile"></param>
-    /// <param name="physicalType"></param>
-    private void DetermineTileComponents(GameObject currentTile, PhysicalType physicalType)
+    private void InitializeSenderOnlyRiverTiles()
+    {
+        // Find all water Tiles in row 0
+        for (int y = 0; y < m_columns; y++)
+        {
+            Vector2 tileIndex = new Vector2(0, y);
+
+            if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
+            {
+                Tile tileScript = value.GetComponent<Tile>();
+
+                if (tileScript.m_Basetype == BaseType.Water)
+                {
+                    tileScript.m_isStateSpawner = true;
+                }
+            }
+        }
+
+        for (int x = 0; x < m_rows; x++)
+        {
+            Vector2 tileIndexLeft = new Vector2(x, 0);
+            Vector2 tileIndexRight = new Vector2(x, m_columns - 1);
+
+            if (TileManager.s_TilesDictonary.TryGetValue(tileIndexLeft, out GameObject valueL))
+            {
+                Tile tileScript = valueL.GetComponent<Tile>();
+
+                if (tileScript.m_Basetype == BaseType.Water)
+                {
+                    tileScript.m_isStateSpawner = true;
+                }
+            }
+
+            if (TileManager.s_TilesDictonary.TryGetValue(tileIndexRight, out GameObject valueR))
+            {
+                Tile tileScript = valueR.GetComponent<Tile>();
+
+                if (tileScript.m_Basetype == BaseType.Water)
+                {
+                    tileScript.m_isStateSpawner = true;
+                }
+            }
+        }
+    }
+
+        //// Please search for a tile's implemented set of components using CTRL+I 
+        ////    then type in name of physical tile type.
+        //// This setup allows for individualization of component setup per tile type.
+        /// <summary>
+        /// Adds the appropriate script Components depending on the PhysicalType of the current tile.
+        /// </summary>
+        /// <param name="currentTile"></param>
+        /// <param name="physicalType"></param>
+        private void DetermineTileComponents(GameObject currentTile, PhysicalType physicalType)
     {
         Debug.Assert(physicalType != PhysicalType.None, $"There is no PhysicalType associated with tile at index {currentTile.GetComponent<Tile>().m_TileIndex}");
 
@@ -89,7 +140,6 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(RateOfFlow));
                 currentTile.AddComponent(typeof(RedDacePopulation));
-                currentTile.AddComponent(typeof(RiparianLevel));
                 currentTile.AddComponent(typeof(RiverbedHealth));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.AddComponent(typeof(Sinuosity));
@@ -106,7 +156,6 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(RateOfFlow));
                 currentTile.AddComponent(typeof(RedDacePopulation));
-                currentTile.AddComponent(typeof(RiparianLevel));
                 currentTile.AddComponent(typeof(RiverbedHealth));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.AddComponent(typeof(Sinuosity));
@@ -130,6 +179,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));               
                 currentTile.AddComponent(typeof(PollutionLevel));
+                currentTile.AddComponent(typeof(RiparianLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.tag = "Forest";
@@ -164,7 +214,6 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(InsectPopulation));
                 currentTile.AddComponent(typeof(RateOfFlow));
                 currentTile.AddComponent(typeof(RedDacePopulation));
-                currentTile.AddComponent(typeof(RiparianLevel)); // How much does Shade effect the Riparian Level?
                 currentTile.AddComponent(typeof(RiverbedHealth));
                 currentTile.AddComponent(typeof(Sinuosity));
                 currentTile.AddComponent(typeof(ShadeCoverage));
@@ -205,6 +254,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
                 currentTile.AddComponent(typeof(PollutionLevel));
+                currentTile.AddComponent(typeof(RiparianLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.tag = "Meadow";
@@ -216,7 +266,6 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(RateOfFlow));
                 currentTile.AddComponent(typeof(RedDacePopulation));
-                currentTile.AddComponent(typeof(RiparianLevel));
                 currentTile.AddComponent(typeof(RiverbedHealth));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.AddComponent(typeof(Sinuosity));
@@ -233,7 +282,6 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(RateOfFlow));
                 currentTile.AddComponent(typeof(RedDacePopulation));
-                currentTile.AddComponent(typeof(RiparianLevel));
                 currentTile.AddComponent(typeof(RiverbedHealth));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.AddComponent(typeof(Sinuosity));
@@ -257,6 +305,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
                 currentTile.AddComponent(typeof(PollutionLevel));
+                currentTile.AddComponent(typeof(RiparianLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.tag = "Successional";

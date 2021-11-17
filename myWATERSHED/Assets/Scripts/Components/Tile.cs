@@ -10,6 +10,8 @@ public class Tile : MonoBehaviour
     public BaseType m_Basetype;
     public PhysicalType m_PhysicalType;
 
+    public bool m_isStateSpawner = false;
+
     public Vector2 m_TileIndex;
 
     public List<GameObject> m_receiverNeighbours = new List<GameObject>();
