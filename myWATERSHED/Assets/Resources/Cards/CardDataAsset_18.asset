@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ba0cd76515e55244974da64004fc1e7, type: 3}
+  m_Name: CardDataAsset_18
+  m_EditorClassIdentifier: 
+  m_id: 18
+  m_name: Industrial Clean up
+  m_description: "Prevent 2 industrial tiles from polluting, reduce turbidity by
+    20% and water temp by 5% for 3 turns, takes effect after \n 1 turn."
+  m_quantity: 1
+  m_effectDuration: 4
+  m_timeBeforeEffect: 1
+  m_initialVolunteerCost: -2
+  m_volunteersGainedPerYear: -5
+  m_tileTypesAffected: Industrial
+  m_amountOfTilesTargeted: 2
+  m_tileModificationScreen: 1
+  m_activity: N
+  m_unlockableCArdID: 0
+  m_brownTroutPopulation: 0
+  m_creekChubPopulation: 0
+  m_insectPopulation: 0
+  m_redDacePopulation: 0
+  m_riparianQuality: 0
+  m_riverbedHealth: 0
+  m_asphaltDensity: 0
+  m_erosionRate: 0
+  m_landHeight: 0
+  m_pollutionLevel: 0
+  m_flowRate: 0
+  m_sewageLevel: 0
+  m_sinuosity: 0
+  m_shadeCoverage: 0
+  m_turbidity: -20
+  m_waterDepth: 0
+  m_waterTemperature: -5
