@@ -49,8 +49,6 @@ public class CardDeckHandler : MonoBehaviour
 
     private void LoadDeck()
     {
-        GoogleSheetParser.LoadCardDeck();
-
         m_cardAssets = Resources.LoadAll<CardAsset>("Cards");
 
         foreach (CardAsset currentCardAsset in m_cardAssets)
