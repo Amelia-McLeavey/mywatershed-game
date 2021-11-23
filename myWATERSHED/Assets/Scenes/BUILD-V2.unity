@@ -266,11 +266,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -6330,8 +6330,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59dca2fdc1968f4449bed15b8b3c9596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_flowTime: 2
-  m_summerLength: 2
+  m_flowTime: 0.5
+  m_summerLength: 1000
   isSummer: 0
   m_cardDeckHandler: {fileID: 2035087586}
 --- !u!114 &1037668536
@@ -7170,6 +7170,7 @@ MonoBehaviour:
   variable4data: {fileID: 587560204}
   variable5data: {fileID: 756935556}
   variable6data: {fileID: 1869519702}
+  variableHolder: {fileID: 0}
 --- !u!4 &1608270785
 Transform:
   m_ObjectHideFlags: 0
@@ -12664,9 +12665,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_cardDealAmount: 3
-  m_deck: []
-  m_cardsDealt: []
-  m_cardsInPlay: []
   m_cardUIObjectHolder: {fileID: 1608069822}
   m_cardUIObjects:
   - {fileID: 423142260}
