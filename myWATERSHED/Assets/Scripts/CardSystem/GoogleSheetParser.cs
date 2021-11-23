@@ -65,9 +65,9 @@ public class GoogleSheetParser : MonoBehaviour
                 cardAsset.m_asphaltDensity = Convert.ToSingle(itemData[19]);
                 cardAsset.m_erosionRate = Convert.ToSingle(itemData[20]);
                 cardAsset.m_landHeight = Convert.ToSingle(itemData[21]);
-                cardAsset.m_pollutionLevel = Convert.ToInt32(itemData[22]);
+                cardAsset.m_pollutionLevel = Convert.ToSingle(itemData[22]);
                 cardAsset.m_flowRate = Convert.ToSingle(itemData[23]);
-                cardAsset.m_sewageLevel = Convert.ToInt32(itemData[24]);
+                cardAsset.m_sewageLevel = Convert.ToSingle(itemData[24]);
                 cardAsset.m_sinuosity = Convert.ToSingle(itemData[25]);
                 cardAsset.m_shadeCoverage = Convert.ToSingle(itemData[26]);
                 cardAsset.m_turbidity = Convert.ToSingle(itemData[27]);

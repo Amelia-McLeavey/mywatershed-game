@@ -25,7 +25,7 @@ public class LandFlowStyle : FlowStyle
         }
     }
 
-    public override void Flow(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
+    public override void ScatterFlow(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
     {
         // DEBUGS BE DEFENSIVE 
         Debug.Assert(senderTile != null, $"senderTile is null at index {tileIndexForDebugging}");
@@ -47,5 +47,9 @@ public class LandFlowStyle : FlowStyle
         senderTile.GetComponent<WaterTemperature>().m_waterTemperature -= 1;        
         receiverTile.GetComponent<WaterTemperature>().m_waterTemperature += 1;
 
+    }
+
+    public override void GatherFlow(GameObject senderTile, Vector2 tileIndexForDebugging)
+    {
     }
 }

@@ -34,9 +34,9 @@ public class CardAsset : ScriptableObject
     public float m_asphaltDensity;
     public float m_erosionRate;
     public float m_landHeight;
-    public int m_pollutionLevel;
+    public float m_pollutionLevel;
     public float m_flowRate;
-    public int m_sewageLevel;
+    public float m_sewageLevel;
     public float m_sinuosity;
     public float m_shadeCoverage;
     public float m_turbidity;

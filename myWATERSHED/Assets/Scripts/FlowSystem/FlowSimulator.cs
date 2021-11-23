@@ -10,20 +10,20 @@ public class FlowSimulator : MonoBehaviour
     private void OnEnable()
     {
         SystemGenerator.OnSystemGenerationComplete += InitializeFlow;
-        FlowTimer.Instance().OnTimerTick += SendLandFlowPulse;
-        FlowTimer.Instance().OnTimerTick += SendWaterFlowPulse;
-        FlowTimer.Instance().OnTimerTick += SendFishFlowPulse;
     }
 
     private void OnDisable()
     {
         SystemGenerator.OnSystemGenerationComplete -= InitializeFlow;
-        FlowTimer.Instance().OnTimerTick -= SendLandFlowPulse;
-        FlowTimer.Instance().OnTimerTick -= SendWaterFlowPulse;
-        FlowTimer.Instance().OnTimerTick -= SendFishFlowPulse;
     }
 
-    public void SendLandFlowPulse()
+    public void UpdateFlow()
+    {
+        SendLandFlowPulse();
+        SendWaterFlowPulse();
+    }
+
+    private void SendLandFlowPulse()
     {
         //Debug.Log("SEND LAND FLOW");
 
@@ -39,42 +39,28 @@ public class FlowSimulator : MonoBehaviour
                 {
                     if (value.GetComponent<Tile>().m_Basetype == BaseType.Land)
                     {
-                        FlowPulse(value, flowStyle, tileIndex);
+                        FlowPulseGather(value, flowStyle, tileIndex);
                     }         
                 }
             }
         }
     }
 
-    public void SendWaterFlowPulse()
+    private void SendWaterFlowPulse()
     {
         //Debug.Log("SEND WATER FLOW");
 
         FlowStyle flowStyle = new WaterFlowStyle();
 
-        for (int x = m_rows; x > 0; x--)
-        {
-            for (int y = m_columns; y > 0 ; y--)
-            {
-                Vector2 tileIndex = new Vector2(x, y);
+        SendTwoStageFlow(flowStyle, BaseType.Water);
+       
+        // RESET THE LIST THEN SCATTER AND ADD TO LIST
+        // TAKES THE AVERAGE AND UPDATE OWN VALUE
 
-                if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
-                {
-                    if (value.GetComponent<Tile>().m_Basetype == BaseType.Water)
-                    {
-                        FlowPulse(value, flowStyle, tileIndex);
-                    }
-                }
-            }
-        }
     }
 
-    public void SendFishFlowPulse()
+    private void SendTwoStageFlow(FlowStyle flowStyle, BaseType baseType)
     {
-        //Debug.Log("SEND LAND FLOW");
-
-        FlowStyle flowStyle = new FishFlowStyle();
-
         for (int x = m_rows; x > 0; x--)
         {
             for (int y = m_columns; y > 0; y--)
@@ -83,16 +69,31 @@ public class FlowSimulator : MonoBehaviour
 
                 if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
                 {
-                    if (value.GetComponent<Tile>().m_Basetype == BaseType.Water)
+                    if (value.GetComponent<Tile>().m_Basetype == baseType)
                     {
-                        FlowPulse(value, flowStyle, tileIndex);
+                        FlowPulseScatter(value, flowStyle, tileIndex); // scatter
+                    }
+                }
+            }
+        }
+        for (int x = m_rows; x > 0; x--)
+        {
+            for (int y = m_columns; y > 0; y--)
+            {
+                Vector2 tileIndex = new Vector2(x, y);
+
+                if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
+                {
+                    if (value.GetComponent<Tile>().m_Basetype == baseType)
+                    {
+                        FlowPulseGather(value, flowStyle, tileIndex);
                     }
                 }
             }
         }
     }
 
-    private void FlowPulse(GameObject senderTile, FlowStyle flowStyle, Vector2 indexForDebugging)
+    private void FlowPulseScatter(GameObject senderTile, FlowStyle flowStyle, Vector2 indexForDebugging)
     {
         List<GameObject> receiverTiles = GetRequiredNeighbours(senderTile);
 
@@ -100,7 +101,7 @@ public class FlowSimulator : MonoBehaviour
         {
             if (flowStyle.CanFlow(senderTile, receiverTile, indexForDebugging))
             {
-                flowStyle.Flow(senderTile, receiverTile, indexForDebugging);
+                flowStyle.ScatterFlow(senderTile, receiverTile, indexForDebugging);
             }
             else
             {
@@ -108,6 +109,24 @@ public class FlowSimulator : MonoBehaviour
             }
         }
     }
+
+    private void FlowPulseGather(GameObject senderTile, FlowStyle flowStyle, Vector2 indexForDebugging)
+    {
+        List<GameObject> receiverTiles = GetRequiredNeighbours(senderTile);
+
+        foreach (GameObject receiverTile in receiverTiles)
+        {
+            if (flowStyle.CanFlow(senderTile, receiverTile, indexForDebugging))
+            {
+                flowStyle.GatherFlow(senderTile, indexForDebugging);
+            }
+            else
+            {
+
+            }
+        }
+    }
+
 
     private List<GameObject> GetRequiredNeighbours (GameObject senderTile)
     {

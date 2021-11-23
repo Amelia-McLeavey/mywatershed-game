@@ -11,32 +11,12 @@ public class FlowTimer : MonoBehaviour
     [SerializeField]
     CardDeckHandler m_cardDeckHandler;
 
-    private static FlowTimer s_instance;
-
-    private void Awake()
-    {
-        // Check if more than one instance of FlowTimer has been created, stop the program if so.
-        Debug.Assert(s_instance == null, "There is more than one FlowTimer instance.");
-
-        // Store the static variable
-        s_instance = this;
-    }
-
     // TODO: We may need to change when the Coroutine is started and stopped.
     void Start()
     {
         isSummer = true;
         StartCoroutine("Timer");
         Invoke("SeasonChange", m_summerLength);
-    }
-
-    // Create a way to access the static variable
-    public static FlowTimer Instance()
-    {
-        // Check if no instances of FlowTimer have been created, stop the program if so.
-        Debug.Assert(s_instance != null, "FlowTimer component must exist on an object in the scene.");
-
-        return s_instance;
     }
 
     // The timer event
@@ -54,7 +34,7 @@ public class FlowTimer : MonoBehaviour
         yield return null; //p sure this has to be here else it will divide by zero and crash
     }
 
-    public void SeasonChange() 
+    public void SeasonChange()
     {
         //Debug.Log("Change to Winter Mode");
 
