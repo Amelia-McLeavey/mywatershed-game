@@ -17,50 +17,53 @@ public class FlowSimulator : MonoBehaviour
         SystemGenerator.OnSystemGenerationComplete -= InitializeFlow;
     }
 
-    public void UpdateFlow()
+    // Initializes tiles by finding the nieghbours of each tile that will receive information
+    private void InitializeFlow(int rows, int columns)
     {
-        SendLandFlowPulse();
-        SendWaterFlowPulse();
-    }
+        //Debug.Log("ITIALIZE FLOW");
 
-    private void SendLandFlowPulse()
-    {
-        //Debug.Log("SEND LAND FLOW");
+        m_rows = rows;
+        m_columns = columns;
 
-        FlowStyle flowStyle = new LandFlowStyle();
-
-        for (int x = m_rows; x > 0; x--)
+        for (int x = 0; x < m_rows; x++)
         {
-            for (int y = m_columns; y > 0; y--)
+            for (int y = 0; y < m_columns; y++)
             {
                 Vector2 tileIndex = new Vector2(x, y);
 
                 if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
                 {
-                    if (value.GetComponent<Tile>().m_Basetype == BaseType.Land)
+                    Tile tileScript = value.GetComponent<Tile>();
+                    List<Vector2> neighbourIndices = NeighbourUtility.FindAllNeighbours(tileIndex);
+
+                    if (tileScript.m_Basetype == BaseType.Water)
                     {
-                        FlowPulseGather(value, flowStyle, tileIndex);
-                    }         
+                        tileScript.m_receiverNeighbours = NeighbourUtility.FindLowestNeighbours(neighbourIndices);
+                    }
+
+                    if (tileScript.m_Basetype == BaseType.Land)
+                    {
+                        tileScript.m_receiverNeighbours = NeighbourUtility.FindLowestNeighbour(neighbourIndices, value);
+                    }
                 }
             }
         }
     }
 
-    private void SendWaterFlowPulse()
+    public void UpdateFlow()
     {
-        //Debug.Log("SEND WATER FLOW");
+        SendTwoStageFlow(new LandVariableProcessor(), BaseType.Land);
+        SendTwoStageFlow(new WaterVariableProcessor(), BaseType.Water);
 
-        FlowStyle flowStyle = new WaterFlowStyle();
-
-        SendTwoStageFlow(flowStyle, BaseType.Water);
-       
-        // RESET THE LIST THEN SCATTER AND ADD TO LIST
-        // TAKES THE AVERAGE AND UPDATE OWN VALUE
-
+        SendTwoStageFlow(new LandFlowStyle(), BaseType.Land);
+        SendTwoStageFlow(new WaterFlowStyle(), BaseType.Water);
     }
+
+
 
     private void SendTwoStageFlow(FlowStyle flowStyle, BaseType baseType)
     {
+        // Reset the list then scatter by adding sender tile current value to the recievers' list
         for (int x = m_rows; x > 0; x--)
         {
             for (int y = m_columns; y > 0; y--)
@@ -76,6 +79,7 @@ public class FlowSimulator : MonoBehaviour
                 }
             }
         }
+        // Take the average of the gathered values and update own value
         for (int x = m_rows; x > 0; x--)
         {
             for (int y = m_columns; y > 0; y--)
@@ -101,7 +105,7 @@ public class FlowSimulator : MonoBehaviour
         {
             if (flowStyle.CanFlow(senderTile, receiverTile, indexForDebugging))
             {
-                flowStyle.ScatterFlow(senderTile, receiverTile, indexForDebugging);
+                flowStyle.DistrubuteData(senderTile, receiverTile, indexForDebugging);
             }
             else
             {
@@ -118,7 +122,7 @@ public class FlowSimulator : MonoBehaviour
         {
             if (flowStyle.CanFlow(senderTile, receiverTile, indexForDebugging))
             {
-                flowStyle.GatherFlow(senderTile, indexForDebugging);
+                flowStyle.ProcessData(senderTile, indexForDebugging);
             }
             else
             {
@@ -127,42 +131,8 @@ public class FlowSimulator : MonoBehaviour
         }
     }
 
-
-    private List<GameObject> GetRequiredNeighbours (GameObject senderTile)
+    private List<GameObject> GetRequiredNeighbours(GameObject senderTile)
     {
         return senderTile.GetComponent<Tile>().m_receiverNeighbours;
-    }
-     
-    // Initializes tiles by finding the nieghbours of each tile that will receive information
-    private void InitializeFlow(int rows, int columns)
-    {
-        //Debug.Log("ITIALIZE FLOW");
-
-        m_rows = rows;
-        m_columns = columns;
-
-        for (int x = 0; x < m_rows; x++)
-        { 
-            for (int y = 0; y < m_columns; y++)
-            {
-                Vector2 tileIndex = new Vector2(x, y);
-
-                if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value)) 
-                {
-                    Tile tileScript = value.GetComponent<Tile>();
-                    List<Vector2> neighbourIndices = NeighbourUtility.FindAllNeighbours(tileIndex);
-
-                    if (tileScript.m_Basetype == BaseType.Water)
-                    {
-                        tileScript.m_receiverNeighbours = NeighbourUtility.FindLowestNeighbours(neighbourIndices);
-                    }
-
-                    if (tileScript.m_Basetype == BaseType.Land)
-                    {
-                        tileScript.m_receiverNeighbours = NeighbourUtility.FindLowestNeighbour(neighbourIndices, value);
-                    }
-                }
-            }
-        }
     }
 }

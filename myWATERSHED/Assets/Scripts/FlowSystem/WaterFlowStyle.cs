@@ -31,7 +31,7 @@ public class WaterFlowStyle : FlowStyle
         }
     }
 
-    public override void ScatterFlow(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
+    public override void DistrubuteData(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
     {
         // DEBUGS BE DEFENSIVE 
         Debug.Assert(senderTile != null, $"senderTile is null at index {tileIndexForDebugging}");
@@ -66,7 +66,7 @@ public class WaterFlowStyle : FlowStyle
         receiverTile.GetComponent<WaterTemperature>().m_GatheredWaterTemperatureValues.Add(senderTile.GetComponent<WaterTemperature>().m_waterTemperature);
     }
 
-    public override void GatherFlow(GameObject senderTile, Vector2 tileIndexForDebugging)
+    public override void ProcessData(GameObject senderTile, Vector2 tileIndexForDebugging)
     {
         // Take the average of the gathered values and update own value
 

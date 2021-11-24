@@ -21,6 +21,7 @@ public class SimulationController : MonoBehaviour
 
     private void SimulationTimer()
     {
+
         GetComponent<FlowSimulator>().UpdateFlow();
         GetComponent<FishSimulator>().UpdateFishPopulations();
     }
