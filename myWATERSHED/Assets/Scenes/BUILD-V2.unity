@@ -7610,7 +7610,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_flowTime: 0.5
-  m_summerLength: 1000
+  m_summerLength: 1
   isSummer: 0
   m_cardDeckHandler: {fileID: 2035087586}
   yearText: {fileID: 1995036821}
@@ -15197,6 +15197,7 @@ MonoBehaviour:
   - {fileID: 423142260}
   - {fileID: 4978656038090264328}
   - {fileID: 1042696973}
+  m_flowTimerReference: {fileID: 0}
 --- !u!114 &2094958552 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1475893848066621031, guid: 695daf52874fcea4d873b1792ca379df, type: 3}

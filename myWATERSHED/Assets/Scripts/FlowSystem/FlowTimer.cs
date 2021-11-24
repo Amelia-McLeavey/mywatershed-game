@@ -34,13 +34,7 @@ public class FlowTimer : MonoBehaviour
         Invoke("SeasonChange", m_summerLength);
     }
 
-    private void Update()
-    {
-        //toggle isSummer for testing
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            if (isSummer==true) { isSummer = false; } else if (isSummer == false) { isSummer = true; }
-        }
-    }
+
 
     // Create a way to access the static variable
     public static FlowTimer Instance()
