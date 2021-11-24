@@ -150,7 +150,7 @@ public class PrototypeController : MonoBehaviour
     }
 
     //some sloppy throwaway code to make buttons for the prototype's variable UI display
-
+    #region VariableButtons
     public void variable1ButtonPlus() {
 
         /*
@@ -175,4 +175,144 @@ public class PrototypeController : MonoBehaviour
             variableHolder.GetComponent<BrownTroutPopulation>().m_BrownTroutPopulation -= (int)UIButtonIncrementAmount;
         }
     }
+
+    public void variable2ButtonPlus()
+    {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<ErosionRate>())
+        {
+            variableHolder.GetComponent<ErosionRate>().m_ErosionRate += UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<CreekChubPopulation>())
+        {
+            variableHolder.GetComponent<CreekChubPopulation>().m_CreekChubPopulation += (int)UIButtonIncrementAmount;
+        }
+    }
+
+    public void variable2ButtonMinus()
+    {
+        if (variableHolder.GetComponent<ErosionRate>())
+        {
+            variableHolder.GetComponent<ErosionRate>().m_ErosionRate -= UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<CreekChubPopulation>())
+        {
+            variableHolder.GetComponent<CreekChubPopulation>().m_CreekChubPopulation -= (int)UIButtonIncrementAmount;
+        }
+    }
+
+
+    public void variable3ButtonPlus()
+    {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<LandHeight>())
+        {
+            variableHolder.GetComponent<LandHeight>().m_LandHeight += UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<InsectPopulation>())
+        {
+            variableHolder.GetComponent<InsectPopulation>().m_InsectPopulation += (int)UIButtonIncrementAmount;
+        }
+    }
+
+    public void variable3ButtonMinus()
+    {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<LandHeight>())
+        {
+            variableHolder.GetComponent<LandHeight>().m_LandHeight -= UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<InsectPopulation>())
+        {
+            variableHolder.GetComponent<InsectPopulation>().m_InsectPopulation -= (int)UIButtonIncrementAmount;
+        }
+    }
+
+    //for some reason rate of flow doesn't change...something weird with the flowtimer?
+    public void variable4ButtonPlus()
+    {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<WaterTemperature>())
+        {
+            variableHolder.GetComponent<WaterTemperature>().m_waterTemperature += UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<RateOfFlow>())
+        {
+            variableHolder.GetComponent<RateOfFlow>().m_RateOfFlow += UIButtonIncrementAmount;
+        }
+    }
+
+    public void variable4ButtonMinus()
+    {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<WaterTemperature>())
+        {
+            variableHolder.GetComponent<WaterTemperature>().m_waterTemperature -= UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<RateOfFlow>())
+        {
+            variableHolder.GetComponent<RateOfFlow>().m_RateOfFlow -= UIButtonIncrementAmount;
+        }
+    }
+
+    public void variable5ButtonPlus()
+    {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<PollutionLevel>())
+        {
+            variableHolder.GetComponent<PollutionLevel>().m_PolutionLevel += (int)UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<RedDacePopulation>())
+        {
+            variableHolder.GetComponent<RedDacePopulation>().m_RedDacePopulation += (int)UIButtonIncrementAmount;
+        }
+    }
+
+    public void variable5ButtonMinus()
+    {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<PollutionLevel>())
+        {
+            variableHolder.GetComponent<PollutionLevel>().m_PolutionLevel -= (int)UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<RedDacePopulation>())
+        {
+            variableHolder.GetComponent<RedDacePopulation>().m_RedDacePopulation -= (int)UIButtonIncrementAmount;
+        }
+    }
+
+    public void variable6ButtonPlus()
+    {
+
+        variableHolder.GetComponent<SewageLevel>().m_SewageLevel += UIButtonIncrementAmount;
+    }
+
+    public void variable6ButtonMinus()
+    {
+
+        variableHolder.GetComponent<SewageLevel>().m_SewageLevel -= UIButtonIncrementAmount;
+    }
+
+    #endregion
 }
