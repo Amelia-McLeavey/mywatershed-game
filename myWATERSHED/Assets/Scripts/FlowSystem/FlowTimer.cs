@@ -62,19 +62,20 @@ public class FlowTimer : MonoBehaviour
 
     public void SeasonChange() 
     {
-        //Debug.Log("Change to Winter Mode");
+        /*
+
+     probably put the check for red side dace population in here?
+
+      where are we getting this total red side dace population from?
+
+      if(total redside dace population <=0){
+      failStateMessage.SetActive(true);
+      } else...
+       */
 
         isSummer = false; //it's winter
         m_cardDeckHandler.DealCards();
-        /*
-         
-        pseudo for cards, prob want this to live in another script
-
-        - shuffle card deck and show player however many cards they get per winter turn
-        - spawn X number of cards from scriptable object
-        - assign values to card obj from parser info
-        
-         */
+      
         
 
     }
