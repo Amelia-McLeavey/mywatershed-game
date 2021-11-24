@@ -38,6 +38,7 @@ public class PrototypeController : MonoBehaviour
     [SerializeField] Text variable6data;
 
     public GameObject variableHolder;
+    public float UIButtonIncrementAmount;
 
 
     public void LoadScene(string sceneName)
@@ -70,7 +71,7 @@ public class PrototypeController : MonoBehaviour
     private void Update()
     {
 
-
+        //passing info from tiles' scripts to the UI
         //all the land types
         if (variableHolder != null)
         {
@@ -139,58 +140,6 @@ public class PrototypeController : MonoBehaviour
             {
                 variableHolder = hit.collider.gameObject;
 
-                //Debug.Log(hit.collider.gameObject.tag);
-
-                //pass tile type to UI
-                //tileType.text = hit.collider.gameObject.tag;
-
-                ////all the land types
-                //if (hit.collider.gameObject.tag == "Agriculture" || hit.collider.gameObject.tag == "Commercial" || hit.collider.gameObject.tag == "EstateResidential" || hit.collider.gameObject.tag == "Forest" || hit.collider.gameObject.tag == "GolfCourse" || hit.collider.gameObject.tag == "HighDensity" || hit.collider.gameObject.tag == "Highway" || hit.collider.gameObject.tag == "Industrial" || hit.collider.gameObject.tag == "Institutional" || hit.collider.gameObject.tag == "LowMidDensity" || hit.collider.gameObject.tag == "Meadow" || hit.collider.gameObject.tag == "RecreationCentreSpace" || hit.collider.gameObject.tag == "Successional" || hit.collider.gameObject.tag == "UrbanOpenSpace" || hit.collider.gameObject.tag == "Vacant")
-                //{
-                //    variable1.text = "Asphalt Density";
-                //    variable1data.text = hit.collider.gameObject.GetComponent<AsphaltDensity>().m_AsphaltDensity.ToString();
-
-                //    variable2.text = "Erosion Rate";
-                //    variable2data.text = hit.collider.gameObject.GetComponent<ErosionRate>().m_ErosionRate.ToString();
-
-                //    variable3.text = "Land Height";
-                //    variable3data.text = hit.collider.gameObject.GetComponent<LandHeight>().m_LandHeight.ToString();
-
-                //    variable4.text = "Water Temperature";
-                //    variable4data.text = hit.collider.gameObject.GetComponent<WaterTemperature>().m_waterTemperature.ToString();
-
-                //    variable5.text = "Pollution Level";
-                //    variable5data.text = hit.collider.gameObject.GetComponent<PollutionLevel>().m_PolutionLevel.ToString();
-
-                //    variable6.text = "Sewage Level";
-                //    variable6data.text = hit.collider.gameObject.GetComponent<SewageLevel>().m_SewageLevel.ToString();
-                //}
-
-                ////all the water types
-                //if (hit.collider.gameObject.tag == "EngineeredReservoir" || hit.collider.gameObject.tag == "EngineeredStream" || hit.collider.gameObject.tag == "NaturalStream" || hit.collider.gameObject.tag == "Wetland")
-                //{
-                //    variable1.text = "Brown Trout Population";
-                //    variable1data.text = hit.collider.gameObject.GetComponent<BrownTroutPopulation>().m_BrownTroutPopulation.ToString();
-
-                //    variable2.text = "Creek Chub Population";
-                //    variable2data.text = hit.collider.gameObject.GetComponent<CreekChubPopulation>().m_CreekChubPopulation.ToString();
-
-                //    variable3.text = "Insect Population";
-                //    variable3data.text = hit.collider.gameObject.GetComponent<InsectPopulation>().m_InsectPopulation.ToString();
-
-                //    variable4.text = "Rate of Flow";
-                //    variable4data.text = hit.collider.gameObject.GetComponent<RateOfFlow>().m_RateOfFlow.ToString();
-
-                //    variable5.text = "Red Dace Population";
-                //    variable5data.text = hit.collider.gameObject.GetComponent<RedDacePopulation>().m_RedDacePopulation.ToString();
-
-                //    variable6.text = "Sewage Level";
-                //    variable6data.text = hit.collider.gameObject.GetComponent<SewageLevel>().m_SewageLevel.ToString();
-                //}
-
-
-
-
             }
         }
 
@@ -198,5 +147,32 @@ public class PrototypeController : MonoBehaviour
         Vector3 direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         m_cameraContainer.transform.position = Vector3.MoveTowards(m_cameraContainer.transform.position, m_cameraContainer.transform.position + direction, m_cameraSpeed);
 
+    }
+
+    //some sloppy throwaway code to make buttons for the prototype's variable UI display
+
+    public void variable1ButtonPlus() {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<AsphaltDensity>())
+        {
+            variableHolder.GetComponent<AsphaltDensity>().m_AsphaltDensity += UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<BrownTroutPopulation>()) {
+            variableHolder.GetComponent<BrownTroutPopulation>().m_BrownTroutPopulation += (int)UIButtonIncrementAmount;
+        }
+    }
+
+    public void variable1ButtonMinus() {
+        if (variableHolder.GetComponent<AsphaltDensity>())
+        {
+            variableHolder.GetComponent<AsphaltDensity>().m_AsphaltDensity -= UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<BrownTroutPopulation>())
+        {
+            variableHolder.GetComponent<BrownTroutPopulation>().m_BrownTroutPopulation -= (int)UIButtonIncrementAmount;
+        }
     }
 }
