@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class FlowTimer : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class FlowTimer : MonoBehaviour
     CardDeckHandler m_cardDeckHandler;
 
     private static FlowTimer s_instance;
+    public Text yearText;
+    public int currentYear = 1;
 
     private void Awake()
     {
@@ -26,8 +29,17 @@ public class FlowTimer : MonoBehaviour
     void Start()
     {
         isSummer = true;
+        yearText.text = currentYear.ToString();
         StartCoroutine("Timer");
         Invoke("SeasonChange", m_summerLength);
+    }
+
+    private void Update()
+    {
+        //toggle isSummer for testing
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            if (isSummer==true) { isSummer = false; } else if (isSummer == false) { isSummer = true; }
+        }
     }
 
     // Create a way to access the static variable
@@ -71,5 +83,13 @@ public class FlowTimer : MonoBehaviour
          */
         
 
+    }
+
+    //can def work this into the seasonchange method, just getting something quick for testing
+    public void NextSeason() {
+        currentYear++;
+        yearText.text = currentYear.ToString();
+        isSummer = true;
+        Invoke("SeasonChange", m_summerLength);
     }
 }
