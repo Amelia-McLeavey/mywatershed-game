@@ -7678,8 +7678,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1037668537}
-  - component: {fileID: 1037668536}
+  - component: {fileID: 1037668538}
   - component: {fileID: 1037668534}
+  - component: {fileID: 1037668536}
+  - component: {fileID: 1037668535}
   m_Layer: 0
   m_Name: Flow Simulator
   m_TagString: Untagged
@@ -7699,12 +7701,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59dca2fdc1968f4449bed15b8b3c9596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_flowTime: 0.5
-  m_summerLength: 1
-  isSummer: 0
-  m_cardDeckHandler: {fileID: 2035087586}
   yearText: {fileID: 1995036821}
   currentYear: 1
+  m_flowTime: 0.5
+  m_summerLength: 20
+  isSummer: 0
+  m_cardDeckHandler: {fileID: 2035087586}
+--- !u!114 &1037668535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1037668533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 438dbb9ad470f864882a15fd3c527332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_dailyRequiredInsectConsumptionPerFish: 5
+  m_maximumRedDacePopulation: 100
+  m_maximumRedDaceGrowthPerUpdate: 10
+  m_ctMin: 5
+  m_ctMax: 30
+  m_insectFactor: 1
+  m_turbidityFactor: 1
+  m_waterTemperatureFactor: 1
 --- !u!114 &1037668536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7731,6 +7753,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1037668538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1037668533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de466c25112af9c45aa314e5e07fabe5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1037761564
 GameObject:
   m_ObjectHideFlags: 0
