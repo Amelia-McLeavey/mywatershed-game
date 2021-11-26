@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class FlowTimer : MonoBehaviour
 {
+    public Text yearText;
+    public int currentYear = 1;
     public float m_flowTime;
     public float m_summerLength; //the amount of time to elapse in seconds before switching to winter
     public bool isSummer; //keep it simple? a bool to track the season. if it's not summer (false) it's obv winter. shrug!
@@ -15,10 +18,10 @@ public class FlowTimer : MonoBehaviour
     void Start()
     {
         isSummer = true;
+        yearText.text = currentYear.ToString();
         StartCoroutine("Timer");
         Invoke("SeasonChange", m_summerLength);
     }
-
     // The timer event
     public event Action OnTimerTick;
 
@@ -36,20 +39,26 @@ public class FlowTimer : MonoBehaviour
 
     public void SeasonChange()
     {
-        //Debug.Log("Change to Winter Mode");
+        /*
+
+     probably put the check for red side dace population in here?
+
+      where are we getting this total red side dace population from?
+
+      if(total redside dace population <=0){
+      failStateMessage.SetActive(true);
+      } else...
+       */
 
         isSummer = false; //it's winter
         m_cardDeckHandler.DealCards();
-        /*
-         
-        pseudo for cards, prob want this to live in another script
+    }
 
-        - shuffle card deck and show player however many cards they get per winter turn
-        - spawn X number of cards from scriptable object
-        - assign values to card obj from parser info
-        
-         */
-        
-
+    //can def work this into the seasonchange method, just getting something quick for testing
+    public void NextSeason() {
+        currentYear++;
+        yearText.text = currentYear.ToString();
+        isSummer = true;
+        Invoke("SeasonChange", m_summerLength);
     }
 }

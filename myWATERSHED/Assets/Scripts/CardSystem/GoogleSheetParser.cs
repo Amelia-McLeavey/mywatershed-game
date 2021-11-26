@@ -16,14 +16,14 @@ public class GoogleSheetParser : MonoBehaviour
 
         if (Application.isEditor)
         {
-            if (AssetDatabase.IsValidFolder("Assets/Resources/Cards"))
-            {
-                List<string> failures = new List<string>();
-                AssetDatabase.DeleteAssets(new string[] { "Assets/Resources/Cards" }, failures);
-                Debug.Assert(failures.Count == 0, "Your assets did not delete");          
-            }
+            //if (AssetDatabase.IsValidFolder("Assets/Resources/Cards"))
+            //{
+            //    List<string> failures = new List<string>();
+            //    //AssetDatabase.DeleteAssets(new string[] { "Assets/Resources/Cards" }, failures);
+            //    Debug.Assert(failures.Count == 0, "Your assets did not delete");          
+            //}
 
-            AssetDatabase.CreateFolder("Assets/Resources", "Cards");
+            //AssetDatabase.CreateFolder("Assets/Resources", "Cards");
 
             IList <IList<object>> cardSheetRows = GoogleSheetReader.getSheetRange("A2:AD61");
             foreach (IList<object> currentRow in cardSheetRows)
@@ -74,10 +74,10 @@ public class GoogleSheetParser : MonoBehaviour
                 cardAsset.m_waterDepth = Convert.ToSingle(itemData[28]);
                 cardAsset.m_waterTemperature = Convert.ToSingle(itemData[29]);
 
-                AssetDatabase.CreateAsset(cardAsset, $"Assets/Resources/Cards/CardDataAsset_{cardAsset.m_id}.asset");
+                //AssetDatabase.CreateAsset(cardAsset, $"Assets/Resources/Cards/CardDataAsset_{cardAsset.m_id}.asset");
             }
 
-            AssetDatabase.SaveAssets();
+            //AssetDatabase.SaveAssets();
         }
     }
 }

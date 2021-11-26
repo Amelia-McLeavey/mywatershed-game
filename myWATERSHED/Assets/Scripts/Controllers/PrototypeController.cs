@@ -37,6 +37,9 @@ public class PrototypeController : MonoBehaviour
     [SerializeField] Text variable5data;
     [SerializeField] Text variable6data;
 
+    public GameObject variableHolder;
+    public float UIButtonIncrementAmount;
+
 
     public void LoadScene(string sceneName)
     {
@@ -60,29 +63,74 @@ public class PrototypeController : MonoBehaviour
         m_worldGenScript.m_Seed--;
     }
 
+    private void Start()
+    {
+        variableHolder = null;
+    }
+
     private void Update()
     {
 
+        //passing info from tiles' scripts to the UI
+        //all the land types
+        if (variableHolder != null)
+        {
+            tileType.text = variableHolder.tag;
 
-        // TILE CLICKS
+            if (variableHolder.tag == "Agriculture" || variableHolder.tag == "Commercial" || variableHolder.tag == "EstateResidential" || variableHolder.tag == "Forest" || variableHolder.tag == "GolfCourse" || variableHolder.tag == "HighDensity" || variableHolder.tag == "Highway" || variableHolder.tag == "Industrial" || variableHolder.tag == "Institutional" || variableHolder.tag == "LowMidDensity" || variableHolder.tag == "Meadow" || variableHolder.tag == "RecreationCentreSpace" || variableHolder.tag == "Successional" || variableHolder.tag == "UrbanOpenSpace" || variableHolder.tag == "Vacant")
+            {
+                variable1.text = "Asphalt Density";
+                variable1data.text = variableHolder.GetComponent<AsphaltDensity>().m_AsphaltDensity.ToString();
 
-        //if (activeTileUI == true) {
-        //prob dont need the bool can just check if the game object is active
-        //    //display and update variables based on tile raycasted
+                variable2.text = "Erosion Rate";
+                variable2data.text = variableHolder.GetComponent<ErosionRate>().m_ErosionRate.ToString();
 
-        /*
-        pseudo:
-       - store the tile in a gameobject holder so we can keep referrencing the variables updating outside of the
-       raycast
-       - 
-        */
+                variable3.text = "Land Height";
+                variable3data.text = variableHolder.GetComponent<LandHeight>().m_LandHeight.ToString();
+
+                variable4.text = "Water Temperature";
+                variable4data.text = variableHolder.GetComponent<WaterTemperature>().m_waterTemperature.ToString();
+
+                variable5.text = "Pollution Level";
+                variable5data.text = variableHolder.GetComponent<PollutionLevel>().m_PolutionLevel.ToString();
+
+                variable6.text = "Sewage Level";
+                variable6data.text = variableHolder.GetComponent<SewageLevel>().m_SewageLevel.ToString();
+            }
+
+            //all the water types
+            if (variableHolder.tag == "EngineeredReservoir" || variableHolder.tag == "EngineeredStream" || variableHolder.tag == "NaturalStream" || variableHolder.tag == "Wetland")
+            {
+                variable1.text = "Brown Trout Population";
+                variable1data.text = variableHolder.GetComponent<BrownTroutPopulation>().m_BrownTroutPopulation.ToString();
+
+                variable2.text = "Creek Chub Population";
+                variable2data.text = variableHolder.GetComponent<CreekChubPopulation>().m_CreekChubPopulation.ToString();
+
+                variable3.text = "Insect Population";
+                variable3data.text = variableHolder.GetComponent<InsectPopulation>().m_InsectPopulation.ToString();
+
+                variable4.text = "Rate of Flow";
+                variable4data.text = variableHolder.GetComponent<RateOfFlow>().m_RateOfFlow.ToString();
+
+                variable5.text = "Red Dace Population";
+                variable5data.text = variableHolder.GetComponent<RedDacePopulation>().m_RedDacePopulation.ToString();
+
+                variable6.text = "Sewage Level";
+                variable6data.text = variableHolder.GetComponent<SewageLevel>().m_SewageLevel.ToString();
+            }
+        }
+
 
         //}
-        if (Input.GetMouseButtonDown(1)) // left mouse click
+        if (Input.GetMouseButtonDown(1)) // right mouse click
         {
-            //toggle tile ui on right click
-            if (activeTileUI == false) { activeTileUI = true; tileUI.SetActive(true); } else if (activeTileUI == true) { activeTileUI = false; tileUI.SetActive(false); }
+            //temporarily removed the clicking to turn on/off, it's always visible for simplicity in this prototype. can easily change later
 
+            //toggle tile ui on right click
+            //if (activeTileUI == false) { activeTileUI = true; tileUI.SetActive(true); } else if (activeTileUI == true) { activeTileUI = false; tileUI.SetActive(false); }
+
+            //ADD SOME VISUAL FEEDBACK TO SHOW WHICH TILE IS CURRENTLY SELECTED
 
             // Create a ray from the point clicked on screen to the point in world space
             Ray ray = m_camera.ScreenPointToRay(Input.mousePosition);
@@ -90,57 +138,7 @@ public class PrototypeController : MonoBehaviour
             // Pass ray into Raycast to get hit info
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                //Debug.Log(hit.collider.gameObject.tag);
-                
-                //pass tile type to UI
-                tileType.text = hit.collider.gameObject.tag;
-               
-                //all the land types
-                if (hit.collider.gameObject.tag == "Agriculture" || hit.collider.gameObject.tag == "Commercial" || hit.collider.gameObject.tag == "EstateResidential" || hit.collider.gameObject.tag == "Forest" || hit.collider.gameObject.tag == "GolfCourse" || hit.collider.gameObject.tag == "HighDensity" || hit.collider.gameObject.tag == "Highway" || hit.collider.gameObject.tag == "Industrial" || hit.collider.gameObject.tag == "Institutional" || hit.collider.gameObject.tag == "LowMidDensity" || hit.collider.gameObject.tag == "Meadow" || hit.collider.gameObject.tag == "RecreationCentreSpace" || hit.collider.gameObject.tag == "Successional" || hit.collider.gameObject.tag == "UrbanOpenSpace" || hit.collider.gameObject.tag == "Vacant")
-                {
-                    variable1.text = "Asphalt Density";
-                    variable1data.text = hit.collider.gameObject.GetComponent<AsphaltDensity>().m_AsphaltDensity.ToString();
-
-                    variable2.text = "Erosion Rate";
-                    variable2data.text = hit.collider.gameObject.GetComponent<ErosionRate>().m_ErosionRate.ToString();
-
-                    variable3.text = "Land Height";
-                    variable3data.text = hit.collider.gameObject.GetComponent<LandHeight>().m_LandHeight.ToString();
-
-                    variable4.text = "Water Temperature";
-                    variable4data.text = hit.collider.gameObject.GetComponent<WaterTemperature>().m_waterTemperature.ToString();
-
-                    variable5.text = "Pollution Level";
-                    variable5data.text = hit.collider.gameObject.GetComponent<PollutionLevel>().m_PolutionLevel.ToString();
-
-                    variable6.text = "Sewage Level";
-                    variable6data.text = hit.collider.gameObject.GetComponent<SewageLevel>().m_SewageLevel.ToString();
-                }
-
-                //all the water types
-                if (hit.collider.gameObject.tag == "EngineeredReservoir" || hit.collider.gameObject.tag == "EngineeredStream" || hit.collider.gameObject.tag == "NaturalStream" || hit.collider.gameObject.tag == "Wetland")
-                {
-                    variable1.text = "Brown Trout Population";
-                    variable1data.text = hit.collider.gameObject.GetComponent<BrownTroutPopulation>().m_BrownTroutPopulation.ToString();
-
-                    variable2.text = "Creek Chub Population";
-                    variable2data.text = hit.collider.gameObject.GetComponent<CreekChubPopulation>().m_CreekChubPopulation.ToString();
-
-                    variable3.text = "Insect Population";
-                    variable3data.text = hit.collider.gameObject.GetComponent<InsectPopulation>().m_InsectPopulation.ToString();
-
-                    variable4.text = "Rate of Flow";
-                    variable4data.text = hit.collider.gameObject.GetComponent<RateOfFlow>().m_RateOfFlow.ToString();
-
-                    variable5.text = "Red Dace Population";
-                    variable5data.text = hit.collider.gameObject.GetComponent<RedDacePopulation>().m_RedDacePopulation.ToString();
-
-                    variable6.text = "Sewage Level";
-                    variable6data.text = hit.collider.gameObject.GetComponent<SewageLevel>().m_SewageLevel.ToString();
-                }
-
-             
-           
+                variableHolder = hit.collider.gameObject;
 
             }
         }
@@ -150,4 +148,171 @@ public class PrototypeController : MonoBehaviour
         m_cameraContainer.transform.position = Vector3.MoveTowards(m_cameraContainer.transform.position, m_cameraContainer.transform.position + direction, m_cameraSpeed);
 
     }
+
+    //some sloppy throwaway code to make buttons for the prototype's variable UI display
+    #region VariableButtons
+    public void variable1ButtonPlus() {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<AsphaltDensity>())
+        {
+            variableHolder.GetComponent<AsphaltDensity>().m_AsphaltDensity += UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<BrownTroutPopulation>()) {
+            variableHolder.GetComponent<BrownTroutPopulation>().m_BrownTroutPopulation += (int)UIButtonIncrementAmount;
+        }
+    }
+
+    public void variable1ButtonMinus() {
+        if (variableHolder.GetComponent<AsphaltDensity>())
+        {
+            variableHolder.GetComponent<AsphaltDensity>().m_AsphaltDensity -= UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<BrownTroutPopulation>())
+        {
+            variableHolder.GetComponent<BrownTroutPopulation>().m_BrownTroutPopulation -= (int)UIButtonIncrementAmount;
+        }
+    }
+
+    public void variable2ButtonPlus()
+    {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<ErosionRate>())
+        {
+            variableHolder.GetComponent<ErosionRate>().m_ErosionRate += UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<CreekChubPopulation>())
+        {
+            variableHolder.GetComponent<CreekChubPopulation>().m_CreekChubPopulation += (int)UIButtonIncrementAmount;
+        }
+    }
+
+    public void variable2ButtonMinus()
+    {
+        if (variableHolder.GetComponent<ErosionRate>())
+        {
+            variableHolder.GetComponent<ErosionRate>().m_ErosionRate -= UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<CreekChubPopulation>())
+        {
+            variableHolder.GetComponent<CreekChubPopulation>().m_CreekChubPopulation -= (int)UIButtonIncrementAmount;
+        }
+    }
+
+
+    public void variable3ButtonPlus()
+    {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<LandHeight>())
+        {
+            variableHolder.GetComponent<LandHeight>().m_LandHeight += UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<InsectPopulation>())
+        {
+            variableHolder.GetComponent<InsectPopulation>().m_InsectPopulation += (int)UIButtonIncrementAmount;
+        }
+    }
+
+    public void variable3ButtonMinus()
+    {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<LandHeight>())
+        {
+            variableHolder.GetComponent<LandHeight>().m_LandHeight -= UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<InsectPopulation>())
+        {
+            variableHolder.GetComponent<InsectPopulation>().m_InsectPopulation -= (int)UIButtonIncrementAmount;
+        }
+    }
+
+    //for some reason rate of flow doesn't change...something weird with the flowtimer?
+    public void variable4ButtonPlus()
+    {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<WaterTemperature>())
+        {
+            variableHolder.GetComponent<WaterTemperature>().m_waterTemperature += UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<RateOfFlow>())
+        {
+            variableHolder.GetComponent<RateOfFlow>().m_RateOfFlow += UIButtonIncrementAmount;
+        }
+    }
+
+    public void variable4ButtonMinus()
+    {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<WaterTemperature>())
+        {
+            variableHolder.GetComponent<WaterTemperature>().m_waterTemperature -= UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<RateOfFlow>())
+        {
+            variableHolder.GetComponent<RateOfFlow>().m_RateOfFlow -= UIButtonIncrementAmount;
+        }
+    }
+
+    public void variable5ButtonPlus()
+    {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<PollutionLevel>())
+        {
+            variableHolder.GetComponent<PollutionLevel>().m_PolutionLevel += (int)UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<RedDacePopulation>())
+        {
+            variableHolder.GetComponent<RedDacePopulation>().m_RedDacePopulation += (int)UIButtonIncrementAmount;
+        }
+    }
+
+    public void variable5ButtonMinus()
+    {
+
+        /*
+         take whatever script is associated with this variable and add to it
+         */
+        if (variableHolder.GetComponent<PollutionLevel>())
+        {
+            variableHolder.GetComponent<PollutionLevel>().m_PolutionLevel -= (int)UIButtonIncrementAmount;
+        }
+        else if (variableHolder.GetComponent<RedDacePopulation>())
+        {
+            variableHolder.GetComponent<RedDacePopulation>().m_RedDacePopulation -= (int)UIButtonIncrementAmount;
+        }
+    }
+
+    public void variable6ButtonPlus()
+    {
+
+        variableHolder.GetComponent<SewageLevel>().m_SewageLevel += UIButtonIncrementAmount;
+    }
+
+    public void variable6ButtonMinus()
+    {
+
+        variableHolder.GetComponent<SewageLevel>().m_SewageLevel -= UIButtonIncrementAmount;
+    }
+
+    #endregion
 }
