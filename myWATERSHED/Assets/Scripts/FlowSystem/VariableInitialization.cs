@@ -45,6 +45,7 @@ public class VariableInitialization : FlowStyle
                 senderTile.GetComponent<CreekChubPopulation>().m_CreekChubPopulation = Random.Range(0, 10);
                 senderTile.GetComponent<PollutionLevel>().m_PolutionLevel = Random.Range(0.6f, 1f);
                 senderTile.GetComponent<RedDacePopulation>().m_RedDacePopulation = Random.Range(0, 10);
+                senderTile.GetComponent<RiparianLevel>().m_RiparianLevel = Random.Range(0f, 0.4f);
                 senderTile.GetComponent<SewageLevel>().m_SewageLevel = Random.Range(0.8f, 1f);
                 senderTile.GetComponent<Sinuosity>().m_Sinuosity = Random.Range(0f, 0.2f);
                 senderTile.GetComponent<WaterDepth>().m_WaterDepth = Random.Range (1, 6);
@@ -55,6 +56,7 @@ public class VariableInitialization : FlowStyle
                 senderTile.GetComponent<CreekChubPopulation>().m_CreekChubPopulation = Random.Range(0, 10);
                 senderTile.GetComponent<PollutionLevel>().m_PolutionLevel = Random.Range(0.6f, 1f);
                 senderTile.GetComponent<RedDacePopulation>().m_RedDacePopulation = Random.Range(0, 10);
+                senderTile.GetComponent<RiparianLevel>().m_RiparianLevel = Random.Range(0f, 0.4f);
                 senderTile.GetComponent<SewageLevel>().m_SewageLevel = Random.Range(0.8f, 1f);
                 senderTile.GetComponent<Sinuosity>().m_Sinuosity = Random.Range(0f, 0.2f);
                 senderTile.GetComponent<WaterDepth>().m_WaterDepth = Random.Range(1, 6);
@@ -128,6 +130,7 @@ public class VariableInitialization : FlowStyle
                 senderTile.GetComponent<CreekChubPopulation>().m_CreekChubPopulation = Random.Range(0, 50);
                 senderTile.GetComponent<PollutionLevel>().m_PolutionLevel = Random.Range(0f, 0.2f);
                 senderTile.GetComponent<RedDacePopulation>().m_RedDacePopulation = Random.Range(0, 50);
+                senderTile.GetComponent<RiparianLevel>().m_RiparianLevel = Random.Range(0.4f, 1f);
                 senderTile.GetComponent<SewageLevel>().m_SewageLevel = Random.Range(0f, 0.2f);
                 senderTile.GetComponent<Sinuosity>().m_Sinuosity = Random.Range(0.2f, 0.5f);
                 senderTile.GetComponent<WaterDepth>().m_WaterDepth = Random.Range(1, 10);
@@ -138,6 +141,7 @@ public class VariableInitialization : FlowStyle
                 senderTile.GetComponent<CreekChubPopulation>().m_CreekChubPopulation = Random.Range(0, 50);
                 senderTile.GetComponent<PollutionLevel>().m_PolutionLevel = Random.Range(0f, 0.2f);
                 senderTile.GetComponent<RedDacePopulation>().m_RedDacePopulation = Random.Range(0, 50);
+                senderTile.GetComponent<RiparianLevel>().m_RiparianLevel = Random.Range(0.4f, 1f);
                 senderTile.GetComponent<SewageLevel>().m_SewageLevel = Random.Range(0f, 0.2f);
                 senderTile.GetComponent<Sinuosity>().m_Sinuosity = Random.Range(0.2f, 1f);
                 senderTile.GetComponent<WaterDepth>().m_WaterDepth = Random.Range(1, 6);

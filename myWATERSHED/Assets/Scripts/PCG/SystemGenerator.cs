@@ -187,7 +187,6 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));               
                 currentTile.AddComponent(typeof(PollutionLevel));
-                currentTile.AddComponent(typeof(RiparianLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.tag = "Forest";
@@ -270,7 +269,6 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
                 currentTile.AddComponent(typeof(PollutionLevel));
-                currentTile.AddComponent(typeof(RiparianLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.tag = "Meadow";
