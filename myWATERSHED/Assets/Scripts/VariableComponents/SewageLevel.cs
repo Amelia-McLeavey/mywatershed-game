@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class SewageLevel : MonoBehaviour
 {
-    public float m_SewageLevel = 0f;
+    public float m_SewageLevel;
 
+    [HideInInspector]
     public List<float> m_GatheredSewageValues = new List<float>();
 }

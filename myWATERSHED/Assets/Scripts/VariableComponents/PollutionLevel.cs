@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PollutionLevel : MonoBehaviour
 {
-    public float m_PolutionLevel = 0;
+    public float m_PolutionLevel;
 
+    [HideInInspector]
     public List<float> m_GatheredPolutionValues = new List<float>();
 }

@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class BrownTroutPopulation : MonoBehaviour
 {
-    public int m_BrownTroutPopulation;
+    public int m_BrownTroutPopulation; 
 }

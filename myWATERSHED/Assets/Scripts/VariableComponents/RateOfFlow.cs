@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class RateOfFlow : MonoBehaviour
 {
-    public float m_RateOfFlow = 1f;
+    public float m_RateOfFlow;
 }

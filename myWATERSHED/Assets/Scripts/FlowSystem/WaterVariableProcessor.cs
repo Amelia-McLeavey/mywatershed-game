@@ -16,6 +16,15 @@ public class WaterVariableProcessor : FlowStyle
 
     public override void ProcessData(GameObject senderTile, Vector2 tileIndexForDebugging)
     {
+        // EROSION RATE
+        if (senderTile.GetComponent<InsectPopulation>() == null)
+        {
+            Debug.LogError("erosion missing");
+        }
+        if (senderTile.GetComponent<RiparianLevel>() == null)
+        {
+            Debug.LogError("landheight missing");
+        }
         // INSECT POPULATION
         senderTile.GetComponent<InsectPopulation>().m_InsectPopulation = Mathf.RoundToInt(senderTile.GetComponent<RiparianLevel>().m_RiparianLevel * 1000);
         // RATE OF FLOW

@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class CreekChubPopulation : MonoBehaviour
 {
-    public int m_CreekChubPopulation = 0;
+    public int m_CreekChubPopulation;
 }

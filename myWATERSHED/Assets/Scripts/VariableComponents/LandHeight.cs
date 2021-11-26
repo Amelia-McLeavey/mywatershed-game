@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class LandHeight : MonoBehaviour
 {
-    public float m_LandHeight = 0f;
+    public float m_LandHeight;
 }

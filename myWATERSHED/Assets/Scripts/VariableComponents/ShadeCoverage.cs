@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class ShadeCoverage : MonoBehaviour
 {
-    public float m_ShadeCoverage = 0f;
+    public float m_ShadeCoverage;
 }

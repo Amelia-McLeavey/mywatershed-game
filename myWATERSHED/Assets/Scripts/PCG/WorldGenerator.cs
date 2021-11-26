@@ -99,6 +99,10 @@ public class WorldGenerator : MonoBehaviour
                 {
                     type = landType;
                 }
+                if (tileScript.m_Basetype == BaseType.Water && tileScript.m_PhysicalType == PhysicalType.Wetland && type == BaseType.Land)
+                {
+                    Debug.LogError("this is the case.");
+                }
                 tileScript.m_Basetype = type;
 
                 // Parent

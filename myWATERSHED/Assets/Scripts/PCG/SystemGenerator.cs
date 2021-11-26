@@ -116,6 +116,7 @@ public class SystemGenerator : MonoBehaviour
                 Debug.LogError($"There is no PhysicalType associated with tile at index {currentTile.GetComponent<Tile>().m_TileIndex}");
                 break;
             case PhysicalType.Agriculture:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Land, "Agriculture tiles are expected to be land type");
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
@@ -125,6 +126,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "Agriculture";
                 break;
             case PhysicalType.Commercial:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Land, "Commercial tiles are expected to be land type");
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
@@ -134,12 +136,14 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "Commercial";
                 break;
             case PhysicalType.EngineeredReservoir:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Water, "EngineeredReservoir tiles are expected to be water type");
                 currentTile.AddComponent(typeof(BrownTroutPopulation));
                 currentTile.AddComponent(typeof(CreekChubPopulation));
                 currentTile.AddComponent(typeof(InsectPopulation));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(RateOfFlow));
                 currentTile.AddComponent(typeof(RedDacePopulation));
+                currentTile.AddComponent(typeof(RiparianLevel));
                 currentTile.AddComponent(typeof(RiverbedHealth));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.AddComponent(typeof(Sinuosity));
@@ -150,12 +154,14 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "EngineeredReservoir";
                 break;
             case PhysicalType.EngineeredStream:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Water, "EngineeredStream tiles are expected to be water type");
                 currentTile.AddComponent(typeof(BrownTroutPopulation));
                 currentTile.AddComponent(typeof(CreekChubPopulation));
                 currentTile.AddComponent(typeof(InsectPopulation));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(RateOfFlow));
                 currentTile.AddComponent(typeof(RedDacePopulation));
+                currentTile.AddComponent(typeof(RiparianLevel));
                 currentTile.AddComponent(typeof(RiverbedHealth));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.AddComponent(typeof(Sinuosity));
@@ -166,6 +172,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "EngineeredStream";
                 break;
             case PhysicalType.EstateResidential:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Land, "EstateResidential tiles are expected to be land type");
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
@@ -175,6 +182,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "EstateResidential";
                 break;
             case PhysicalType.Forest:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Land, "Forest tiles are expected to be land type");
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));               
@@ -185,6 +193,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "Forest";
                 break;
             case PhysicalType.GolfCourse:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Land, "GolfCourse tiles are expected to be land type");
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
@@ -194,6 +203,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "GolfCourse";
                 break;
             case PhysicalType.HighDensity:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Land, "HighDensity tiles are expected to be land type");
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));                
@@ -203,6 +213,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "HighDensity";
                 break;
             case PhysicalType.Highway:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Land, "Highway tiles are expected to be land type");
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
@@ -214,6 +225,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.AddComponent(typeof(InsectPopulation));
                 currentTile.AddComponent(typeof(RateOfFlow));
                 currentTile.AddComponent(typeof(RedDacePopulation));
+                currentTile.AddComponent(typeof(RiparianLevel));
                 currentTile.AddComponent(typeof(RiverbedHealth));
                 currentTile.AddComponent(typeof(Sinuosity));
                 currentTile.AddComponent(typeof(ShadeCoverage));
@@ -223,6 +235,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "Highway";
                 break;
             case PhysicalType.Industrial:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Land, "Industrial tiles are expected to be land type");
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
@@ -232,6 +245,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "Industrial";
                 break;
             case PhysicalType.Institutional:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Land, "Institutional tiles are expected to be land type");
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
@@ -241,6 +255,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "Institutional";
                 break;
             case PhysicalType.LowMidDensity:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Land, "LowMidDensity tiles are expected to be land type");
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
@@ -250,6 +265,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "LowMidDensity";
                 break;
             case PhysicalType.Meadow:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Land, "Meadow tiles are expected to be land type");
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
@@ -260,12 +276,14 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "Meadow";
                 break;
             case PhysicalType.NaturalReservoir:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Water, "NaturalReservoir tiles are expected to be water type");
                 currentTile.AddComponent(typeof(BrownTroutPopulation));
                 currentTile.AddComponent(typeof(CreekChubPopulation));
                 currentTile.AddComponent(typeof(InsectPopulation));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(RateOfFlow));
                 currentTile.AddComponent(typeof(RedDacePopulation));
+                currentTile.AddComponent(typeof(RiparianLevel));
                 currentTile.AddComponent(typeof(RiverbedHealth));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.AddComponent(typeof(Sinuosity));
@@ -276,12 +294,14 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "NaturalReservoir";
                 break;
             case PhysicalType.NaturalStream:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Water, "NaturalStream tiles are expected to be water type");
                 currentTile.AddComponent(typeof(BrownTroutPopulation));
                 currentTile.AddComponent(typeof(CreekChubPopulation));
                 currentTile.AddComponent(typeof(InsectPopulation));
                 currentTile.AddComponent(typeof(PollutionLevel));
                 currentTile.AddComponent(typeof(RateOfFlow));
                 currentTile.AddComponent(typeof(RedDacePopulation));
+                currentTile.AddComponent(typeof(RiparianLevel));
                 currentTile.AddComponent(typeof(RiverbedHealth));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.AddComponent(typeof(Sinuosity));
@@ -292,6 +312,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "NaturalStream";
                 break;
             case PhysicalType.RecreationCentreSpace:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Land, "RecreationCentreSpace tiles are expected to be land type");
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
@@ -301,16 +322,17 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "RecreationCentreSpace";
                 break;
             case PhysicalType.Successional:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Land, "Successional tiles are suspected to be land type");
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
                 currentTile.AddComponent(typeof(PollutionLevel));
-                currentTile.AddComponent(typeof(RiparianLevel));
                 currentTile.AddComponent(typeof(SewageLevel));
                 currentTile.AddComponent(typeof(WaterTemperature));
                 currentTile.tag = "Successional";
                 break;
             case PhysicalType.UrbanOpenSpace:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Land, "UrbanOpenSpace tiles are expected to be land type");
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
@@ -320,6 +342,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "UrbanOpenSpace";
                 break;
             case PhysicalType.Vacant:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Land, "Vacant tiles are expected to be land type");
                 currentTile.AddComponent(typeof(AsphaltDensity));
                 currentTile.AddComponent(typeof(ErosionRate));
                 currentTile.AddComponent(typeof(LandHeight));
@@ -329,6 +352,7 @@ public class SystemGenerator : MonoBehaviour
                 currentTile.tag = "Vacant";
                 break;
             case PhysicalType.Wetland:
+                Debug.Assert(currentTile.GetComponent<Tile>().m_Basetype == BaseType.Water, "Wetland tiles are expected to be water type");
                 currentTile.AddComponent(typeof(BrownTroutPopulation));
                 currentTile.AddComponent(typeof(CreekChubPopulation));
                 currentTile.AddComponent(typeof(InsectPopulation));

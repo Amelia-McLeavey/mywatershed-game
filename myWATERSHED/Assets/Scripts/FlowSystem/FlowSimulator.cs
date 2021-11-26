@@ -33,21 +33,33 @@ public class FlowSimulator : MonoBehaviour
 
                 if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
                 {
-                    Tile tileScript = value.GetComponent<Tile>();
-                    List<Vector2> neighbourIndices = NeighbourUtility.FindAllNeighbours(tileIndex);
-
-                    if (tileScript.m_Basetype == BaseType.Water)
-                    {
-                        tileScript.m_receiverNeighbours = NeighbourUtility.FindLowestNeighbours(neighbourIndices);
-                    }
-
-                    if (tileScript.m_Basetype == BaseType.Land)
-                    {
-                        tileScript.m_receiverNeighbours = NeighbourUtility.FindLowestNeighbour(neighbourIndices, value);
-                    }
+                    SetNeighbours(value, tileIndex);
+                    SetStartingVariableValues(value, tileIndex);
                 }
             }
         }
+    }
+
+    private void SetNeighbours(GameObject tile, Vector2 tileIndex)
+    {
+        Tile tileScript = tile.GetComponent<Tile>();
+        List<Vector2> neighbourIndices = NeighbourUtility.FindAllNeighbours(tileIndex);
+
+        if (tileScript.m_Basetype == BaseType.Water)
+        {
+            tileScript.m_receiverNeighbours = NeighbourUtility.FindLowestNeighbours(neighbourIndices);
+        }
+
+        if (tileScript.m_Basetype == BaseType.Land)
+        {
+            tileScript.m_receiverNeighbours = NeighbourUtility.FindLowestNeighbour(neighbourIndices, tile);
+        }
+    }
+
+    private void SetStartingVariableValues(GameObject tile, Vector2 tileIndex)
+    {
+        SendProcessingPulse(tile, new VariableInitialization(), tileIndex);
+
     }
 
     public void UpdateFlow()
@@ -74,7 +86,7 @@ public class FlowSimulator : MonoBehaviour
                 {
                     if (value.GetComponent<Tile>().m_Basetype == baseType)
                     {
-                        FlowPulseScatter(value, flowStyle, tileIndex); // scatter
+                        SendDistributionPulse(value, flowStyle, tileIndex); // scatter
                     }
                 }
             }
@@ -90,14 +102,14 @@ public class FlowSimulator : MonoBehaviour
                 {
                     if (value.GetComponent<Tile>().m_Basetype == baseType)
                     {
-                        FlowPulseGather(value, flowStyle, tileIndex);
+                        SendProcessingPulse(value, flowStyle, tileIndex);
                     }
                 }
             }
         }
     }
 
-    private void FlowPulseScatter(GameObject senderTile, FlowStyle flowStyle, Vector2 indexForDebugging)
+    private void SendDistributionPulse(GameObject senderTile, FlowStyle flowStyle, Vector2 indexForDebugging)
     {
         List<GameObject> receiverTiles = GetRequiredNeighbours(senderTile);
 
@@ -114,21 +126,10 @@ public class FlowSimulator : MonoBehaviour
         }
     }
 
-    private void FlowPulseGather(GameObject senderTile, FlowStyle flowStyle, Vector2 indexForDebugging)
+    private void SendProcessingPulse(GameObject senderTile, FlowStyle flowStyle, Vector2 indexForDebugging)
     {
-        List<GameObject> receiverTiles = GetRequiredNeighbours(senderTile);
-
-        foreach (GameObject receiverTile in receiverTiles)
-        {
-            if (flowStyle.CanFlow(senderTile, receiverTile, indexForDebugging))
-            {
-                flowStyle.ProcessData(senderTile, indexForDebugging);
-            }
-            else
-            {
-
-            }
-        }
+        flowStyle.ProcessData(senderTile, indexForDebugging);
+     
     }
 
     private List<GameObject> GetRequiredNeighbours(GameObject senderTile)

@@ -132,14 +132,8 @@ public class TileTypeAllocator : MonoBehaviour
         // Iterate through each index stored in the starting forest indicies. This creates the first forest outline along the river.
         foreach (Vector2 index in m_startingForestIndicies)
         {
-            // Check if the tile exists
-            if (TileManager.s_TilesDictonary.TryGetValue(index, out GameObject value))
-            {
-                // Set type and colour 
-                Tile tileScript = value.GetComponent<Tile>();
-                tileScript.m_PhysicalType = PhysicalType.Forest;
-                tileScript.SetTypeColor(colour);
-            }
+            // Type initial tiles
+            TypeInitialTiles(index, BaseType.Land, PhysicalType.Forest, colour);
         }
 
         // Iterate through process of creating more forest outlines depending on set depth
@@ -170,10 +164,8 @@ public class TileTypeAllocator : MonoBehaviour
                                 // Check if the physical type is as desired
                                 if (value.GetComponent<Tile>().m_PhysicalType == PhysicalType.None)
                                 {
-                                    // Set type and colour 
-                                    Tile tileScript = value.GetComponent<Tile>();
-                                    tileScript.m_PhysicalType = PhysicalType.Forest;
-                                    tileScript.SetTypeColor(colour);
+                                    // Type tiles
+                                    TypeInitialTiles(neighbourIndex, BaseType.Land, PhysicalType.Forest, colour);
 
                                     // Add to list for next iteration
                                     m_startingForestIndicies.Add(neighbourIndex);
@@ -231,7 +223,7 @@ public class TileTypeAllocator : MonoBehaviour
 
         foreach (Vector2 initialPoint in initialPoints)
         {
-            TypeInitialTiles(initialPoint, PhysicalType.GolfCourse, colour);
+            TypeInitialTiles(initialPoint, BaseType.Land, PhysicalType.GolfCourse, colour);
 
             List<Vector2> neighbourIndices = TypeNeighbouringTiles(initialPoint, PhysicalType.GolfCourse, colour, PhysicalType.None, PhysicalType.Forest, PhysicalType.Forest);
            
@@ -249,8 +241,8 @@ public class TileTypeAllocator : MonoBehaviour
                         Tile tileScript = eValue.GetComponent<Tile>();
                         if (tileScript.m_PhysicalType == PhysicalType.None || tileScript.m_PhysicalType == PhysicalType.Forest)
                         {
-                            tileScript.m_PhysicalType = PhysicalType.GolfCourse;
-                            tileScript.SetTypeColor(colour);
+                            // Type tile
+                            TypeInitialTiles(extraNeighbourIndex, BaseType.Land, PhysicalType.GolfCourse, colour);
                         }
                     }
                 }
@@ -340,8 +332,7 @@ public class TileTypeAllocator : MonoBehaviour
                         // Check if the tile exists
                         if (TileManager.s_TilesDictonary.TryGetValue(initialPoint, out GameObject value))
                         {
-                            value.GetComponent<Tile>().SetTypeColor(colours[i]);
-                            value.GetComponent<Tile>().m_PhysicalType = physicalTypes[i]; 
+                            TypeInitialTiles(initialPoint, BaseType.Land, physicalTypes[i], colours[i]);
                             initialTiles.Add(value);
                             tileHat.Remove(i);
                             break;
@@ -376,6 +367,7 @@ public class TileTypeAllocator : MonoBehaviour
                         distanceToNearestPoint = distance;
                     }
                 }
+                tileScript.m_Basetype = nearestTile.GetComponent<Tile>().m_Basetype;
                 tileScript.m_PhysicalType = nearestTile.GetComponent<Tile>().m_PhysicalType;
                 tileScript.SetTypeColor(m_TileManager.ReturnTileType(tileScript.m_PhysicalType));
             }
@@ -430,7 +422,7 @@ public class TileTypeAllocator : MonoBehaviour
         {
             foreach (Vector2 initialPoint in arrays[i])
             {
-                TypeInitialTiles(initialPoint, physicalTypes[i], colours[i]);
+                TypeInitialTiles(initialPoint, BaseType.Land, physicalTypes[i], colours[i]);
 
                 switch (i)
                 {
@@ -470,7 +462,7 @@ public class TileTypeAllocator : MonoBehaviour
         Color colour = m_TileManager.ReturnTileType(PhysicalType.LowMidDensity);
         foreach (Vector2 initialPoint in initialTilePoints)
         {
-            TypeInitialTiles(initialPoint, PhysicalType.LowMidDensity, colour);
+            TypeInitialTiles(initialPoint, BaseType.Land, PhysicalType.LowMidDensity, colour);
             TypeSurroundingTilesV2(m_urbanHousingSpaceSize, initialPoint, PhysicalType.LowMidDensity, colour, PhysicalType.HighDensity, PhysicalType.Forest);
         }
 
@@ -489,7 +481,7 @@ public class TileTypeAllocator : MonoBehaviour
         Color colour = m_TileManager.ReturnTileType(PhysicalType.EstateResidential);
         foreach (Vector2 initialPoint in initialTilePoints)
         {
-            TypeInitialTiles(initialPoint, PhysicalType.EstateResidential, colour);
+            TypeInitialTiles(initialPoint, BaseType.Land, PhysicalType.EstateResidential, colour);
             TypeSurroundingTilesV4(initialPoint, PhysicalType.EstateResidential, colour, PhysicalType.Agriculture);
         }
 
@@ -508,7 +500,7 @@ public class TileTypeAllocator : MonoBehaviour
         Color colour = m_TileManager.ReturnTileType(PhysicalType.Meadow);
         foreach (Vector2 initialPoint in initialTilePoints)
         {
-            TypeInitialTiles(initialPoint, PhysicalType.Meadow, colour);
+            TypeInitialTiles(initialPoint, BaseType.Land, PhysicalType.Meadow, colour);
             TypeSurroundingTilesV4(initialPoint, PhysicalType.Meadow, colour, PhysicalType.Forest);
         }
 
@@ -525,12 +517,7 @@ public class TileTypeAllocator : MonoBehaviour
             if (rng < 0.02)
             {
                 // Type initial tiles
-                if (TileManager.s_TilesDictonary.TryGetValue(tilePoint, out GameObject value))
-                {
-                    Tile tileScript = value.GetComponent<Tile>();
-                    tileScript.m_PhysicalType = PhysicalType.Successional;
-                    tileScript.SetTypeColor(successionalColour);
-                }
+                TypeInitialTiles(tilePoint, BaseType.Land, PhysicalType.Successional, successionalColour);
             }
         }
     }
@@ -560,7 +547,7 @@ public class TileTypeAllocator : MonoBehaviour
 
         foreach (Vector2 initialPoint in initialTilePoints1)
         {
-            TypeInitialTiles(initialPoint, PhysicalType.NaturalReservoir, colour);
+            TypeInitialTiles(initialPoint, BaseType.Water, PhysicalType.NaturalReservoir, colour);
             TypeSurroundingTilesV3(initialPoint, PhysicalType.NaturalReservoir, colour, PhysicalType.Forest, PhysicalType.Meadow);
         }
 
@@ -577,7 +564,7 @@ public class TileTypeAllocator : MonoBehaviour
 
         foreach (Vector2 initialPoint in initialTilePoints2)
         {
-            TypeInitialTiles(initialPoint, PhysicalType.EngineeredReservoir, colour);
+            TypeInitialTiles(initialPoint, BaseType.Water, PhysicalType.EngineeredReservoir, colour);
             TypeSurroundingTilesV3(initialPoint, PhysicalType.EngineeredReservoir, colour, PhysicalType.Agriculture, PhysicalType.LowMidDensity);
         }
     }
@@ -602,12 +589,9 @@ public class TileTypeAllocator : MonoBehaviour
                         xStart--;
                     }
                 }
-                if (TileManager.s_TilesDictonary.TryGetValue(new Vector2(xStart, y), out GameObject value))
-                {
-                    Tile tileScript = value.GetComponent<Tile>();
-                    tileScript.m_PhysicalType = PhysicalType.Highway;
-                    tileScript.SetTypeColor(colour);
-                }
+
+                Vector2 initialPoint = new Vector2(xStart, y);
+                TypeInitialTiles(initialPoint, BaseType.Land, PhysicalType.Highway, colour);
             }
         }
     }
@@ -624,7 +608,7 @@ public class TileTypeAllocator : MonoBehaviour
         Color colour = m_TileManager.ReturnTileType(PhysicalType.UrbanOpenSpace);
         foreach (Vector2 initialPoint in initialTilePoints)
         {
-            TypeInitialTiles(initialPoint, PhysicalType.UrbanOpenSpace, colour);
+            TypeInitialTiles(initialPoint, BaseType.Land, PhysicalType.UrbanOpenSpace, colour);
             TypeSurroundingTilesV5(initialPoint, PhysicalType.UrbanOpenSpace, colour, PhysicalType.LowMidDensity, PhysicalType.Industrial, PhysicalType.Commercial);
         }
 
@@ -643,9 +627,7 @@ public class TileTypeAllocator : MonoBehaviour
                 // Type initial tiles
                 if (TileManager.s_TilesDictonary.TryGetValue(tilePoint, out GameObject value))
                 {
-                    Tile tileScript = value.GetComponent<Tile>();
-                    tileScript.m_PhysicalType = PhysicalType.RecreationCentreSpace;
-                    tileScript.SetTypeColor(recColour);
+                    TypeInitialTiles(tilePoint, BaseType.Land, PhysicalType.RecreationCentreSpace, colour);
                 }
             }
         }
@@ -738,7 +720,7 @@ public class TileTypeAllocator : MonoBehaviour
         Color colour = m_TileManager.ReturnTileType(PhysicalType.Wetland);
         foreach (Vector2 initialPoint in initialTilePoints)
         {
-            TypeInitialTiles(initialPoint, PhysicalType.Wetland, colour);
+            TypeInitialTiles(initialPoint, BaseType.Water, PhysicalType.Wetland, colour);
             TypeSurroundingTilesV3(initialPoint, PhysicalType.Wetland, colour, PhysicalType.Forest, PhysicalType.Meadow);
         }
 
@@ -770,7 +752,7 @@ public class TileTypeAllocator : MonoBehaviour
         Color resColour = m_TileManager.ReturnTileType(PhysicalType.EngineeredReservoir);
         foreach (Vector2 initialPoint in initialTilePoints1)
         {
-            TypeInitialTiles(initialPoint, PhysicalType.EngineeredReservoir, resColour);
+            TypeInitialTiles(initialPoint, BaseType.Water, PhysicalType.EngineeredReservoir, resColour);
         }
 
         stormwaterTileSet.Clear();
@@ -834,9 +816,7 @@ public class TileTypeAllocator : MonoBehaviour
                         Tile tileScript = value.GetComponent<Tile>();
                         if (tileScript.m_PhysicalType != PhysicalType.NaturalStream)
                         {
-                            tileScript.m_Basetype = BaseType.Water;
-                            tileScript.m_PhysicalType = PhysicalType.EngineeredStream;
-                            tileScript.SetTypeColor(streamColour);
+                            TypeInitialTiles(new Vector2(xStart, y), BaseType.Water, PhysicalType.EngineeredStream, streamColour);
                         }
                     }
                 }
@@ -855,9 +835,7 @@ public class TileTypeAllocator : MonoBehaviour
                         Tile tileScript = value.GetComponent<Tile>();
                         if (tileScript.m_PhysicalType != PhysicalType.NaturalStream)
                         {
-                            tileScript.m_Basetype = BaseType.Water;
-                            tileScript.m_PhysicalType = PhysicalType.EngineeredStream;
-                            tileScript.SetTypeColor(streamColour);
+                            TypeInitialTiles(new Vector2(xStart, y), BaseType.Water, PhysicalType.EngineeredStream, streamColour);
                         }
                     }
                 }
@@ -936,12 +914,13 @@ public class TileTypeAllocator : MonoBehaviour
     /// <param name="initialPoint"></param>
     /// <param name="physicalType"></param>
     /// <param name="colour"></param>
-    private void TypeInitialTiles(Vector2 initialPoint, PhysicalType physicalType, Color colour)
+    private void TypeInitialTiles(Vector2 initialPoint, BaseType baseType, PhysicalType physicalType, Color colour)
     {
         // Type initial tiles
         if (TileManager.s_TilesDictonary.TryGetValue(initialPoint, out GameObject value))
         {
             Tile tileScript = value.GetComponent<Tile>();
+            tileScript.m_Basetype = baseType;
             tileScript.m_PhysicalType = physicalType;
             tileScript.SetTypeColor(colour);
         }
@@ -960,6 +939,16 @@ public class TileTypeAllocator : MonoBehaviour
     {
         List<Vector2> neighbourIndices = NeighbourUtility.FindAllNeighbours(initialPoint);
 
+        BaseType initialBaseType = BaseType.None;
+
+        if (TileManager.s_TilesDictonary.TryGetValue(initialPoint, out GameObject value))
+        {
+            // TODO: Use initialPoint BaseType as way of getting PhysicalType and Color
+            initialBaseType = value.GetComponent<Tile>().m_Basetype;
+        }
+
+        Debug.Assert(initialBaseType != BaseType.None, "BaseType is invalid and needs to be either Land or Water.");
+
         foreach (Vector2 neighbourIndex in neighbourIndices)
         {
             if (TileManager.s_TilesDictonary.TryGetValue(neighbourIndex, out GameObject nValue))
@@ -967,6 +956,7 @@ public class TileTypeAllocator : MonoBehaviour
                 Tile tileScript = nValue.GetComponent<Tile>();
                 if (tileScript.m_PhysicalType == checkAgainstType1 || tileScript.m_PhysicalType == checkAgainstType2 || tileScript.m_PhysicalType == checkAgainstType3)
                 {
+                    tileScript.m_Basetype = initialBaseType;
                     tileScript.m_PhysicalType = type;
                     tileScript.SetTypeColor(colour);
                 }
@@ -1047,8 +1037,18 @@ public class TileTypeAllocator : MonoBehaviour
     {
         List<Vector2> neighbourIndices = TypeNeighbouringTiles(initialPoint, type, colour, checkAgainstType1, checkAgainstType2, checkAgainstType2);
 
-        // Type extra tiles
-        for (int i = 0; i < 2; i++)
+        BaseType initialBaseType = BaseType.None;
+
+        if (TileManager.s_TilesDictonary.TryGetValue(initialPoint, out GameObject value))
+        {
+            // TODO: Use initialPoint BaseType as way of getting PhysicalType and Color
+            initialBaseType = value.GetComponent<Tile>().m_Basetype;
+        }
+
+        Debug.Assert(initialBaseType != BaseType.None, "BaseType is invalid and needs to be either Land or Water.");
+
+            // Type extra tiles
+            for (int i = 0; i < 2; i++)
         {
             int index = Random.Range(0, neighbourIndices.Count);
 
@@ -1061,6 +1061,11 @@ public class TileTypeAllocator : MonoBehaviour
                     Tile tileScript = eValue.GetComponent<Tile>();
                     if (tileScript.m_PhysicalType == checkAgainstType1)
                     {
+                        if (tileScript.m_Basetype == BaseType.Water && tileScript.m_PhysicalType == PhysicalType.Wetland && initialBaseType == BaseType.Land)
+                        {
+                            Debug.LogError("this is the case.");
+                        }
+                        tileScript.m_Basetype = initialBaseType;
                         tileScript.m_PhysicalType = type;
                         tileScript.SetTypeColor(colour);
                     }

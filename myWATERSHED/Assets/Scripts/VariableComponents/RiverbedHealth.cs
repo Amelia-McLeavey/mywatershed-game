@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class RiverbedHealth : MonoBehaviour
 {
-    public int m_RiverBedHealth = 0;
+    public int m_RiverBedHealth;
 }

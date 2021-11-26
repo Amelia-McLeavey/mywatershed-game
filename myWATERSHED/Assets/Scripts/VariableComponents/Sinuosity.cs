@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Sinuosity : MonoBehaviour
 {
-    public float m_Sinuosity = 0f;
+    public float m_Sinuosity;
 }

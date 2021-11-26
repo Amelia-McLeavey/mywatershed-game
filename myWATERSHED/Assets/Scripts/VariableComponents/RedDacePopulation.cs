@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class RedDacePopulation : MonoBehaviour
 {
-    public int m_RedDacePopulation = 0;
+    public int m_RedDacePopulation;
 }

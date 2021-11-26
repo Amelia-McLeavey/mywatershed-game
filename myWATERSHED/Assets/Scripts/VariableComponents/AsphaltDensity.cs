@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class AsphaltDensity : MonoBehaviour
 {
-    public float m_AsphaltDensity = 0;
+    public float m_AsphaltDensity;
 }

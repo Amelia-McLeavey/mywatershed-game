@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class ErosionRate : MonoBehaviour
 {
-    public float m_ErosionRate = 0f;
+    public float m_ErosionRate;
 }

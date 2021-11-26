@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class RiparianLevel : MonoBehaviour
 {
-    public float m_RiparianLevel = 0;
+    public float m_RiparianLevel;
 }

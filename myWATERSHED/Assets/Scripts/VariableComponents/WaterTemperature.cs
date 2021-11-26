@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class WaterTemperature : MonoBehaviour
 {
-    public float m_waterTemperature = 0f;
-
+    public float m_waterTemperature;
+    
+    [HideInInspector]
     public List<float> m_GatheredWaterTemperatureValues = new List<float>();
 }

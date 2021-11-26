@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class WaterDepth : MonoBehaviour
 {
-    public float m_WaterDepth = 0;
+    public float m_WaterDepth;
 }
