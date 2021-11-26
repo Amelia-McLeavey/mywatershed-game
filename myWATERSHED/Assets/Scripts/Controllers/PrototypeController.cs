@@ -19,6 +19,14 @@ public class PrototypeController : MonoBehaviour
     [SerializeField]
     private GameObject m_cameraContainer;
 
+    [SerializeField]
+    private GameObject m_buttonToDisable1;
+    [SerializeField]
+    private GameObject m_buttonToDisable2;
+    [SerializeField]
+    private GameObject m_buttonToDisable3;
+
+
     //very rough tile ui stuff, this is obv awful
     [SerializeField] private GameObject tileUI;
     public bool activeTileUI = false;
@@ -48,6 +56,10 @@ public class PrototypeController : MonoBehaviour
 
     public void GenerateWorldOnClick()
     {
+        m_buttonToDisable1.SetActive(false);
+        m_buttonToDisable2.SetActive(false);
+        m_buttonToDisable3.SetActive(false);
+        
         m_worldGenScript.GenerateWorld();
 
         m_cameraContainer.transform.position = new Vector3(20f, 20f, 20f);

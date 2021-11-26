@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using System.Linq;
 
 public class FlowTimer : MonoBehaviour
 {
+    public GameObject m_failState;
+
     public Text yearText;
     public int currentYear = 1;
     public float m_flowTime;
@@ -49,6 +52,29 @@ public class FlowTimer : MonoBehaviour
       failStateMessage.SetActive(true);
       } else...
        */
+
+        List<int> dace = new List<int>();
+
+        for (int x = 0; x < 120; x++)
+        {
+            for (int y = 0; y < 70; y++)
+            {
+                Vector2 tileIndex = new Vector2(x, y);
+
+                if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
+                {
+                    if (value.GetComponent<Tile>().m_Basetype == BaseType.Water)
+                    {
+                        dace.Add(value.GetComponent<RedDacePopulation>().m_RedDacePopulation);
+                    }
+                }
+            }
+        }
+
+        if (dace.Sum() <= 0)
+        {
+            m_failState.SetActive(true);
+        }
 
         isSummer = false; //it's winter
         m_cardDeckHandler.DealCards();

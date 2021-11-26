@@ -7701,6 +7701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59dca2fdc1968f4449bed15b8b3c9596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_failState: {fileID: 1499067487}
   yearText: {fileID: 1995036821}
   currentYear: 1
   m_flowTime: 0.5
@@ -9395,6 +9396,9 @@ MonoBehaviour:
   m_worldGenScript: {fileID: 1971862562}
   m_camera: {fileID: 963194227}
   m_cameraContainer: {fileID: 1670411932}
+  m_buttonToDisable1: {fileID: 892816342}
+  m_buttonToDisable2: {fileID: 490176435}
+  m_buttonToDisable3: {fileID: 1992598769}
   tileUI: {fileID: 799916027}
   activeTileUI: 0
   tileType: {fileID: 1250947242}
