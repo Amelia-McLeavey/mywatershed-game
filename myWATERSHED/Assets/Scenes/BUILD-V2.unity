@@ -7704,7 +7704,7 @@ MonoBehaviour:
   yearText: {fileID: 1995036821}
   currentYear: 1
   m_flowTime: 0.5
-  m_summerLength: 20
+  m_summerLength: 30
   isSummer: 0
   m_cardDeckHandler: {fileID: 2035087586}
 --- !u!114 &1037668535
