@@ -16,6 +16,9 @@ public class FlowTimer : MonoBehaviour
     public bool isSummer; //keep it simple? a bool to track the season. if it's not summer (false) it's obv winter. shrug!
     [SerializeField]
     CardDeckHandler m_cardDeckHandler;
+    List<int> dace = new List<int>();
+    //public Text daceText;
+    public DaceHealthUI daceHealth;
 
     // TODO: We may need to change when the Coroutine is started and stopped.
     void Start()
@@ -53,7 +56,7 @@ public class FlowTimer : MonoBehaviour
       } else...
        */
 
-        List<int> dace = new List<int>();
+       
 
         for (int x = 0; x < 120; x++)
         {
@@ -71,6 +74,10 @@ public class FlowTimer : MonoBehaviour
             }
         }
 
+        //update the healthbar UI
+        
+        daceHealth.SetHealth(dace.Sum());
+
         if (dace.Sum() <= 0)
         {
             m_failState.SetActive(true);
@@ -80,6 +87,13 @@ public class FlowTimer : MonoBehaviour
         m_cardDeckHandler.DealCards();
     }
 
+    private void Update()
+    {
+        Debug.Log(dace.Sum());
+        
+      
+    }
+
     //can def work this into the seasonchange method, just getting something quick for testing
     public void NextSeason() {
         currentYear++;
@@ -87,4 +101,6 @@ public class FlowTimer : MonoBehaviour
         isSummer = true;
         Invoke("SeasonChange", m_summerLength);
     }
+
+   
 }
