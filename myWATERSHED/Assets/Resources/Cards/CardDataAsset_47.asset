@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardDataAsset_47
   m_EditorClassIdentifier: 
   m_id: 47
-  m_name: tbd
+  m_name: card 47
   m_description: Massively decrease turbidity, increase temperature
   m_quantity: 3
   m_effectDuration: 5

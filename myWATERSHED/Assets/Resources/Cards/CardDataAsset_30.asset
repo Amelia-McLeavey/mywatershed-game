@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: CardDataAsset_30
   m_EditorClassIdentifier: 
   m_id: 30
-  m_name: tbd
-  m_description: Decrease sewage and sinuosity
+  m_name: card 30
+  m_description: Decrease sewage and sinuosity on steams
   m_quantity: 3
   m_effectDuration: 3
   m_timeBeforeEffect: 0

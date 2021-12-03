@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: CardDataAsset_36
   m_EditorClassIdentifier: 
   m_id: 36
-  m_name: tbd
-  m_description: Increase water depth for 2 tiles
+  m_name: card 36
+  m_description: Increase water depth in reservoirs
   m_quantity: 3
   m_effectDuration: 9
   m_timeBeforeEffect: 0

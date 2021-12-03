@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: CardDataAsset_56
   m_EditorClassIdentifier: 
   m_id: 56
-  m_name: tbd
-  m_description: Drastically increase shade coverage, decrease temperature
+  m_name: card 56
+  m_description: Drastically increase shade coverage, decrease temperature in wetlands
   m_quantity: 4
   m_effectDuration: 3
   m_timeBeforeEffect: 0
-  m_initialVolunteerCost: -1
+  m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: Wetland
   m_amountOfTilesTargeted: 5

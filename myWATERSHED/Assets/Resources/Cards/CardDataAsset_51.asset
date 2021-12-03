@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: CardDataAsset_51
   m_EditorClassIdentifier: 
   m_id: 51
-  m_name: tbd
-  m_description: Reduce pollution, increase sinuosity and water depth
+  m_name: card 51
+  m_description: Reduce pollution, increase sinuosity and water depth in engineered
+    streams
   m_quantity: 2
   m_effectDuration: 4
   m_timeBeforeEffect: 0
-  m_initialVolunteerCost: -2
+  m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: EngineeredStream
   m_amountOfTilesTargeted: 5

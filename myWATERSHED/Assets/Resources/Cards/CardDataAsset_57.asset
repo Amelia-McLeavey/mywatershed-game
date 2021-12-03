@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: CardDataAsset_57
   m_EditorClassIdentifier: 
   m_id: 57
-  m_name: tbd
-  m_description: Increase sinuosity, decrease pollution and depth
+  m_name: card 57
+  m_description: Increase sinuosity, decrease pollution and depth in wetlands
   m_quantity: 3
   m_effectDuration: 6
   m_timeBeforeEffect: 0
-  m_initialVolunteerCost: -2
-  m_volunteersGainedPerYear: 1
+  m_initialVolunteerCost: 0
+  m_volunteersGainedPerYear: 0
   m_tileTypesAffected: Wetland
   m_amountOfTilesTargeted: 15
   m_tileModificationScreen: 1

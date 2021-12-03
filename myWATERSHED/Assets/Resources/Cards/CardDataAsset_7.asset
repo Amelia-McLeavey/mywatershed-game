@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: CardDataAsset_7
   m_EditorClassIdentifier: 
   m_id: 7
-  m_name: "Volunteer \n Campaign"
-  m_description: Add 2 volunteer per turn, for 10 turns
+  m_name: riverbed Campaign
+  m_description: 'Add 5 riverbed health per turn, for 10 turns on streams '
   m_quantity: 2
   m_effectDuration: 10
   m_timeBeforeEffect: 0
   m_initialVolunteerCost: 0
-  m_volunteersGainedPerYear: 2
-  m_tileTypesAffected: None
-  m_amountOfTilesTargeted: 0
+  m_volunteersGainedPerYear: 0
+  m_tileTypesAffected: NaturalStream
+  m_amountOfTilesTargeted: 3
   m_tileModificationScreen: 0
   m_activity: N
   m_unlockableCArdID: 0
@@ -30,7 +30,7 @@ MonoBehaviour:
   m_insectPopulation: 0
   m_redDacePopulation: 0
   m_riparianQuality: 0
-  m_riverbedHealth: 0
+  m_riverbedHealth: 5
   m_asphaltDensity: 0
   m_erosionRate: 0
   m_landHeight: 0

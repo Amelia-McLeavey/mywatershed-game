@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: CardDataAsset_35
   m_EditorClassIdentifier: 
   m_id: 35
-  m_name: tbd
-  m_description: Decrease brown trout pop and water depth for 8 tiles
+  m_name: card 35
+  m_description: Decrease brown trout pop and water depth in reservoirs
   m_quantity: 1
   m_effectDuration: 2
   m_timeBeforeEffect: 0
   m_initialVolunteerCost: 0
-  m_volunteersGainedPerYear: 2
+  m_volunteersGainedPerYear: 0
   m_tileTypesAffected: NaturalReservoir
   m_amountOfTilesTargeted: 8
   m_tileModificationScreen: 1

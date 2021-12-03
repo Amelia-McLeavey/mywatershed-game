@@ -18,11 +18,11 @@ MonoBehaviour:
   m_quantity: 2
   m_effectDuration: 7
   m_timeBeforeEffect: 0
-  m_initialVolunteerCost: -1
-  m_volunteersGainedPerYear: -1
-  m_tileTypesAffected: NaturalStream
-  m_amountOfTilesTargeted: 20
-  m_tileModificationScreen: 1
+  m_initialVolunteerCost: 0
+  m_volunteersGainedPerYear: 0
+  m_tileTypesAffected: None
+  m_amountOfTilesTargeted: 0
+  m_tileModificationScreen: 0
   m_activity: N
   m_unlockableCArdID: 0
   m_brownTroutPopulation: 0

@@ -13,22 +13,22 @@ MonoBehaviour:
   m_Name: CardDataAsset_3
   m_EditorClassIdentifier: 
   m_id: 3
-  m_name: "Bring in Redside\n Dace"
-  m_description: "Bring in 50 redside dace from\n a hatchery"
+  m_name: Bring in Redside Dace
+  m_description: Bring in 10 redside dace after 3 years in reservoirs
   m_quantity: 1
   m_effectDuration: 1
-  m_timeBeforeEffect: 0
-  m_initialVolunteerCost: -5
-  m_volunteersGainedPerYear: -5
+  m_timeBeforeEffect: 3
+  m_initialVolunteerCost: 0
+  m_volunteersGainedPerYear: 0
   m_tileTypesAffected: NaturalReservoir
-  m_amountOfTilesTargeted: 6
+  m_amountOfTilesTargeted: 3
   m_tileModificationScreen: 1
   m_activity: N
   m_unlockableCArdID: 0
   m_brownTroutPopulation: 0
   m_creekChubPopulation: 0
   m_insectPopulation: 0
-  m_redDacePopulation: 50
+  m_redDacePopulation: 10
   m_riparianQuality: 0
   m_riverbedHealth: 0
   m_asphaltDensity: 0

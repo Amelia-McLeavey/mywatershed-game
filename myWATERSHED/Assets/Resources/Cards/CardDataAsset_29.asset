@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: CardDataAsset_29
   m_EditorClassIdentifier: 
   m_id: 29
-  m_name: tbd
-  m_description: Decrease turbidity in tiles with >10 sinuosity
+  m_name: card 29
+  m_description: Decrease turbidity and increase sinuosity on steams
   m_quantity: 2
   m_effectDuration: 3
   m_timeBeforeEffect: 0

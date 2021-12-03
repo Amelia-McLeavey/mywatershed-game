@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardDataAsset_42
   m_EditorClassIdentifier: 
   m_id: 42
-  m_name: tbd
+  m_name: card 42
   m_description: increase land height
   m_quantity: 2
   m_effectDuration: 3

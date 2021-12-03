@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_id: 15
   m_name: Focused Filtration
-  m_description: Select 1 tile, permanently improve water filtration at that tile.
+  m_description: permanently improve water filtration
   m_quantity: 2
   m_effectDuration: 50
   m_timeBeforeEffect: 0
@@ -30,7 +30,7 @@ MonoBehaviour:
   m_insectPopulation: 0
   m_redDacePopulation: 0
   m_riparianQuality: 0
-  m_riverbedHealth: 0
+  m_riverbedHealth: 100
   m_asphaltDensity: 0
   m_erosionRate: 0
   m_landHeight: 0

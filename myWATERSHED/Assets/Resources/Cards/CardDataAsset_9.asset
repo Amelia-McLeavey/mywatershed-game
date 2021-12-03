@@ -14,13 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_id: 9
   m_name: Cultivate Redside Dace Population
-  m_description: "Spend 5 volunteers to add 5 to the dace population in any\n tile
-    with 15+ dace"
+  m_description: Spend add 1 to the dace population on streams
   m_quantity: 2
   m_effectDuration: 1
   m_timeBeforeEffect: 0
-  m_initialVolunteerCost: -5
-  m_volunteersGainedPerYear: -5
+  m_initialVolunteerCost: 0
+  m_volunteersGainedPerYear: 0
   m_tileTypesAffected: NaturalStream
   m_amountOfTilesTargeted: 20
   m_tileModificationScreen: 1
@@ -29,7 +28,7 @@ MonoBehaviour:
   m_brownTroutPopulation: 0
   m_creekChubPopulation: 0
   m_insectPopulation: 0
-  m_redDacePopulation: 5
+  m_redDacePopulation: 1
   m_riparianQuality: 0
   m_riverbedHealth: 0
   m_asphaltDensity: 0

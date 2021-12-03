@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: CardDataAsset_43
   m_EditorClassIdentifier: 
   m_id: 43
-  m_name: tbd
-  m_description: Reduce asphalt density on 2 tiles with >4 land height
+  m_name: card 43
+  m_description: Reduce asphalt density
   m_quantity: 3
   m_effectDuration: 9
   m_timeBeforeEffect: 1
   m_initialVolunteerCost: 0
-  m_volunteersGainedPerYear: 1
+  m_volunteersGainedPerYear: 0
   m_tileTypesAffected: UrbanOpenSpace
   m_amountOfTilesTargeted: 2
   m_tileModificationScreen: 1

@@ -13,14 +13,13 @@ MonoBehaviour:
   m_Name: CardDataAsset_8
   m_EditorClassIdentifier: 
   m_id: 8
-  m_name: "Controlled Redside\n Dace Release"
-  m_description: Select up to 10 tiles, spend 1 volunteer per tile. Restore dace
-    population by 5% on each of these tiles.
+  m_name: Controlled Redside Dace Release
+  m_description: Restore dace population by 5 on on streams.
   m_quantity: 2
   m_effectDuration: 1
   m_timeBeforeEffect: 0
-  m_initialVolunteerCost: -1
-  m_volunteersGainedPerYear: 1
+  m_initialVolunteerCost: 0
+  m_volunteersGainedPerYear: 0
   m_tileTypesAffected: NaturalStream
   m_amountOfTilesTargeted: 10
   m_tileModificationScreen: 1

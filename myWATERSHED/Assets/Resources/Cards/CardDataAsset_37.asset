@@ -13,13 +13,12 @@ MonoBehaviour:
   m_Name: CardDataAsset_37
   m_EditorClassIdentifier: 
   m_id: 37
-  m_name: tbd
-  m_description: For tiles with 9+ water depth, increase water temp and decrease
-    asphalt density of nearby tiles
+  m_name: card 37
+  m_description: increase water temp and water depth on steams
   m_quantity: 2
   m_effectDuration: 8
   m_timeBeforeEffect: 0
-  m_initialVolunteerCost: -1
+  m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: NaturalStream
   m_amountOfTilesTargeted: 5

@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: CardDataAsset_10
   m_EditorClassIdentifier: 
   m_id: 10
-  m_name: "Controlled water\n  Climate"
-  m_description: Select an area of 10 river/marsh tiles. Those tiles will not go
-    over 20c for 4 turns. 5% brown trout will be added to each of those tiles.
+  m_name: Controlled water  Climate
+  m_description: 5% brown trout will be added and temperature will be reduced on
+    steams
   m_quantity: 1
   m_effectDuration: 4
   m_timeBeforeEffect: 0
-  m_initialVolunteerCost: -2
-  m_volunteersGainedPerYear: -2
+  m_initialVolunteerCost: 0
+  m_volunteersGainedPerYear: 0
   m_tileTypesAffected: NaturalStream
   m_amountOfTilesTargeted: 10
   m_tileModificationScreen: 1
@@ -42,4 +42,4 @@ MonoBehaviour:
   m_shadeCoverage: 0
   m_turbidity: 0
   m_waterDepth: 0
-  m_waterTemperature: 20
+  m_waterTemperature: -20

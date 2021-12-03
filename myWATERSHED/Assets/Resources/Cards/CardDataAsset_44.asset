@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: CardDataAsset_44
   m_EditorClassIdentifier: 
   m_id: 44
-  m_name: tbd
+  m_name: card 44
   m_description: Reduce asphalt density and sewage
   m_quantity: 2
   m_effectDuration: 6
   m_timeBeforeEffect: 1
-  m_initialVolunteerCost: -2
+  m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: EstateResidential
   m_amountOfTilesTargeted: 3

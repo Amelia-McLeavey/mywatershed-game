@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: CardDataAsset_33
   m_EditorClassIdentifier: 
   m_id: 33
-  m_name: tbd
-  m_description: Increases sinuosity of selected tiles
+  m_name: card 33
+  m_description: Increases sinuosity on steams
   m_quantity: 2
   m_effectDuration: 10
   m_timeBeforeEffect: 0

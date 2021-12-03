@@ -14,13 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_id: 5
   m_name: Repaint Roads
-  m_description: "Will affect land\n temperature and subsequentially the water temperatures
-    (from the runoff)"
+  m_description: Reduce asphalt density in industrial spaces
   m_quantity: 3
   m_effectDuration: 5
   m_timeBeforeEffect: 0
-  m_initialVolunteerCost: -4
-  m_volunteersGainedPerYear: -4
+  m_initialVolunteerCost: 0
+  m_volunteersGainedPerYear: 0
   m_tileTypesAffected: Industrial
   m_amountOfTilesTargeted: 20
   m_tileModificationScreen: 1

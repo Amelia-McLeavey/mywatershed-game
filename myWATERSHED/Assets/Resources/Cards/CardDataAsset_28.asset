@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: CardDataAsset_28
   m_EditorClassIdentifier: 
   m_id: 28
-  m_name: "Lots of room \n to Grow"
-  m_description: "Convert Vacant \n lot to an eco parking garage, improving that
-    tiles Asphalt Density"
+  m_name: Lots of room  to Grow
+  m_description: Convert Vacant  lot to an eco parking garage, improving Asphalt
+    Density
   m_quantity: 2
   m_effectDuration: 5
   m_timeBeforeEffect: 5
-  m_initialVolunteerCost: -2
+  m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: Vacant
   m_amountOfTilesTargeted: 1

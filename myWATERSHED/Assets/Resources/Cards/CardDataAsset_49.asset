@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: CardDataAsset_49
   m_EditorClassIdentifier: 
   m_id: 49
-  m_name: tbd
+  m_name: card 49
   m_description: Decrease erosion rate, increase land height and asphalt density
+    in high density areas
   m_quantity: 3
   m_effectDuration: 4
   m_timeBeforeEffect: 0
-  m_initialVolunteerCost: -5
+  m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: HighDensity
   m_amountOfTilesTargeted: 3
