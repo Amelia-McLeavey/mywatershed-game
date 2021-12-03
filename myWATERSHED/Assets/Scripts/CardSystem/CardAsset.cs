@@ -27,8 +27,8 @@ public class CardAsset : ScriptableObject
     public int m_creekChubPopulation;
     public int m_insectPopulation;
     public int m_redDacePopulation;
-    public int m_riparianQuality;
-    public int m_riverbedHealth;
+    public float m_riparianQuality;
+    public float m_riverbedHealth;
 
     // ABIOTIC VARIABLE DATA // [11 TOTAL]
     public float m_asphaltDensity;
@@ -43,6 +43,7 @@ public class CardAsset : ScriptableObject
     public float m_waterDepth;
     public float m_waterTemperature;
 
+    // FOR GOOGLE SHEET REFERENCE
     // COLUMN LETTER | Parameter
     // CARD INFO // [13 TOTAL]
     // A  | Id

@@ -58,8 +58,8 @@ public class GoogleSheetParser : MonoBehaviour
                 cardAsset.m_creekChubPopulation = Convert.ToInt32(itemData[14]);
                 cardAsset.m_insectPopulation = Convert.ToInt32(itemData[15]);
                 cardAsset.m_redDacePopulation = Convert.ToInt32(itemData[16]);
-                cardAsset.m_riparianQuality = Convert.ToInt32(itemData[17]);
-                cardAsset.m_riverbedHealth = Convert.ToInt32(itemData[18]);
+                cardAsset.m_riparianQuality = Convert.ToSingle(itemData[17]);
+                cardAsset.m_riverbedHealth = Convert.ToSingle(itemData[18]);
 
                 // ABIOTIC VARIABLE DATA // [11 TOTAL (19-29)]
                 cardAsset.m_asphaltDensity = Convert.ToSingle(itemData[19]);

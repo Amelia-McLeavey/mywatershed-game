@@ -48,12 +48,6 @@ public class PrototypeController : MonoBehaviour
     public GameObject variableHolder;
     public float UIButtonIncrementAmount;
 
-
-    public void LoadScene(string sceneName)
-    {
-        SceneManager.LoadScene(sceneName);
-    }
-
     public void GenerateWorldOnClick()
     {
         m_buttonToDisable1.SetActive(false);

@@ -6,12 +6,12 @@ public class SimulationController : MonoBehaviour
 {
     private void OnEnable()
     {
-        GetComponent<FlowTimer>().OnTimerTick += SimulationTimer;
+        GetComponent<FlowTimer>().OnFlowControlTimerTick += SimulationTimer;
     }
 
     private void OnDisable()
     {
-        GetComponent<FlowTimer>().OnTimerTick -= SimulationTimer;
+        GetComponent<FlowTimer>().OnFlowControlTimerTick -= SimulationTimer;
     }
 
     private void Update()

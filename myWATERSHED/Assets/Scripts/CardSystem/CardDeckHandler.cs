@@ -20,11 +20,14 @@ public class CardDeckHandler : MonoBehaviour
     private Queue<int> m_shuffledIDDeck = new Queue<int>();
 
     private CardAsset[] m_cardAssets;
-    [SerializeField] FlowTimer m_flowTimerReference;
+
+    private World m_world;
 
 
     private void Awake()
     {
+        m_world = FindObjectOfType<World>();
+
         // Reset leftover data 
         m_idDeck.Clear();
 
@@ -46,8 +49,6 @@ public class CardDeckHandler : MonoBehaviour
         {
             m_shuffledIDDeck.Enqueue(card);
         }
-
-        m_flowTimerReference = GameObject.Find("Flow Simulator").GetComponent<FlowTimer>();
     }
 
     private void LoadDeck()
@@ -125,7 +126,7 @@ public class CardDeckHandler : MonoBehaviour
             }
         }
         DiscardDealtCards();
-        m_flowTimerReference.NextSeason();
+        m_world.ChangeSeason(SeasonState.Summer);
 
     }
 
