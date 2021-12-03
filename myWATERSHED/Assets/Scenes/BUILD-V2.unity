@@ -766,6 +766,7 @@ RectTransform:
   - {fileID: 39293688}
   - {fileID: 1499067488}
   - {fileID: 316170067}
+  - {fileID: 495244052}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6122,7 +6123,7 @@ RectTransform:
   - {fileID: 1668390029}
   - {fileID: 939304390}
   m_Father: {fileID: 322231541}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -8073,10 +8074,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_flowTime: 0.5
-  m_summerLength: 5
-  isSummer: 0
-  m_cardDeckHandler: {fileID: 2035087586}
-  daceHealth: {fileID: 495244054}
 --- !u!114 &1037668535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10318,6 +10315,7 @@ MonoBehaviour:
   m_currentYear: 1
   m_currentYearText: {fileID: 1995036821}
   m_redDacePopulationText: {fileID: 1679917242}
+  m_daceHealthScript: {fileID: 495244054}
   m_failStateObject: {fileID: 1499067487}
 --- !u!4 &1742436284
 Transform:
