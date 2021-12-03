@@ -28,6 +28,9 @@ public class World : MonoBehaviour
     private Text m_redDacePopulationText;
 
     [SerializeField]
+    private DaceHealthUI m_daceHealthScript;
+
+    [SerializeField]
     private GameObject m_failStateObject;
 
     private int m_redDaceTotalPopulation;
@@ -111,6 +114,7 @@ public class World : MonoBehaviour
         }
 
         m_redDaceTotalPopulation = dace.Sum();
+        m_daceHealthScript.SetHealth(m_redDaceTotalPopulation);
         m_redDacePopulationText.text = m_redDaceTotalPopulation.ToString();
 
         if (m_redDaceTotalPopulation <= 0)

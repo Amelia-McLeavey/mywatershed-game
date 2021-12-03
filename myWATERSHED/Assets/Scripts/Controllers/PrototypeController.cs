@@ -155,6 +155,8 @@ public class PrototypeController : MonoBehaviour
 
     }
 
+    // TODO: Adjust these values to not break the system.
+
     //some sloppy throwaway code to make buttons for the prototype's variable UI display
     #region VariableButtons
     public void variable1ButtonPlus() {
