@@ -6169,7 +6169,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 998065793}
   m_FillRect: {fileID: 138771565}
   m_HandleRect: {fileID: 998065792}
@@ -9856,6 +9856,8 @@ MonoBehaviour:
   variable5data: {fileID: 756935556}
   variable6data: {fileID: 1869519702}
   variableHolder: {fileID: 0}
+  storedMat: {fileID: 0}
+  highlightMat: {fileID: 2100000, guid: 01206072853b532489a081341901509d, type: 2}
   UIButtonIncrementAmount: 5
 --- !u!4 &1608270785
 Transform:
