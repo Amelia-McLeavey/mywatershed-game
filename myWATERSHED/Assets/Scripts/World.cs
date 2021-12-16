@@ -93,6 +93,8 @@ public class World : MonoBehaviour
         m_currentYearText.text = m_currentYear.ToString();
     }
 
+
+    //this is just adding to the population but doesn't actually keep track of active number of dace...how to fix?
     private void UpdateTotalDacePopulation()
     {
         List<int> dace = new List<int>();
