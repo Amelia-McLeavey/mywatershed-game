@@ -45,7 +45,12 @@ public class PrototypeController : MonoBehaviour
     [SerializeField] Text variable5data;
     [SerializeField] Text variable6data;
 
+    //empty object to store variables from tiles
     public GameObject variableHolder;
+    //material to store tile material when swapping to highlight material
+    public Material storedMat;
+    public Material highlightMat;
+    //how much the UI buttons increase/decrease variables in the prototype UI display
     public float UIButtonIncrementAmount;
 
     public void GenerateWorldOnClick()
@@ -53,7 +58,7 @@ public class PrototypeController : MonoBehaviour
         m_buttonToDisable1.SetActive(false);
         m_buttonToDisable2.SetActive(false);
         m_buttonToDisable3.SetActive(false);
-        
+
         m_worldGenScript.GenerateWorld();
 
         m_cameraContainer.transform.position = new Vector3(20f, 20f, 20f);
@@ -131,12 +136,12 @@ public class PrototypeController : MonoBehaviour
         //}
         if (Input.GetMouseButtonDown(1)) // right mouse click
         {
-            //temporarily removed the clicking to turn on/off, it's always visible for simplicity in this prototype. can easily change later
+            //TEMPORARILY REMOVED TOGGLE FOR PROTOTYPE, UNCOMMENT BELOW IF DESIRABLE
 
-            //toggle tile ui on right click
+            ////toggle tile ui on right click
             //if (activeTileUI == false) { activeTileUI = true; tileUI.SetActive(true); } else if (activeTileUI == true) { activeTileUI = false; tileUI.SetActive(false); }
 
-            //ADD SOME VISUAL FEEDBACK TO SHOW WHICH TILE IS CURRENTLY SELECTED
+         
 
             // Create a ray from the point clicked on screen to the point in world space
             Ray ray = m_camera.ScreenPointToRay(Input.mousePosition);
@@ -144,7 +149,20 @@ public class PrototypeController : MonoBehaviour
             // Pass ray into Raycast to get hit info
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
+                //if we're storing a tile, reset it's stored material before assigning this new tile
+                if (variableHolder != null)
+                {
+                    variableHolder.GetComponent<MeshRenderer>().material = storedMat;
+                }
+
+                //store the tile we hit so we can access it's variables
                 variableHolder = hit.collider.gameObject;
+
+                //store the material from this tile for later
+                storedMat = variableHolder.GetComponent<MeshRenderer>().material;
+                //set the material to be the highlighted colour
+                variableHolder.GetComponent<MeshRenderer>().material = highlightMat;
+
 
             }
         }
@@ -159,7 +177,8 @@ public class PrototypeController : MonoBehaviour
 
     //some sloppy throwaway code to make buttons for the prototype's variable UI display
     #region VariableButtons
-    public void variable1ButtonPlus() {
+    public void variable1ButtonPlus()
+    {
 
         /*
          take whatever script is associated with this variable and add to it
@@ -168,12 +187,14 @@ public class PrototypeController : MonoBehaviour
         {
             variableHolder.GetComponent<AsphaltDensity>().m_AsphaltDensity += UIButtonIncrementAmount;
         }
-        else if (variableHolder.GetComponent<BrownTroutPopulation>()) {
+        else if (variableHolder.GetComponent<BrownTroutPopulation>())
+        {
             variableHolder.GetComponent<BrownTroutPopulation>().m_BrownTroutPopulation += (int)UIButtonIncrementAmount;
         }
     }
 
-    public void variable1ButtonMinus() {
+    public void variable1ButtonMinus()
+    {
         if (variableHolder.GetComponent<AsphaltDensity>())
         {
             variableHolder.GetComponent<AsphaltDensity>().m_AsphaltDensity -= UIButtonIncrementAmount;
