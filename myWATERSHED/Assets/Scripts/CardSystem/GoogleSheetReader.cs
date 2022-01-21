@@ -9,6 +9,10 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 
+/// <summary>
+/// Backend reading of Google sheet.
+/// </summary>
+
 class GoogleSheetReader : MonoBehaviour
 {
     //variables to reference google spreadsheet and authentication key

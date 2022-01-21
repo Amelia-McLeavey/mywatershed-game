@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 
+/// <summary>
+/// Handles creation of a shuffled card deck and ordering of cards to different states of use.
+/// </summary>
+
 public class CardDeckHandler : MonoBehaviour
 {
     [SerializeField]

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// An abstract class that defines the methods called on different flow styles.
+/// </summary>
 // This abstract class is only defining the methods that we want to be able to call on different flow styles
 
 public abstract class FlowStyle

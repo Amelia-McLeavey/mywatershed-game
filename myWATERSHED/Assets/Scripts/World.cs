@@ -94,7 +94,7 @@ public class World : MonoBehaviour
     }
 
 
-    //this is just adding to the population but doesn't actually keep track of active number of dace...how to fix?
+    // TODO: Bug, RSD Population not displaying correct data, not updating
     private void UpdateTotalDacePopulation()
     {
         List<int> dace = new List<int>();
@@ -119,6 +119,7 @@ public class World : MonoBehaviour
         m_daceHealthScript.SetHealth(m_redDaceTotalPopulation);
         m_redDacePopulationText.text = m_redDaceTotalPopulation.ToString();
 
+        // TODO: Test that fail state is working accurately
         if (m_redDaceTotalPopulation <= 0)
         {
             m_failStateObject.SetActive(true);

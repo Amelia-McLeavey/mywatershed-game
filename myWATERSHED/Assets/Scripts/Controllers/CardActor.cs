@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// This scrip handles the effects of played cards
+/// <summary>
+/// A script to handle the effect of played cards.
+/// </summary>
 
 public class CardActor : MonoBehaviour
 {

@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controls movement of this fish being in the FishCam
+/// </summary>
+
 public class FishMovement : MonoBehaviour
 {
     [SerializeField]

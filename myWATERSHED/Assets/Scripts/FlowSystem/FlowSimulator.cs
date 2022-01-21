@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Sends request to update info on all tiles.
+/// </summary>
+
 public class FlowSimulator : MonoBehaviour
 {
     private int m_rows;

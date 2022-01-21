@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Provides an object type for creating cards. Includes all the base information that can be on any card.
+/// </summary>
+
 [CreateAssetMenu(fileName = "New CardAsset", menuName = "CardAsset")]
 public class CardAsset : ScriptableObject
 {

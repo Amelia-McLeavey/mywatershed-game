@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-// This script currently handles tile interaction.
+/// <summary>
+/// Holds refernce to basic tile info and provides basic methods to interact with tiles.
+/// </summary>
 
 public class Tile : MonoBehaviour
 {
