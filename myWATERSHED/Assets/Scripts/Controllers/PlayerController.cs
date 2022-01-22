@@ -119,19 +119,25 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        //Movement
+        ///////////////////         Movement           ///////////////////////////////////
+        
         if (mouseDown)
         {
-            //move
+            //move with dragging
         }
         else
         {
+            //move camera with keyboard
             Vector3 direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             targetCamPos = m_cameraContainer.transform.position + (direction.normalized * m_cameraSpeed);
             targetCamPos = new Vector3(Mathf.Clamp(targetCamPos.x, minMaxXPosition.x, minMaxXPosition.y), targetCamPos.y, Mathf.Clamp(targetCamPos.z, minMaxZPosition.x, minMaxZPosition.y));
         }
 
-        //Zooming
+
+        
+        //////////////////         Zooming         /////////////////////////////////
+        
+        //zoom with keybaord
         if(Input.GetKey(KeyCode.Equals) && m_camera.orthographicSize > minMaxCameraZoom.x)
         {
             m_camera.orthographicSize = Mathf.Max(m_camera.orthographicSize- (cameraZoomSpeed * Time.deltaTime), minMaxCameraZoom.x);
