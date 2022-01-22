@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-
+/// <summary>
+/// Controls the rate of data flow.
+/// </summary>
 public class FlowTimer : MonoBehaviour
 {
     // The timer event
@@ -61,7 +63,7 @@ public class FlowTimer : MonoBehaviour
         {
             yield return new WaitForSeconds(m_flowTime);
             OnFlowControlTimerTick?.Invoke();
-            Debug.Log("TICK");
+            //Debug.Log("TICK");
         }
     }
 

@@ -5,6 +5,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 
+/// <summary>
+/// Interprets google sheet and populates each card asset with the appropriate data.
+/// </summary>
+/// 
+
+// PLEASE LEAVE CODE THAT HAS BEEN COMMENTED OUT. WE USE THIS TO REGEN CARDS DURING DEVELOPMENT IF THERE ARE CHANGES TO THE GOOGLE SHEET
+
 public class GoogleSheetParser : MonoBehaviour
 {
     public static List<CardAsset> s_cardAssets;

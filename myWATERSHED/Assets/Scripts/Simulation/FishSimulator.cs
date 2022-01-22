@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class FishSimulator : MonoBehaviour
 {
+    public World m_worldScript;
+
     [SerializeField]
     private int m_dailyRequiredInsectConsumptionPerFish;
     [SerializeField]
@@ -117,6 +119,7 @@ public class FishSimulator : MonoBehaviour
 
             }
         }
+        m_worldScript.UpdateTotalDacePopulation();
     }
 
 }

@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Provides different ways to find the neighbours of a tile.
+/// </summary>
+
 public class NeighbourUtility : MonoBehaviour
 {
     /// <summary>
