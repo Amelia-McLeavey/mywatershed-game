@@ -7,7 +7,7 @@ public class RedDacePopulation : VariableClass
     //public int m_RedDacePopulation;
     private void Awake()
     {
-        variableName = "Red Dance Population";
+        variableName = "Red Dace Population";
         moreIsBad = false;
         wholeNumbers = true;
     }

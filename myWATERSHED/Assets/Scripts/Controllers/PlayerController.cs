@@ -113,7 +113,8 @@ public class PlayerController : MonoBehaviour
                     //reset current material 
 
                     variableHolder = hit.collider.gameObject;
-                    variableHolder.GetComponent<MeshRenderer>().materials[1] = highlightMat;                 
+                    variableHolder.GetComponent<MeshRenderer>().materials[1] = highlightMat;
+                    tileTitle.text = variableHolder.tag;
                 }
             }
         }
