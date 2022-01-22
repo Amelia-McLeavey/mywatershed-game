@@ -86,7 +86,7 @@ public class PrototypeController : MonoBehaviour
         //all the land types
         if (variableHolder != null)
         {
-            tileType.text = variableHolder.tag;
+         /*   tileType.text = variableHolder.tag;
 
             if (variableHolder.tag == "Agriculture" || variableHolder.tag == "Commercial" || variableHolder.tag == "EstateResidential" || variableHolder.tag == "Forest" || variableHolder.tag == "GolfCourse" || variableHolder.tag == "HighDensity" || variableHolder.tag == "Highway" || variableHolder.tag == "Industrial" || variableHolder.tag == "Institutional" || variableHolder.tag == "LowMidDensity" || variableHolder.tag == "Meadow" || variableHolder.tag == "RecreationCentreSpace" || variableHolder.tag == "Successional" || variableHolder.tag == "UrbanOpenSpace" || variableHolder.tag == "Vacant")
             {
@@ -129,7 +129,7 @@ public class PrototypeController : MonoBehaviour
 
                 variable6.text = "Sewage Level";
                 variable6data.text = variableHolder.GetComponent<SewageLevel>().m_SewageLevel.ToString();
-            }
+            }*/
         }
 
 
@@ -176,13 +176,11 @@ public class PrototypeController : MonoBehaviour
     // TODO: Adjust these values to not break the system.
 
     //some sloppy throwaway code to make buttons for the prototype's variable UI display
+    /*
     #region VariableButtons
     public void variable1ButtonPlus()
     {
 
-        /*
-         take whatever script is associated with this variable and add to it
-         */
         if (variableHolder.GetComponent<AsphaltDensity>())
         {
             variableHolder.GetComponent<AsphaltDensity>().m_AsphaltDensity += UIButtonIncrementAmount;
@@ -208,9 +206,7 @@ public class PrototypeController : MonoBehaviour
     public void variable2ButtonPlus()
     {
 
-        /*
-         take whatever script is associated with this variable and add to it
-         */
+
         if (variableHolder.GetComponent<ErosionRate>())
         {
             variableHolder.GetComponent<ErosionRate>().m_ErosionRate += UIButtonIncrementAmount;
@@ -237,9 +233,7 @@ public class PrototypeController : MonoBehaviour
     public void variable3ButtonPlus()
     {
 
-        /*
-         take whatever script is associated with this variable and add to it
-         */
+
         if (variableHolder.GetComponent<LandHeight>())
         {
             variableHolder.GetComponent<LandHeight>().m_LandHeight += UIButtonIncrementAmount;
@@ -253,9 +247,7 @@ public class PrototypeController : MonoBehaviour
     public void variable3ButtonMinus()
     {
 
-        /*
-         take whatever script is associated with this variable and add to it
-         */
+
         if (variableHolder.GetComponent<LandHeight>())
         {
             variableHolder.GetComponent<LandHeight>().m_LandHeight -= UIButtonIncrementAmount;
@@ -270,9 +262,6 @@ public class PrototypeController : MonoBehaviour
     public void variable4ButtonPlus()
     {
 
-        /*
-         take whatever script is associated with this variable and add to it
-         */
         if (variableHolder.GetComponent<WaterTemperature>())
         {
             variableHolder.GetComponent<WaterTemperature>().m_waterTemperature += UIButtonIncrementAmount;
@@ -286,9 +275,6 @@ public class PrototypeController : MonoBehaviour
     public void variable4ButtonMinus()
     {
 
-        /*
-         take whatever script is associated with this variable and add to it
-         */
         if (variableHolder.GetComponent<WaterTemperature>())
         {
             variableHolder.GetComponent<WaterTemperature>().m_waterTemperature -= UIButtonIncrementAmount;
@@ -302,9 +288,6 @@ public class PrototypeController : MonoBehaviour
     public void variable5ButtonPlus()
     {
 
-        /*
-         take whatever script is associated with this variable and add to it
-         */
         if (variableHolder.GetComponent<PollutionLevel>())
         {
             variableHolder.GetComponent<PollutionLevel>().m_PolutionLevel += (int)UIButtonIncrementAmount;
@@ -318,9 +301,7 @@ public class PrototypeController : MonoBehaviour
     public void variable5ButtonMinus()
     {
 
-        /*
-         take whatever script is associated with this variable and add to it
-         */
+
         if (variableHolder.GetComponent<PollutionLevel>())
         {
             variableHolder.GetComponent<PollutionLevel>().m_PolutionLevel -= (int)UIButtonIncrementAmount;
@@ -342,6 +323,6 @@ public class PrototypeController : MonoBehaviour
 
         variableHolder.GetComponent<SewageLevel>().m_SewageLevel -= UIButtonIncrementAmount;
     }
-
-    #endregion
+    
+    #endregion*/
 }

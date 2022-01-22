@@ -109,7 +109,7 @@ public class World : MonoBehaviour
                 {
                     if (value.GetComponent<Tile>().m_Basetype == BaseType.Water)
                     {
-                        dace.Add(value.GetComponent<RedDacePopulation>().m_RedDacePopulation);
+                        dace.Add((int)value.GetComponent<RedDacePopulation>().value);
                     }
                 }
             }

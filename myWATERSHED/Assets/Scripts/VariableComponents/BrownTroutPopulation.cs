@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class BrownTroutPopulation : VariableClass
 {
-    public int m_BrownTroutPopulation;
+   // public int m_BrownTroutPopulation;
     private void Awake()
     {
         variableName = "Brown Trout Population";
+        moreIsBad = false;
+        wholeNumbers = true;
     }
 }

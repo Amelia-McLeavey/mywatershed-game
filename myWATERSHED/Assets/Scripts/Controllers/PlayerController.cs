@@ -113,11 +113,7 @@ public class PlayerController : MonoBehaviour
                     //reset current material 
 
                     variableHolder = hit.collider.gameObject;
-                    variableHolder.GetComponent<MeshRenderer>().materials[1] = highlightMat;
-                    for(int i=0;i<tileVariableObjects.Length; i++)
-                    {
-                        tileVariableObjects[i].gameObject.SetActive(false);
-                    }
+                    variableHolder.GetComponent<MeshRenderer>().materials[1] = highlightMat;                 
                 }
             }
         }
@@ -167,6 +163,11 @@ public class PlayerController : MonoBehaviour
                 tileVariableObjects[variableNum].gameObject.SetActive(true);
                 // tileVariableObjects[variableNum].SetText(v.variableName);
                 variableNum++;
+            }
+
+            for(int i = variableNum; i< tileVariableObjects.Length; i++)
+            {
+                tileVariableObjects[i].gameObject.SetActive(false);
             }
         }
     }

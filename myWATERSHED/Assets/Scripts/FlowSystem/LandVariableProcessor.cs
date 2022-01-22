@@ -16,8 +16,8 @@ public class LandVariableProcessor : FlowStyle
     public override void ProcessData(GameObject senderTile, Vector2 tileIndexForDebugging)
     {
         // EROSION RATE
-        senderTile.GetComponent<ErosionRate>().m_ErosionRate = senderTile.GetComponent<LandHeight>().m_LandHeight / 100;
+        senderTile.GetComponent<ErosionRate>().value = senderTile.GetComponent<LandHeight>().value / 100;
         // WATER TEMPERATURE
-        senderTile.GetComponent<WaterTemperature>().m_waterTemperature = senderTile.GetComponent<AsphaltDensity>().m_AsphaltDensity * 30f;
+        senderTile.GetComponent<WaterTemperature>().value = senderTile.GetComponent<AsphaltDensity>().value * 30f;
     }
 }

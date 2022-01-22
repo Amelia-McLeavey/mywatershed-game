@@ -26,19 +26,19 @@ public class WaterVariableProcessor : FlowStyle
             Debug.LogError("landheight missing");
         }
         // INSECT POPULATION
-        senderTile.GetComponent<InsectPopulation>().m_InsectPopulation = Mathf.RoundToInt(senderTile.GetComponent<RiparianLevel>().m_RiparianLevel * 1000);
+        senderTile.GetComponent<InsectPopulation>().value = Mathf.RoundToInt(senderTile.GetComponent<RiparianLevel>().value * 1000);
         // RATE OF FLOW
-        senderTile.GetComponent<RateOfFlow>().m_RateOfFlow = 1 - senderTile.GetComponent<Sinuosity>().m_Sinuosity;
+        senderTile.GetComponent<RateOfFlow>().value = 1 - senderTile.GetComponent<Sinuosity>().value;
         // RIVERBED HEALTH
-        senderTile.GetComponent<RiverbedHealth>().m_RiverBedHealth = 
-            Mathf.RoundToInt((1 - senderTile.GetComponent<PollutionLevel>().m_PolutionLevel + (1 - senderTile.GetComponent<SewageLevel>().m_SewageLevel) / 2) * 100);
+        senderTile.GetComponent<RiverbedHealth>().value = 
+            Mathf.RoundToInt((1 - senderTile.GetComponent<PollutionLevel>().value + (1 - senderTile.GetComponent<SewageLevel>().value) / 2) * 100);
         // SHADE COVERAGE
-        senderTile.GetComponent<ShadeCoverage>().m_ShadeCoverage = senderTile.GetComponent<RiparianLevel>().m_RiparianLevel;
+        senderTile.GetComponent<ShadeCoverage>().value = senderTile.GetComponent<RiparianLevel>().value;
         // TURBIDITY
-        senderTile.GetComponent<Turbidity>().m_Turbidity =
-            (senderTile.GetComponent<PollutionLevel>().m_PolutionLevel + senderTile.GetComponent<SewageLevel>().m_SewageLevel + senderTile.GetComponent<RateOfFlow>().m_RateOfFlow) / 3;
+        senderTile.GetComponent<Turbidity>().value =
+            (senderTile.GetComponent<PollutionLevel>().value + senderTile.GetComponent<SewageLevel>().value + senderTile.GetComponent<RateOfFlow>().value) / 3;
         // WATER TEMPERATURE
-        senderTile.GetComponent<WaterTemperature>().m_waterTemperature =
-            (1 - senderTile.GetComponent<ShadeCoverage>().m_ShadeCoverage) * 30f - ((1 - senderTile.GetComponent<WaterDepth>().m_WaterDepth) / 10 * 15f);
+        senderTile.GetComponent<WaterTemperature>().value =
+            (1 - senderTile.GetComponent<ShadeCoverage>().value) * 30f - ((1 - senderTile.GetComponent<WaterDepth>().value) / 10 * 15f);
     }
 }

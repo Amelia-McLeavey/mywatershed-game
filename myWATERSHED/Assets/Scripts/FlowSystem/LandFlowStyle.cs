@@ -40,13 +40,13 @@ public class LandFlowStyle : FlowStyle
 
         // POLLUTION LEVEL
         senderTile.GetComponent<PollutionLevel>().m_GatheredPolutionValues.Clear();
-        receiverTile.GetComponent<PollutionLevel>().m_GatheredPolutionValues.Add(senderTile.GetComponent<PollutionLevel>().m_PolutionLevel);
+        receiverTile.GetComponent<PollutionLevel>().m_GatheredPolutionValues.Add(senderTile.GetComponent<PollutionLevel>().value);
         // SEWAGE LEVEL
         senderTile.GetComponent<SewageLevel>().m_GatheredSewageValues.Clear();
-        receiverTile.GetComponent<SewageLevel>().m_GatheredSewageValues.Add(senderTile.GetComponent<SewageLevel>().m_SewageLevel);
+        receiverTile.GetComponent<SewageLevel>().m_GatheredSewageValues.Add(senderTile.GetComponent<SewageLevel>().value);
         // WATER TEMPERATURE
         senderTile.GetComponent<WaterTemperature>().m_GatheredWaterTemperatureValues.Clear();
-        receiverTile.GetComponent<WaterTemperature>().m_GatheredWaterTemperatureValues.Add(senderTile.GetComponent<WaterTemperature>().m_waterTemperature);
+        receiverTile.GetComponent<WaterTemperature>().m_GatheredWaterTemperatureValues.Add(senderTile.GetComponent<WaterTemperature>().value);
     }
 
     public override void ProcessData(GameObject senderTile, Vector2 tileIndexForDebugging)
@@ -54,17 +54,17 @@ public class LandFlowStyle : FlowStyle
         // POLLUTION LEVEL
         if (senderTile.GetComponent<PollutionLevel>().m_GatheredPolutionValues.Count != 0)
         {
-            senderTile.GetComponent<PollutionLevel>().m_PolutionLevel = senderTile.GetComponent<PollutionLevel>().m_GatheredPolutionValues.Average();
+            senderTile.GetComponent<PollutionLevel>().value = senderTile.GetComponent<PollutionLevel>().m_GatheredPolutionValues.Average();
         }
         // SEWAGE LEVEL
         if (senderTile.GetComponent<SewageLevel>().m_GatheredSewageValues.Count != 0)
         {
-            senderTile.GetComponent<SewageLevel>().m_SewageLevel = senderTile.GetComponent<SewageLevel>().m_GatheredSewageValues.Average();
+            senderTile.GetComponent<SewageLevel>().value = senderTile.GetComponent<SewageLevel>().m_GatheredSewageValues.Average();
         }
         // WATER TEMPERATURE\
         if (senderTile.GetComponent<WaterTemperature>().m_GatheredWaterTemperatureValues.Count != 0)
         {
-            senderTile.GetComponent<WaterTemperature>().m_waterTemperature = senderTile.GetComponent<WaterTemperature>().m_GatheredWaterTemperatureValues.Average();
+            senderTile.GetComponent<WaterTemperature>().value = senderTile.GetComponent<WaterTemperature>().m_GatheredWaterTemperatureValues.Average();
         }
     }
 }

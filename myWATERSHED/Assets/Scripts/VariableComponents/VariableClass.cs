@@ -6,5 +6,7 @@ using UnityEngine;
 public class VariableClass : MonoBehaviour
 {
     public string variableName;
+    public float value;
+    public bool wholeNumbers = false;
     public bool moreIsBad = true;
 }

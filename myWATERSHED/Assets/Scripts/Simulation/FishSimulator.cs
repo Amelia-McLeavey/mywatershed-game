@@ -80,38 +80,38 @@ public class FishSimulator : MonoBehaviour
             Turbidity turbidityComponent = waterTile.gameObject.GetComponent<Turbidity>();
             WaterTemperature waterTemperatureComponent = waterTile.gameObject.GetComponent<WaterTemperature>();
 
-            if (redDaceComponent.m_RedDacePopulation > 0)
+            if (redDaceComponent.value > 0)
             {
                 if (m_insectFactor)
                 {
-                    int prevRedDacePopulation = redDaceComponent.m_RedDacePopulation;
+                    int prevRedDacePopulation = (int)redDaceComponent.value;
 
                     int insectPopulationRequiredToSustain = prevRedDacePopulation * m_dailyRequiredInsectConsumptionPerFish;
 
-                    if (insectComponent.m_InsectPopulation >= insectPopulationRequiredToSustain)
+                    if (insectComponent.value >= insectPopulationRequiredToSustain)
                     {
-                        int populationDifference = insectComponent.m_InsectPopulation - insectPopulationRequiredToSustain;
+                        int populationDifference = (int)insectComponent.value - insectPopulationRequiredToSustain;
                         int newFishies = Mathf.Clamp(populationDifference / m_dailyRequiredInsectConsumptionPerFish, 0, m_maximumRedDaceGrowthPerUpdate);
-                        redDaceComponent.m_RedDacePopulation += newFishies;
+                        redDaceComponent.value += newFishies;
                     }
                     else
                     {
-                        redDaceComponent.m_RedDacePopulation = insectComponent.m_InsectPopulation / m_dailyRequiredInsectConsumptionPerFish;
+                        redDaceComponent.value = (int)insectComponent.value / m_dailyRequiredInsectConsumptionPerFish;
                     }
 
-                    redDaceComponent.m_RedDacePopulation = Mathf.Clamp(redDaceComponent.m_RedDacePopulation, 0, m_maximumRedDacePopulation);
+                    redDaceComponent.value = Mathf.Clamp(redDaceComponent.value, 0, m_maximumRedDacePopulation);
                 }
 
                 if (m_turbidityFactor)
                 {
-                    redDaceComponent.m_RedDacePopulation = Mathf.RoundToInt(redDaceComponent.m_RedDacePopulation * (1 - turbidityComponent.m_Turbidity));
+                    redDaceComponent.value = Mathf.RoundToInt(redDaceComponent.value * (1 - turbidityComponent.value));
                 }
                 
                 if (m_waterTemperatureFactor)
                 {
-                    if (waterTemperatureComponent.m_waterTemperature < m_ctMin || waterTemperatureComponent.m_waterTemperature > m_ctMax)
+                    if (waterTemperatureComponent.value < m_ctMin || waterTemperatureComponent.value > m_ctMax)
                     {
-                        redDaceComponent.m_RedDacePopulation = 0;
+                        redDaceComponent.value = 0;
                     }
                 }
 
