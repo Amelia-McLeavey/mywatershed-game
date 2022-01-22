@@ -63,7 +63,7 @@ public class FlowTimer : MonoBehaviour
         {
             yield return new WaitForSeconds(m_flowTime);
             OnFlowControlTimerTick?.Invoke();
-            Debug.Log("TICK");
+            //Debug.Log("TICK");
         }
     }
 

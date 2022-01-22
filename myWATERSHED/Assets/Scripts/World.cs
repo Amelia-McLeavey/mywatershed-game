@@ -80,6 +80,7 @@ public class World : MonoBehaviour
         else if (m_seasonState == SeasonState.Summer && season == SeasonState.Winter)
         {
             UpdateTotalDacePopulation();
+            DisplayTotalDacePopulationInUI();
             m_cardDeckHandler.DealCards();
         }
 
@@ -95,7 +96,7 @@ public class World : MonoBehaviour
 
 
     // TODO: Bug, RSD Population not displaying correct data, not updating
-    private void UpdateTotalDacePopulation()
+    public void UpdateTotalDacePopulation()
     {
         List<int> dace = new List<int>();
 
@@ -116,6 +117,11 @@ public class World : MonoBehaviour
         }
 
         m_redDaceTotalPopulation = dace.Sum();
+        Debug.Log($"RSD Population: {m_redDaceTotalPopulation}");
+    }
+
+    private void DisplayTotalDacePopulationInUI()
+    {
         m_daceHealthScript.SetHealth(m_redDaceTotalPopulation);
         m_redDacePopulationText.text = m_redDaceTotalPopulation.ToString();
 
@@ -125,5 +131,4 @@ public class World : MonoBehaviour
             m_failStateObject.SetActive(true);
         }
     }
-
 }
