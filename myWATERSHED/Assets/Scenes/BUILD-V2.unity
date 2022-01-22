@@ -9833,7 +9833,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd7547ebad767614ebc69e215eb58986, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_cameraSpeed: 5
+  m_cameraSpeed: 1
   m_worldGenScript: {fileID: 1971862562}
   m_camera: {fileID: 963194227}
   m_cameraContainer: {fileID: 1670411932}

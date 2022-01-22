@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 public enum SeasonState { Summer, Winter }
 public enum RedDacePopulationState { High, Average, Low, Extinct }
 
@@ -23,9 +23,9 @@ public class World : MonoBehaviour
     private int m_currentYear = 1;
 
     [SerializeField]
-    private Text m_currentYearText;
+    private TMP_Text m_currentYearText;
     [SerializeField]
-    private Text m_redDacePopulationText;
+    private TMP_Text m_redDacePopulationText;
 
     [SerializeField]
     private DaceHealthUI m_daceHealthScript;
