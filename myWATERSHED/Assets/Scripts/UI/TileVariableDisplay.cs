@@ -37,11 +37,11 @@ public class TileVariableDisplay : MonoBehaviour
             slider.value = variableClassToRead.value;
             if (variableClassToRead.moreIsBad)
             {
-                sliderFill.color = new Color((1f* slider.value), (1f* (1f- slider.value)), 0f);
+                sliderFill.color = new Color((1f* (slider.value / slider.maxValue)), (1f* (1f- (slider.value / slider.maxValue))), 0f);
             }
             else
             {
-                sliderFill.color = new Color((1f * (1f - slider.value)), (1f * slider.value), 0f);
+                sliderFill.color = new Color((1f * (1f - (slider.value / slider.maxValue))), (1f * (slider.value / slider.maxValue)), 0f);
             }
         }
     }

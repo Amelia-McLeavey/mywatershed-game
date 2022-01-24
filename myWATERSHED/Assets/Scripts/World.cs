@@ -26,6 +26,10 @@ public class World : MonoBehaviour
     private TMP_Text m_currentYearText;
     [SerializeField]
     private TMP_Text m_redDacePopulationText;
+    [SerializeField]
+    private Slider m_temperatureSlider;
+    [SerializeField]
+    private TMP_Text m_temperatureText;
 
     [SerializeField]
     private DaceHealthUI m_daceHealthScript;
@@ -34,6 +38,7 @@ public class World : MonoBehaviour
     private GameObject m_failStateObject;
 
     private int m_redDaceTotalPopulation;
+    private int m_averageTemperature;
 
     private GameManager m_gameManager;
     private WorldGenerator m_worldGenerator;
@@ -61,6 +66,8 @@ public class World : MonoBehaviour
         {
             m_gameManager.SetGameState(GameState.Pause, null);
         }
+
+        UpdateAverageTemperature();
     }
 
     public void OnClickReturnToMenu()
@@ -117,7 +124,31 @@ public class World : MonoBehaviour
         }
 
         m_redDaceTotalPopulation = dace.Sum();
-        Debug.Log($"RSD Population: {m_redDaceTotalPopulation}");
+        //Debug.Log($"RSD Population: {m_redDaceTotalPopulation}");
+        DisplayTotalDacePopulationInUI();
+    }
+
+    public void UpdateAverageTemperature()
+    {
+        float totalTemp=0;
+        for (int x = 0; x < m_worldGenerator.m_rows; x++)
+        {
+            for (int y = 0; y < m_worldGenerator.m_columns; y++)
+            {
+                Vector2 tileIndex = new Vector2(x, y);
+
+                if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
+                {
+                    if (value.GetComponent<WaterTemperature>() != null)
+                    {
+                        totalTemp += value.GetComponent<WaterTemperature>().value;
+                    }
+                }
+            }
+        }
+
+        m_averageTemperature = Mathf.RoundToInt(totalTemp / (m_worldGenerator.m_rows * m_worldGenerator.m_columns));
+        DisplayAverageTemperature();
     }
 
     private void DisplayTotalDacePopulationInUI()
@@ -130,5 +161,11 @@ public class World : MonoBehaviour
         {
             m_failStateObject.SetActive(true);
         }
+    }
+
+    private void DisplayAverageTemperature()
+    {
+        m_temperatureSlider.value = m_averageTemperature;
+        m_temperatureText.text = m_averageTemperature.ToString();
     }
 }

@@ -12,9 +12,12 @@ EditorBuildSettings:
     path: Assets/Scenes/BUILD-V2.unity
     guid: 6e6362b678c93624cb839678f61bd545
   - enabled: 0
-    path: Assets/Scenes/BUILD-V1.unity
+    path: 
     guid: c0d9d5c5a7caa234f92a19fbdbe99e19
   - enabled: 0
     path: Assets/Scenes/PrototypeWorldGeneration.unity
     guid: 195ecd55cf7237248b458231ca21b1e8
+  - enabled: 1
+    path: Assets/Scenes/UI-Implementation.unity
+    guid: 128216124bbe0344799c5061ff9014ba
   m_configObjects: {}

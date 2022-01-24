@@ -9,18 +9,19 @@ public class PlayerController : MonoBehaviour
     [Header("Camera Variables")]
 
     [SerializeField] private float m_cameraSpeed;
+    [SerializeField] private float m_cameraDragSpeed;
     [SerializeField] private Camera m_camera;
     [SerializeField] private GameObject m_cameraContainer;
     [SerializeField] private float m_cameraPadding;
 
-    [SerializeField] private Vector2 minMaxCameraZoom;
-    [SerializeField] private float cameraZoomSpeed;
+    [SerializeField] private Vector2 m_minMaxCameraZoom;
+    [SerializeField] private float m_cameraZoomSpeed;
 
     private Vector3 targetCamPos;
     private bool mouseDown = false;
     private Vector2 storedMousePos;
     private double mouseDownTime;
-    [SerializeField] private float clickSpeed = 0.2f;
+    [SerializeField] private float m_clickSpeed = 0.2f;
 
     //used to find the actual z length of the map as the hexagons stack
     private float mapHeightMultiplyer = 0.86f;
@@ -34,27 +35,26 @@ public class PlayerController : MonoBehaviour
     [Header("Select Tile Variables")]
     
     public GameObject variableHolder;
-    [SerializeField] private Material highlightMat;
+    private Color storedColour;
+    [SerializeField] private Color highlightColour;
 
     [Header("World Gen")]
-    [SerializeField] private GameObject loadingPanel;
+    [SerializeField] private GameObject m_loadingPanel;
     [SerializeField] private WorldGenerator m_worldGenScript;
 
     [Header("Tile Variables")]
 
-    [SerializeField] private GameObject tileInfoObject;
-    [SerializeField] private TileVariableDisplay[] tileVariableObjects;
-    [SerializeField] private TMP_Text tileTitle;
-    [SerializeField] private Image tileImage;
-
-    
+    [SerializeField] private GameObject m_tileInfoObject;
+    [SerializeField] private TileVariableDisplay[] m_tileVariableObjects;
+    [SerializeField] private TMP_Text m_tileTitle;
+    [SerializeField] private Image m_tileImage;
 
     // This region just holds functions for the Dev Generate Buttons
     // Will not be needed in the final game as players will not have these buttons
     #region Dev Generation Functions
     public void GenerateWorldOnClick()
     {
-        loadingPanel.SetActive(true);
+        m_loadingPanel.SetActive(true);
         WorldGenerator.OnWorldGenerationComplete += hideLoadingPanel;
         m_worldGenScript.GenerateWorld();      
     }
@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
         //calculate camera restraints
         minMaxXPosition = new Vector2(0 + m_cameraPadding, rows - m_cameraPadding);
         minMaxZPosition = new Vector2(-cameraZOffset + m_cameraPadding, (columns * mapHeightMultiplyer) - cameraZOffset - m_cameraPadding);
-        loadingPanel.SetActive(false);
+        m_loadingPanel.SetActive(false);
     }
 
     public void IncreaseSeedValue()
@@ -104,53 +104,58 @@ public class PlayerController : MonoBehaviour
         if((Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))&&mouseDown)
         {
             mouseDown = false;  
-            if(Time.realtimeSinceStartupAsDouble - mouseDownTime < clickSpeed)
+            if(Time.realtimeSinceStartupAsDouble - mouseDownTime < m_clickSpeed)
             {
                 //select this tile
                 Ray ray = m_camera.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
                     //reset current material 
-
+                    if (variableHolder != null)
+                    {
+                        variableHolder.GetComponent<MeshRenderer>().materials[1].color = storedColour;
+                    }
                     variableHolder = hit.collider.gameObject;
-                    variableHolder.GetComponent<MeshRenderer>().materials[1] = highlightMat;
-                    tileTitle.text = variableHolder.tag;
+                    storedColour = variableHolder.GetComponent<MeshRenderer>().materials[1].color;
+                    variableHolder.GetComponent<MeshRenderer>().materials[1].color = highlightColour;
+                    m_tileTitle.text = variableHolder.tag;
                 }
             }
         }
 
-
         ///////////////////         Movement           ///////////////////////////////////
-        
+        Vector3 direction = Vector3.zero;
         if (mouseDown)
         {
             //move with dragging
+            direction = new Vector3(storedMousePos.x - Input.mousePosition.x, 0f, storedMousePos.y - Input.mousePosition.y)* m_cameraDragSpeed;
+            storedMousePos = Input.mousePosition;
         }
         else
         {
             //move camera with keyboard
-            Vector3 direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            targetCamPos = m_cameraContainer.transform.position + (direction.normalized * m_cameraSpeed);
-            targetCamPos = new Vector3(Mathf.Clamp(targetCamPos.x, minMaxXPosition.x, minMaxXPosition.y), targetCamPos.y, Mathf.Clamp(targetCamPos.z, minMaxZPosition.x, minMaxZPosition.y));
+           direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         }
 
+        targetCamPos = m_cameraContainer.transform.position + (direction.normalized * m_cameraSpeed);
+        targetCamPos = new Vector3(Mathf.Clamp(targetCamPos.x, minMaxXPosition.x, minMaxXPosition.y), targetCamPos.y, Mathf.Clamp(targetCamPos.z, minMaxZPosition.x, minMaxZPosition.y));
 
-        
+
         //////////////////         Zooming         /////////////////////////////////
-        
+
         //zoom with keybaord
-        if(Input.GetKey(KeyCode.Equals) && m_camera.orthographicSize > minMaxCameraZoom.x)
+        if (Input.GetKey(KeyCode.Equals) && m_camera.orthographicSize > m_minMaxCameraZoom.x)
         {
-            m_camera.orthographicSize = Mathf.Max(m_camera.orthographicSize- (cameraZoomSpeed * Time.deltaTime), minMaxCameraZoom.x);
+            m_camera.orthographicSize = Mathf.Max(m_camera.orthographicSize- (m_cameraZoomSpeed * Time.deltaTime), m_minMaxCameraZoom.x);
         }
 
-        if (Input.GetKey(KeyCode.Minus) && m_camera.orthographicSize < minMaxCameraZoom.y)
+        if (Input.GetKey(KeyCode.Minus) && m_camera.orthographicSize < m_minMaxCameraZoom.y)
         {
-            m_camera.orthographicSize = Mathf.Min(m_camera.orthographicSize + (cameraZoomSpeed*Time.deltaTime), minMaxCameraZoom.y);
+            m_camera.orthographicSize = Mathf.Min(m_camera.orthographicSize + (m_cameraZoomSpeed*Time.deltaTime), m_minMaxCameraZoom.y);
         }
 
         //scroll wheel zoom
-        m_camera.orthographicSize = Mathf.Clamp(m_camera.orthographicSize - (Input.mouseScrollDelta.y * cameraZoomSpeed), minMaxCameraZoom.x, minMaxCameraZoom.y);
+        m_camera.orthographicSize = Mathf.Clamp(m_camera.orthographicSize - (Input.mouseScrollDelta.y * m_cameraZoomSpeed), m_minMaxCameraZoom.x, m_minMaxCameraZoom.y);
     }
 
     private void LateUpdate()
@@ -166,15 +171,15 @@ public class PlayerController : MonoBehaviour
             VariableClass[] varClass = variableHolder.GetComponents<VariableClass>();
             foreach (VariableClass v in varClass)
             {
-                tileVariableObjects[variableNum].SetVariableClass(v);
-                tileVariableObjects[variableNum].gameObject.SetActive(true);
+                m_tileVariableObjects[variableNum].SetVariableClass(v);
+                m_tileVariableObjects[variableNum].gameObject.SetActive(true);
                 // tileVariableObjects[variableNum].SetText(v.variableName);
                 variableNum++;
             }
 
-            for(int i = variableNum; i< tileVariableObjects.Length; i++)
+            for(int i = variableNum; i< m_tileVariableObjects.Length; i++)
             {
-                tileVariableObjects[i].gameObject.SetActive(false);
+                m_tileVariableObjects[i].gameObject.SetActive(false);
             }
         }
     }
