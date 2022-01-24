@@ -13,6 +13,10 @@ public class LandVariableProcessor : FlowStyle
     {
     }
 
+    public override void VerifyTiles(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
+    {
+    }
+
     public override void ProcessData(GameObject senderTile, Vector2 tileIndexForDebugging)
     {
         // EROSION RATE

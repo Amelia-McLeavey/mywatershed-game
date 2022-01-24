@@ -30,8 +30,7 @@ public class WaterFlowStyle : FlowStyle
             return false;
         }
     }
-
-    public override void DistrubuteData(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
+    public override void VerifyTiles(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
     {
         // DEBUGS BE DEFENSIVE 
         Debug.Assert(senderTile != null, $"senderTile is null at index {tileIndexForDebugging}");
@@ -46,7 +45,10 @@ public class WaterFlowStyle : FlowStyle
         Debug.Assert(receiverTile.GetComponent<Turbidity>() != null, $"receiverTile is missing a Turbidity component at index {tileIndexForDebugging}");
         Debug.Assert(senderTile.GetComponent<WaterTemperature>() != null, $"senderTile is missing a WaterTemperature component at index {tileIndexForDebugging}");
         Debug.Assert(receiverTile.GetComponent<WaterTemperature>() != null, $"receiverTile is missing a WaterTemperature component at index {tileIndexForDebugging}");
+    }
 
+    public override void DistrubuteData(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
+    {
         // Reset the list then scatter by adding sender tile current value to the recievers' list
 
         // INSECT POPULATION
