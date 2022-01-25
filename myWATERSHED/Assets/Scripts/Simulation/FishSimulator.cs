@@ -67,9 +67,15 @@ public class FishSimulator : MonoBehaviour
         }
     }
 
+    private static Unity.Profiling.ProfilerMarker s_updateFishPopMarker = new Unity.Profiling.ProfilerMarker("FishSimulator.UpdateFishPopulations");
+
     public void UpdateFishPopulations()
     {
+        s_updateFishPopMarker.Begin();
+
         UpdateRedDace();
+
+        s_updateFishPopMarker.End();
     }
 
     private void UpdateRedDace()

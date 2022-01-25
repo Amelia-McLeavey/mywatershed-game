@@ -12,4 +12,5 @@ public abstract class FlowStyle
     public abstract bool CanFlow(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging);
     public abstract void DistrubuteData(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging);
     public abstract void ProcessData(GameObject senderTile, Vector2 tileIndexForDebugging);
+    public abstract void VerifyTiles(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging);
 }

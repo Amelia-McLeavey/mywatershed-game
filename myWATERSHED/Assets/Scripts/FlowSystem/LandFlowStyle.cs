@@ -26,7 +26,7 @@ public class LandFlowStyle : FlowStyle
         }
     }
 
-    public override void DistrubuteData(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
+    public override void VerifyTiles(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
     {
         // DEBUGS BE DEFENSIVE 
         Debug.Assert(senderTile != null, $"senderTile is null at index {tileIndexForDebugging}");
@@ -37,7 +37,10 @@ public class LandFlowStyle : FlowStyle
         Debug.Assert(receiverTile.GetComponent<SewageLevel>() != null, $"receiverTile is missing a SewageLevel component at index {tileIndexForDebugging}");
         Debug.Assert(senderTile.GetComponent<WaterTemperature>() != null, $"senderTile is missing a LandTemperature component at index {tileIndexForDebugging}");
         Debug.Assert(receiverTile.GetComponent<WaterTemperature>() != null, $"recieverTile is missing a LandTemperature component at index {tileIndexForDebugging}");
+    }
 
+    public override void DistrubuteData(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
+    {
         // POLLUTION LEVEL
         senderTile.GetComponent<PollutionLevel>().m_GatheredPolutionValues.Clear();
         receiverTile.GetComponent<PollutionLevel>().m_GatheredPolutionValues.Add(senderTile.GetComponent<PollutionLevel>().value);

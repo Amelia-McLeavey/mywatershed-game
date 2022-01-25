@@ -24,10 +24,13 @@ public class FlowSimulator : MonoBehaviour
     // Initializes tiles by finding the nieghbours of each tile that will receive information
     private void InitializeFlow(int rows, int columns)
     {
-        //Debug.Log("ITIALIZE FLOW");
+        //Debug.Log("INITIALIZE FLOW");
 
         m_rows = rows;
         m_columns = columns;
+
+        FlowStyle waterFlowStyle = new WaterFlowStyle();
+        FlowStyle landFlowStyle = new LandFlowStyle();
 
         for (int x = 0; x < m_rows; x++)
         {
@@ -39,6 +42,21 @@ public class FlowSimulator : MonoBehaviour
                 {
                     SetNeighbours(value, tileIndex);
                     SetStartingVariableValues(value, tileIndex);
+
+                    List<GameObject> receiverTiles = GetNeighbours(value);
+
+                    foreach (GameObject receiverTile in receiverTiles)
+                    {
+                        if (waterFlowStyle.CanFlow(value, receiverTile, tileIndex))
+                        {
+                            waterFlowStyle.VerifyTiles(value, receiverTile, tileIndex);
+                        }
+
+                        if (landFlowStyle.CanFlow(value, receiverTile, tileIndex))
+                        {
+                            landFlowStyle.VerifyTiles(value, receiverTile, tileIndex);
+                        }
+                    }
                 }
             }
         }
@@ -66,13 +84,34 @@ public class FlowSimulator : MonoBehaviour
 
     }
 
+    private static Unity.Profiling.ProfilerMarker s_updateFlowMarker = new Unity.Profiling.ProfilerMarker("FlowSimulator.UpdateFlow");
+
+    private static Unity.Profiling.ProfilerMarker s_landVariableMarker = new Unity.Profiling.ProfilerMarker("FlowSimulator.LandVariableProcessor");
+    private static Unity.Profiling.ProfilerMarker s_waterVariableMarker = new Unity.Profiling.ProfilerMarker("FlowSimulator.WaterVariableProcessor");
+    private static Unity.Profiling.ProfilerMarker s_landFlowMarker = new Unity.Profiling.ProfilerMarker("FlowSimulator.LandFlowStyle");
+    private static Unity.Profiling.ProfilerMarker s_waterFlowMarker = new Unity.Profiling.ProfilerMarker("FlowSimulator.WaterFlowStyle");
+
     public void UpdateFlow()
     {
-        SendTwoStageFlow(new LandVariableProcessor(), BaseType.Land);
-        SendTwoStageFlow(new WaterVariableProcessor(), BaseType.Water);
+        s_updateFlowMarker.Begin();
 
+        s_landVariableMarker.Begin();
+        SendTwoStageFlow(new LandVariableProcessor(), BaseType.Land);
+        s_landVariableMarker.End();
+
+        s_waterVariableMarker.Begin();
+        SendTwoStageFlow(new WaterVariableProcessor(), BaseType.Water);
+        s_waterVariableMarker.End();
+
+        s_landFlowMarker.Begin();
         SendTwoStageFlow(new LandFlowStyle(), BaseType.Land);
+        s_landFlowMarker.End();
+
+        s_waterFlowMarker.Begin();
         SendTwoStageFlow(new WaterFlowStyle(), BaseType.Water);
+        s_waterFlowMarker.End();
+
+        s_updateFlowMarker.End();
     }
 
 
@@ -115,17 +154,13 @@ public class FlowSimulator : MonoBehaviour
 
     private void SendDistributionPulse(GameObject senderTile, FlowStyle flowStyle, Vector2 indexForDebugging)
     {
-        List<GameObject> receiverTiles = GetRequiredNeighbours(senderTile);
+        List<GameObject> receiverTiles = GetNeighbours(senderTile);
 
         foreach (GameObject receiverTile in receiverTiles)
         {
             if (flowStyle.CanFlow(senderTile, receiverTile, indexForDebugging))
             {
                 flowStyle.DistrubuteData(senderTile, receiverTile, indexForDebugging);
-            }
-            else
-            {
-
             }
         }
     }
@@ -136,7 +171,7 @@ public class FlowSimulator : MonoBehaviour
      
     }
 
-    private List<GameObject> GetRequiredNeighbours(GameObject senderTile)
+    private List<GameObject> GetNeighbours(GameObject senderTile)
     {
         return senderTile.GetComponent<Tile>().m_receiverNeighbours;
     }
