@@ -48,6 +48,15 @@ public class World : MonoBehaviour
 
     private void Start()
     {
+        if (m_temperatureSlider == null)
+        {
+            Debug.LogWarning("m_temperatureSlider is not connected.");
+        }
+        if (m_redDacePopulationText == null)
+        {
+            Debug.LogWarning("m_redDacePopulationText is not connected.");
+        }
+
         m_gameManager = GameManager.Instance;
         m_worldGenerator = FindObjectOfType<WorldGenerator>();
         m_cardDeckHandler = FindObjectOfType<CardDeckHandler>();
@@ -154,7 +163,11 @@ public class World : MonoBehaviour
     private void DisplayTotalDacePopulationInUI()
     {
         m_daceHealthScript.SetHealth(m_redDaceTotalPopulation);
-        m_redDacePopulationText.text = m_redDaceTotalPopulation.ToString();
+        // TODO: Share UI across scenes
+        if (m_redDacePopulationText != null)
+        {
+            m_redDacePopulationText.text = m_redDaceTotalPopulation.ToString();
+        }
 
         // TODO: Test that fail state is working accurately
         if (m_redDaceTotalPopulation <= 0)
@@ -165,7 +178,12 @@ public class World : MonoBehaviour
 
     private void DisplayAverageTemperature()
     {
-        m_temperatureSlider.value = m_averageTemperature;
-        m_temperatureText.text = m_averageTemperature.ToString();
+        // TODO: Share UI across scenes
+        if (m_temperatureSlider != null)
+        {
+            m_temperatureSlider.value = m_averageTemperature;
+            m_temperatureText.text = m_averageTemperature.ToString();
+        }
+        
     }
 }

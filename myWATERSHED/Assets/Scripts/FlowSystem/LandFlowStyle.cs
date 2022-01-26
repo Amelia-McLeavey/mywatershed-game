@@ -10,8 +10,12 @@ public class LandFlowStyle : FlowStyle
         Tile senderTileScript = senderTile.GetComponent<Tile>();
         Tile receiverTileScript = receiverTile.GetComponent<Tile>();
 
-        // Check if any of the neighbouring tiles are able to recieve data
+        if (senderTileScript.m_Basetype != BaseType.Land)
+        {
+            return false;
+        }
 
+        // Check if any of the neighbouring tiles are able to recieve data
         if (receiverTileScript.m_Basetype == BaseType.Water)
         {
             return true;

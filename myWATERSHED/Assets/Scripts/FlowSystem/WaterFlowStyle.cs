@@ -9,11 +9,18 @@ public class WaterFlowStyle : FlowStyle
 {
     public override bool CanFlow(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
     {
+
         Tile senderTileScript = senderTile.GetComponent<Tile>();
         Tile receiverTileScript = receiverTile.GetComponent<Tile>();
 
+        // Check if the sender tile is able to run this flow in the first place
+        if (senderTileScript.m_Basetype != BaseType.Water)
+        {
+            return false;
+        }
+
         // Check if any of the neighbouring tiles are able to recieve data
-        if (receiverTileScript.m_PhysicalType == PhysicalType.Highway)
+        if (receiverTileScript.m_PhysicalType == PhysicalType.Highway)     
         {
             return true;
         }

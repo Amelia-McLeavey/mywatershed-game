@@ -29,8 +29,8 @@ public class FlowSimulator : MonoBehaviour
         m_rows = rows;
         m_columns = columns;
 
-        FlowStyle waterFlowStyle = new WaterFlowStyle();
-        FlowStyle landFlowStyle = new LandFlowStyle();
+        WaterFlowStyle waterFlowStyle = new WaterFlowStyle();
+        LandFlowStyle landFlowStyle = new LandFlowStyle();
 
         for (int x = 0; x < m_rows; x++)
         {
@@ -127,6 +127,7 @@ public class FlowSimulator : MonoBehaviour
 
                 if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
                 {
+                    // Make sure we don't call the wrong flow
                     if (value.GetComponent<Tile>().m_Basetype == baseType)
                     {
                         SendDistributionPulse(value, flowStyle, tileIndex); // scatter
