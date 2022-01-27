@@ -78,6 +78,8 @@ public class FishSimulator : MonoBehaviour
         s_updateFishPopMarker.End();
     }
 
+
+    // TODO: Sync this up with on complete of world generate 
     private void UpdateRedDace()
     {
         // If there are fish in the tile

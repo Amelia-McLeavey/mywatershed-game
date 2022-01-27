@@ -56,6 +56,10 @@ public class World : MonoBehaviour
         {
             Debug.LogWarning("m_redDacePopulationText is not connected.");
         }
+        if (m_currentYearText == null)
+        {
+            Debug.LogWarning("m_currentYearText is not connected.");
+        }
 
         m_gameManager = GameManager.Instance;
         m_worldGenerator = FindObjectOfType<WorldGenerator>();
@@ -107,7 +111,11 @@ public class World : MonoBehaviour
 
     private void SetYear()
     {
-        m_currentYearText.text = m_currentYear.ToString();
+        // TODO: Share UI across scenes
+        if (m_currentYearText != null)
+        {
+            m_currentYearText.text = m_currentYear.ToString();
+        }    
     }
 
 
@@ -134,7 +142,6 @@ public class World : MonoBehaviour
 
         m_redDaceTotalPopulation = dace.Sum();
         //Debug.Log($"RSD Population: {m_redDaceTotalPopulation}");
-        DisplayTotalDacePopulationInUI();
     }
 
     public void UpdateAverageTemperature()
