@@ -20,39 +20,44 @@ public class WaterVariableProcessor : FlowStyle
 
     public override void ProcessData(GameObject senderTile, Vector2 tileIndexForDebugging)
     {
-        // TODO: Finish migrating cached scripts up
-        InsectPopulation senderTileInsectPopulation = senderTile.GetComponent<InsectPopulation>();
-        RiparianLevel senderTileRiparianLevel = senderTile.GetComponent<RiparianLevel>();
-        RateOfFlow senderTileRateOfFlow = senderTile.GetComponent<RateOfFlow>();
-        PollutionLevel senderTilePollutionLevel = senderTile.GetComponent<PollutionLevel>();
-        SewageLevel senderTileSewageLevel = senderTile.GetComponent<SewageLevel>();
-        ShadeCoverage senderTileShadeCoverage = senderTile.GetComponent<ShadeCoverage>();
-
+        // Cache references for performance optimization 
+        InsectPopulation insectPopulation = senderTile.GetComponent<InsectPopulation>();
+        RiparianLevel riparianLevel = senderTile.GetComponent<RiparianLevel>();
+        RateOfFlow rateOfFlow = senderTile.GetComponent<RateOfFlow>();
+        PollutionLevel pollutionLevel = senderTile.GetComponent<PollutionLevel>();
+        SewageLevel sewageLevel = senderTile.GetComponent<SewageLevel>();
+        ShadeCoverage shadeCoverage = senderTile.GetComponent<ShadeCoverage>();
+        Sinuosity sinuosity = senderTile.GetComponent<Sinuosity>();
+        RiverbedHealth riverbedHealth = senderTile.GetComponent<RiverbedHealth>();
+        Turbidity turbidity = senderTile.GetComponent<Turbidity>();
+        WaterTemperature waterTemperature = senderTile.GetComponent<WaterTemperature>();
+        WaterDepth waterDepth = senderTile.GetComponent<WaterDepth>();
+        
         // TODO: Check why this is like this
         // EROSION RATE
-        if (senderTileInsectPopulation == null)
+        if (insectPopulation == null)
         {
             Debug.LogError("insectpopulation missing");
         }
-        if (senderTileRiparianLevel == null)
+        if (riparianLevel == null)
         {
             Debug.LogError("riparianlevel missing");
         }
 
         // INSECT POPULATION
-        senderTileInsectPopulation.value = Mathf.RoundToInt(senderTileRiparianLevel.value * 1000);
+        insectPopulation.value = Mathf.RoundToInt(riparianLevel.value * 1000);
         // RATE OF FLOW
-        senderTileRateOfFlow.value = 1 - senderTile.GetComponent<Sinuosity>().value;
+        rateOfFlow.value = 1 - sinuosity.value;
         // RIVERBED HEALTH
-        senderTile.GetComponent<RiverbedHealth>().value = 
-            Mathf.RoundToInt((1 - senderTilePollutionLevel.value + (1 - senderTileSewageLevel.value) / 2) * 100);
+        riverbedHealth.value = 
+            Mathf.RoundToInt((1 - pollutionLevel.value + (1 - sewageLevel.value) / 2) * 100);
         // SHADE COVERAGE
-        senderTileShadeCoverage.value = senderTileRiparianLevel.value;
+        shadeCoverage.value = riparianLevel.value;
         // TURBIDITY
-        senderTile.GetComponent<Turbidity>().value =
-            (senderTilePollutionLevel.value + senderTileSewageLevel.value + senderTileRateOfFlow.value) / 3;
+        turbidity.value =
+            (pollutionLevel.value + sewageLevel.value + rateOfFlow.value) / 3;
         // WATER TEMPERATURE
-        senderTile.GetComponent<WaterTemperature>().value =
-            (1 - senderTileShadeCoverage.value) * 30f - ((1 - senderTile.GetComponent<WaterDepth>().value) / 10 * 15f);
+        waterTemperature.value =
+            (1 - shadeCoverage.value) * 30f - ((1 - waterDepth.value) / 10 * 15f);
     }
 }
