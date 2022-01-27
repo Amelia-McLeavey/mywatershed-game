@@ -114,10 +114,12 @@ public class FlowSimulator : MonoBehaviour
         s_updateFlowMarker.End();
     }
 
-
+    private static Unity.Profiling.ProfilerMarker s_distributeDataMarker = new Unity.Profiling.ProfilerMarker("FlowSimulator.SendDistributionPulse");
+    private static Unity.Profiling.ProfilerMarker s_processDataMarker = new Unity.Profiling.ProfilerMarker("FlowSimulator.SendProcessingPulse");
 
     private void SendTwoStageFlow(FlowStyle flowStyle, BaseType baseType)
     {
+        s_distributeDataMarker.Begin();
         // Reset the list then scatter by adding sender tile current value to the recievers' list
         for (int x = m_rows; x > 0; x--)
         {
@@ -135,6 +137,8 @@ public class FlowSimulator : MonoBehaviour
                 }
             }
         }
+        s_distributeDataMarker.End();
+        s_processDataMarker.Begin();
         // Take the average of the gathered values and update own value
         for (int x = m_rows; x > 0; x--)
         {
@@ -151,6 +155,7 @@ public class FlowSimulator : MonoBehaviour
                 }
             }
         }
+        s_processDataMarker.End();
     }
 
     private void SendDistributionPulse(GameObject senderTile, FlowStyle flowStyle, Vector2 indexForDebugging)

@@ -20,29 +20,39 @@ public class WaterVariableProcessor : FlowStyle
 
     public override void ProcessData(GameObject senderTile, Vector2 tileIndexForDebugging)
     {
+        // TODO: Finish migrating cached scripts up
+        InsectPopulation senderTileInsectPopulation = senderTile.GetComponent<InsectPopulation>();
+        RiparianLevel senderTileRiparianLevel = senderTile.GetComponent<RiparianLevel>();
+        RateOfFlow senderTileRateOfFlow = senderTile.GetComponent<RateOfFlow>();
+        PollutionLevel senderTilePollutionLevel = senderTile.GetComponent<PollutionLevel>();
+        SewageLevel senderTileSewageLevel = senderTile.GetComponent<SewageLevel>();
+        ShadeCoverage senderTileShadeCoverage = senderTile.GetComponent<ShadeCoverage>();
+
+        // TODO: Check why this is like this
         // EROSION RATE
-        if (senderTile.GetComponent<InsectPopulation>() == null)
+        if (senderTileInsectPopulation == null)
         {
-            Debug.LogError("erosion missing");
+            Debug.LogError("insectpopulation missing");
         }
-        if (senderTile.GetComponent<RiparianLevel>() == null)
+        if (senderTileRiparianLevel == null)
         {
-            Debug.LogError("landheight missing");
+            Debug.LogError("riparianlevel missing");
         }
+
         // INSECT POPULATION
-        senderTile.GetComponent<InsectPopulation>().value = Mathf.RoundToInt(senderTile.GetComponent<RiparianLevel>().value * 1000);
+        senderTileInsectPopulation.value = Mathf.RoundToInt(senderTileRiparianLevel.value * 1000);
         // RATE OF FLOW
-        senderTile.GetComponent<RateOfFlow>().value = 1 - senderTile.GetComponent<Sinuosity>().value;
+        senderTileRateOfFlow.value = 1 - senderTile.GetComponent<Sinuosity>().value;
         // RIVERBED HEALTH
         senderTile.GetComponent<RiverbedHealth>().value = 
-            Mathf.RoundToInt((1 - senderTile.GetComponent<PollutionLevel>().value + (1 - senderTile.GetComponent<SewageLevel>().value) / 2) * 100);
+            Mathf.RoundToInt((1 - senderTilePollutionLevel.value + (1 - senderTileSewageLevel.value) / 2) * 100);
         // SHADE COVERAGE
-        senderTile.GetComponent<ShadeCoverage>().value = senderTile.GetComponent<RiparianLevel>().value;
+        senderTileShadeCoverage.value = senderTileRiparianLevel.value;
         // TURBIDITY
         senderTile.GetComponent<Turbidity>().value =
-            (senderTile.GetComponent<PollutionLevel>().value + senderTile.GetComponent<SewageLevel>().value + senderTile.GetComponent<RateOfFlow>().value) / 3;
+            (senderTilePollutionLevel.value + senderTileSewageLevel.value + senderTileRateOfFlow.value) / 3;
         // WATER TEMPERATURE
         senderTile.GetComponent<WaterTemperature>().value =
-            (1 - senderTile.GetComponent<ShadeCoverage>().value) * 30f - ((1 - senderTile.GetComponent<WaterDepth>().value) / 10 * 15f);
+            (1 - senderTileShadeCoverage.value) * 30f - ((1 - senderTile.GetComponent<WaterDepth>().value) / 10 * 15f);
     }
 }
