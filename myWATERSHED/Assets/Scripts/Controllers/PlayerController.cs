@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 minMaxXPosition;
     private Vector2 minMaxZPosition;
 
+    private GameManager m_gameManager;
+
     [Header("Select Tile Variables")]
     
     public GameObject variableHolder;
@@ -52,6 +54,8 @@ public class PlayerController : MonoBehaviour
     // This region just holds functions for the Dev Generate Buttons
     // Will not be needed in the final game as players will not have these buttons
     #region Dev Generation Functions
+
+    
     public void GenerateWorldOnClick()
     {
         m_loadingPanel.SetActive(true);
@@ -85,83 +89,86 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         variableHolder = null;
-
+        m_gameManager = GameManager.Instance;
         GenerateWorldOnClick();
     }
 
     private void Update()
     {
-        DisplayTileValues();
-
-        //Clicking
-        if ((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))&&!mouseDown)
+        if (m_gameManager.m_gameState == GameState.Game)
         {
-            mouseDown = true;
-            storedMousePos= Input.mousePosition;
-            mouseDownTime = Time.realtimeSinceStartupAsDouble;
-        }
+            DisplayTileValues();
 
-        if((Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))&&mouseDown)
-        {
-            mouseDown = false;  
-            if(Time.realtimeSinceStartupAsDouble - mouseDownTime < m_clickSpeed)
+            //Clicking
+            if ((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && !mouseDown)
             {
-                //select this tile
-                Ray ray = m_camera.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit))
+                mouseDown = true;
+                storedMousePos = Input.mousePosition;
+                mouseDownTime = Time.realtimeSinceStartupAsDouble;
+            }
+
+            if ((Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1)) && mouseDown)
+            {
+                mouseDown = false;
+                if (Time.realtimeSinceStartupAsDouble - mouseDownTime < m_clickSpeed)
                 {
-                    //reset current material 
-                    if (variableHolder != null)
+                    //select this tile
+                    Ray ray = m_camera.ScreenPointToRay(Input.mousePosition);
+                    if (Physics.Raycast(ray, out RaycastHit hit))
                     {
-                        variableHolder.GetComponent<MeshRenderer>().materials[1].color = storedColour;
+                        //reset current material 
+                        if (variableHolder != null)
+                        {
+                            variableHolder.GetComponent<MeshRenderer>().materials[1].color = storedColour;
+                        }
+                        variableHolder = hit.collider.gameObject;
+                        storedColour = variableHolder.GetComponent<MeshRenderer>().materials[1].color;
+                        variableHolder.GetComponent<MeshRenderer>().materials[1].color = highlightColour;
+                        m_tileTitle.text = variableHolder.tag;
                     }
-                    variableHolder = hit.collider.gameObject;
-                    storedColour = variableHolder.GetComponent<MeshRenderer>().materials[1].color;
-                    variableHolder.GetComponent<MeshRenderer>().materials[1].color = highlightColour;
-                    m_tileTitle.text = variableHolder.tag;
                 }
             }
+
+
+            ///////////////////         Movement           ///////////////////////////////////
+            Vector3 direction = Vector3.zero;
+            if (mouseDown)
+            {
+                //move with dragging
+                direction = new Vector3(storedMousePos.x - Input.mousePosition.x, 0f, storedMousePos.y - Input.mousePosition.y) * m_cameraDragSpeed;
+                storedMousePos = Input.mousePosition;
+            }
+            else
+            {
+                //move camera with keyboard
+                direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            }
+
+            targetCamPos = m_cameraContainer.transform.position + (direction.normalized * m_cameraSpeed);
+            targetCamPos = new Vector3(Mathf.Clamp(targetCamPos.x, minMaxXPosition.x, minMaxXPosition.y), targetCamPos.y, Mathf.Clamp(targetCamPos.z, minMaxZPosition.x, minMaxZPosition.y));
+
+
+            //////////////////         Zooming         /////////////////////////////////
+
+            //zoom with keybaord
+            if (Input.GetKey(KeyCode.Equals) && m_camera.orthographicSize > m_minMaxCameraZoom.x)
+            {
+                m_camera.orthographicSize = Mathf.Max(m_camera.orthographicSize - (m_cameraZoomSpeed * Time.deltaTime), m_minMaxCameraZoom.x);
+            }
+
+            if (Input.GetKey(KeyCode.Minus) && m_camera.orthographicSize < m_minMaxCameraZoom.y)
+            {
+                m_camera.orthographicSize = Mathf.Min(m_camera.orthographicSize + (m_cameraZoomSpeed * Time.deltaTime), m_minMaxCameraZoom.y);
+            }
+
+            //scroll wheel zoom
+            m_camera.orthographicSize = Mathf.Clamp(m_camera.orthographicSize - (Input.mouseScrollDelta.y * m_cameraZoomSpeed), m_minMaxCameraZoom.x, m_minMaxCameraZoom.y);
         }
 
-        ///////////////////         Movement           ///////////////////////////////////
-        Vector3 direction = Vector3.zero;
-        if (mouseDown)
-        {
-            //move with dragging
-            direction = new Vector3(storedMousePos.x - Input.mousePosition.x, 0f, storedMousePos.y - Input.mousePosition.y)* m_cameraDragSpeed;
-            storedMousePos = Input.mousePosition;
-        }
-        else
-        {
-            //move camera with keyboard
-           direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        }
+        m_cameraContainer.transform.position = Vector3.Lerp(m_cameraContainer.transform.position, targetCamPos, Time.deltaTime);
 
-        targetCamPos = m_cameraContainer.transform.position + (direction.normalized * m_cameraSpeed);
-        targetCamPos = new Vector3(Mathf.Clamp(targetCamPos.x, minMaxXPosition.x, minMaxXPosition.y), targetCamPos.y, Mathf.Clamp(targetCamPos.z, minMaxZPosition.x, minMaxZPosition.y));
-
-
-        //////////////////         Zooming         /////////////////////////////////
-
-        //zoom with keybaord
-        if (Input.GetKey(KeyCode.Equals) && m_camera.orthographicSize > m_minMaxCameraZoom.x)
-        {
-            m_camera.orthographicSize = Mathf.Max(m_camera.orthographicSize- (m_cameraZoomSpeed * Time.deltaTime), m_minMaxCameraZoom.x);
-        }
-
-        if (Input.GetKey(KeyCode.Minus) && m_camera.orthographicSize < m_minMaxCameraZoom.y)
-        {
-            m_camera.orthographicSize = Mathf.Min(m_camera.orthographicSize + (m_cameraZoomSpeed*Time.deltaTime), m_minMaxCameraZoom.y);
-        }
-
-        //scroll wheel zoom
-        m_camera.orthographicSize = Mathf.Clamp(m_camera.orthographicSize - (Input.mouseScrollDelta.y * m_cameraZoomSpeed), m_minMaxCameraZoom.x, m_minMaxCameraZoom.y);
     }
 
-    private void LateUpdate()
-    {
-        m_cameraContainer.transform.position = Vector3.Lerp(m_cameraContainer.transform.position, targetCamPos, 0.1f);
-    }
 
     private void DisplayTileValues()
     {
@@ -171,10 +178,13 @@ public class PlayerController : MonoBehaviour
             VariableClass[] varClass = variableHolder.GetComponents<VariableClass>();
             foreach (VariableClass v in varClass)
             {
-                m_tileVariableObjects[variableNum].SetVariableClass(v);
-                m_tileVariableObjects[variableNum].gameObject.SetActive(true);
-                // tileVariableObjects[variableNum].SetText(v.variableName);
-                variableNum++;
+                if (v.value != 0)
+                {
+                    m_tileVariableObjects[variableNum].SetVariableClass(v);
+                    m_tileVariableObjects[variableNum].gameObject.SetActive(true);
+                    // tileVariableObjects[variableNum].SetText(v.variableName);
+                    variableNum++;
+                }
             }
 
             for(int i = variableNum; i< m_tileVariableObjects.Length; i++)

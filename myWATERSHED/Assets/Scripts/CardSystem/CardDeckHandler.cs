@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using TMPro;
 
 /// <summary>
 /// Handles creation of a shuffled card deck and ordering of cards to different states of use.
@@ -27,6 +28,10 @@ public class CardDeckHandler : MonoBehaviour
 
     private World m_world;
 
+    private GameManager m_gameManager;
+
+    [SerializeField]
+    private PlayedCardHolder m_playedCardHolder;
 
     private void Awake()
     {
@@ -41,6 +46,9 @@ public class CardDeckHandler : MonoBehaviour
 
     private void Start()
     {
+        //get game manager
+        m_gameManager = GameManager.Instance;
+
         m_shuffledIDDeck.Clear();
         m_cardsDealt.Clear();
         m_cardsInPlay.Clear();
@@ -98,6 +106,9 @@ public class CardDeckHandler : MonoBehaviour
 
     public void DealCards()
     {
+        //pause game time
+        m_gameManager.SetGameState(GameState.Pause, null);
+
         for (int i = 0; i < m_cardDealAmount; i++)
         {
             // Dequeue cards from the deck and add to list of cards dealt
@@ -110,8 +121,8 @@ public class CardDeckHandler : MonoBehaviour
                 m_cardUIObjects[i].SetActive(true);
 
                 // Populate card UI elements with data from Card
-                m_cardUIObjects[i].transform.Find("Card Name").GetComponent<Text>().text = m_cardAssets[cardDealt.cardAssetID].m_name;
-                m_cardUIObjects[i].transform.Find("Card Description").GetComponent<Text>().text = m_cardAssets[cardDealt.cardAssetID].m_description;
+                m_cardUIObjects[i].transform.Find("Card Name").GetComponent<TMP_Text>().text = m_cardAssets[cardDealt.cardAssetID].m_name;
+                m_cardUIObjects[i].transform.Find("Card Description").GetComponent<TMP_Text>().text = m_cardAssets[cardDealt.cardAssetID].m_description;
                 // etc. all other info passed here
                 // Ex:
                 //m_cardUIObjects[i].transform.Find("Card Image").GetComponent<Image>().sprite = m_cardAssets[cardDealt.cardAssetID].m_sprite;
@@ -127,11 +138,15 @@ public class CardDeckHandler : MonoBehaviour
             if (chosenCard.name == m_cardUIObjectHolder.transform.GetChild(i).name)
             {
                 m_cardsInPlay.Add(m_cardsDealt[i]);
+
+                m_playedCardHolder.AddNewCard(m_cardUIObjects[i].transform.Find("Card Name").GetComponent<TMP_Text>().text, m_cardUIObjects[i].transform.Find("Card Description").GetComponent<TMP_Text>().text);
+
             }
         }
         DiscardDealtCards();
         m_world.ChangeSeason(SeasonState.Summer);
-
+        //pause game time
+        m_gameManager.SetGameState(GameState.Game, null);
     }
 
     private void DiscardDealtCards()

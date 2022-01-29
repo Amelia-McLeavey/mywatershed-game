@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("There is already an instance of GameManager");
             Destroy(gameObject);
         }
+        m_gameState = GameState.Game;
     }
 
     /// <summary>
