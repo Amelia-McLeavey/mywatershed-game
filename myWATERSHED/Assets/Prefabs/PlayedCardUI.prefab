@@ -167,8 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f24be0f60c11464dbc9c2461f6726c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_cardSpeed: 1
-  m_hoverOverYPos: 40
+  m_cardSpeed: 5
+  m_hoverOverYPos: 100
 --- !u!1 &6555106606914336678
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class PlayedCard : MonoBehaviour
+public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private RectTransform rect;
     [SerializeField] private float m_cardSpeed;
@@ -20,13 +21,15 @@ public class PlayedCard : MonoBehaviour
         rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, Mathf.Lerp(rect.anchoredPosition.y, targetYPos, Time.deltaTime* m_cardSpeed));
     }
 
-    private void OnMouseEnter()
+    public void OnPointerEnter(PointerEventData eventData)
     {
+        Debug.Log("hovering over");
         targetYPos = m_hoverOverYPos;
     }
-
-    private void OnMouseExit()
+    public void OnPointerExit(PointerEventData eventData)
     {
+        Debug.Log("hovering over");
         targetYPos = 0f;
     }
+
 }

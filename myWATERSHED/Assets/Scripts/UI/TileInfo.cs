@@ -4,15 +4,63 @@ using UnityEngine;
 
 public class TileInfo : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private RectTransform rect;
+    [SerializeField] private bool m_showTileInfo;
+    [SerializeField] private float m_TileInfoSpeed;
+
+    private float offscreenYPos;
+    private float onscreenYPos;
+    private float xPos;
+
+    private float targetYPos;
+
+    private void Awake()
+    {
+        rect = this.GetComponent<RectTransform>();
+        xPos = rect.anchoredPosition.x;
+    }
     void Start()
     {
-        
+        StartCoroutine(LateStart());
     }
 
-    // Update is called once per frame
+    private IEnumerator LateStart()
+    {
+        yield return new WaitForEndOfFrame();
+        offscreenYPos = rect.rect.height;
+        targetYPos = offscreenYPos;
+        onscreenYPos = xPos;
+        m_showTileInfo = false;
+    }
+    
     void Update()
     {
-        
+        if(rect.anchoredPosition.y > targetYPos)
+        {
+            rect.anchoredPosition = new Vector2(xPos, Mathf.Max(rect.anchoredPosition.y - (Time.deltaTime * m_TileInfoSpeed), targetYPos));
+        }
+        else if (rect.anchoredPosition.y < targetYPos)
+        {
+            rect.anchoredPosition = new Vector2(xPos, Mathf.Min(rect.anchoredPosition.y + (Time.deltaTime * m_TileInfoSpeed), targetYPos));
+        }
+    }
+
+    public void ChangeTile()
+    {
+        if (!m_showTileInfo)
+        {
+            targetYPos = onscreenYPos;
+            m_showTileInfo = true;
+        }
+    }
+
+    public void DeselectTile()
+    {
+        if (m_showTileInfo)
+        {
+            m_showTileInfo = false;
+            offscreenYPos = rect.rect.height;
+            targetYPos = offscreenYPos;
+        }
     }
 }

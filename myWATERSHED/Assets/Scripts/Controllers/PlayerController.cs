@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
 public class PlayerController : MonoBehaviour
@@ -46,16 +47,19 @@ public class PlayerController : MonoBehaviour
 
     [Header("Tile Variables")]
 
-    [SerializeField] private GameObject m_tileInfoObject;
+    [SerializeField] private TileInfo m_tileInfoObject;
     [SerializeField] private TileVariableDisplay[] m_tileVariableObjects;
     [SerializeField] private TMP_Text m_tileTitle;
     [SerializeField] private Image m_tileImage;
 
+
+    private int mapRows;
+    private int mapColumns;
     // This region just holds functions for the Dev Generate Buttons
     // Will not be needed in the final game as players will not have these buttons
     #region Dev Generation Functions
 
-    
+
     public void GenerateWorldOnClick()
     {
         m_loadingPanel.SetActive(true);
@@ -66,12 +70,12 @@ public class PlayerController : MonoBehaviour
     private void hideLoadingPanel(int rows, int columns)
     {
         //center camera in the middle of the map
-        targetCamPos = new Vector3(rows / 2, 20f, columns * mapHeightMultiplyer / 2);
-
+        targetCamPos = new Vector3(rows / 2, 20f, (columns * mapHeightMultiplyer / 2)-cameraZOffset);
+        mapRows = rows;
+        mapColumns = columns;
         m_cameraContainer.transform.position = targetCamPos;
         //calculate camera restraints
-        minMaxXPosition = new Vector2(0 + m_cameraPadding, rows - m_cameraPadding);
-        minMaxZPosition = new Vector2(-cameraZOffset + m_cameraPadding, (columns * mapHeightMultiplyer) - cameraZOffset - m_cameraPadding);
+        CalculateCameraPadding();
         m_loadingPanel.SetActive(false);
     }
 
@@ -110,10 +114,12 @@ public class PlayerController : MonoBehaviour
             if ((Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1)) && mouseDown)
             {
                 mouseDown = false;
-                if (Time.realtimeSinceStartupAsDouble - mouseDownTime < m_clickSpeed)
+                if (Time.realtimeSinceStartupAsDouble - mouseDownTime < m_clickSpeed && !EventSystem.current.IsPointerOverGameObject())
                 {
                     //select this tile
                     Ray ray = m_camera.ScreenPointToRay(Input.mousePosition);
+
+                   
                     if (Physics.Raycast(ray, out RaycastHit hit))
                     {
                         //reset current material 
@@ -121,6 +127,7 @@ public class PlayerController : MonoBehaviour
                         {
                             variableHolder.GetComponent<MeshRenderer>().materials[1].color = storedColour;
                         }
+
                         variableHolder = hit.collider.gameObject;
                         storedColour = variableHolder.GetComponent<MeshRenderer>().materials[1].color;
                         variableHolder.GetComponent<MeshRenderer>().materials[1].color = highlightColour;
@@ -154,27 +161,54 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKey(KeyCode.Equals) && m_camera.orthographicSize > m_minMaxCameraZoom.x)
             {
                 m_camera.orthographicSize = Mathf.Max(m_camera.orthographicSize - (m_cameraZoomSpeed * Time.deltaTime), m_minMaxCameraZoom.x);
+                CalculateCameraPadding();
             }
 
             if (Input.GetKey(KeyCode.Minus) && m_camera.orthographicSize < m_minMaxCameraZoom.y)
             {
                 m_camera.orthographicSize = Mathf.Min(m_camera.orthographicSize + (m_cameraZoomSpeed * Time.deltaTime), m_minMaxCameraZoom.y);
+                CalculateCameraPadding();
             }
 
-            //scroll wheel zoom
-            m_camera.orthographicSize = Mathf.Clamp(m_camera.orthographicSize - (Input.mouseScrollDelta.y * m_cameraZoomSpeed), m_minMaxCameraZoom.x, m_minMaxCameraZoom.y);
+            if (Input.mouseScrollDelta.y != 0)
+            {
+                //scroll wheel zoom
+                m_camera.orthographicSize = Mathf.Clamp(m_camera.orthographicSize - (Input.mouseScrollDelta.y * m_cameraZoomSpeed), m_minMaxCameraZoom.x, m_minMaxCameraZoom.y);
+                CalculateCameraPadding();
+            }
+
         }
 
         m_cameraContainer.transform.position = Vector3.Lerp(m_cameraContainer.transform.position, targetCamPos, Time.deltaTime);
 
     }
 
+    private void CalculateCameraPadding()
+    {
+        minMaxXPosition = new Vector2(0 + m_cameraPadding + (m_camera.orthographicSize * 1.75f), mapRows - m_cameraPadding - (m_camera.orthographicSize * 1.75f));
+        minMaxZPosition = new Vector2(-cameraZOffset + m_cameraPadding + (m_camera.orthographicSize * 1.5f), (mapColumns * mapHeightMultiplyer) - cameraZOffset - m_cameraPadding - (m_camera.orthographicSize * 1.5f));
+    }
+
+
+    public void DeselectTile()
+    {
+        if (variableHolder != null)
+        {
+            variableHolder.GetComponent<MeshRenderer>().materials[1].color = storedColour;
+        }
+
+        variableHolder = null;
+
+        m_tileInfoObject.DeselectTile();
+    }
 
     private void DisplayTileValues()
     {
         int variableNum = 0;
+
         if (variableHolder != null)
         {
+            m_tileInfoObject.ChangeTile();
             VariableClass[] varClass = variableHolder.GetComponents<VariableClass>();
             foreach (VariableClass v in varClass)
             {

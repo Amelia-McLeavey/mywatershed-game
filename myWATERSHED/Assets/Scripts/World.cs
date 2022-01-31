@@ -79,8 +79,7 @@ public class World : MonoBehaviour
         {
             m_gameManager.SetGameState(GameState.Pause, null);
         }
-
-        UpdateAverageTemperature();
+      
     }
 
     public void OnClickReturnToMenu()
@@ -103,7 +102,7 @@ public class World : MonoBehaviour
             DisplayTotalDacePopulationInUI();
             m_cardDeckHandler.DealCards();
         }
-
+        UpdateAverageTemperature();
         // Change the season state and callback the event
         m_seasonState = season;
         OnSeasonChange?.Invoke(season);
