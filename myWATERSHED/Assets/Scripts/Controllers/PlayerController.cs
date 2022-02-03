@@ -53,6 +53,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Image m_tileImage;
 
 
+    [SerializeField] private Heatmap m_heatMap;
+
     private int mapRows;
     private int mapColumns;
     // This region just holds functions for the Dev Generate Buttons
@@ -76,6 +78,7 @@ public class PlayerController : MonoBehaviour
         m_cameraContainer.transform.position = targetCamPos;
         //calculate camera restraints
         CalculateCameraPadding();
+        m_heatMap.GenerateMaps();
         m_loadingPanel.SetActive(false);
     }
 
@@ -99,11 +102,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        //if the game is currently playing
         if (m_gameManager.m_gameState == GameState.Game)
         {
             DisplayTileValues();
 
-            //Clicking
+            //Clicking down
             if ((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && !mouseDown)
             {
                 mouseDown = true;
@@ -111,14 +115,15 @@ public class PlayerController : MonoBehaviour
                 mouseDownTime = Time.realtimeSinceStartupAsDouble;
             }
 
+            //click released
             if ((Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1)) && mouseDown)
             {
                 mouseDown = false;
+                //finds if the player has clicked quick enough and the mouse isnt currently over some UI
                 if (Time.realtimeSinceStartupAsDouble - mouseDownTime < m_clickSpeed && !EventSystem.current.IsPointerOverGameObject())
                 {
                     //select this tile
                     Ray ray = m_camera.ScreenPointToRay(Input.mousePosition);
-
                    
                     if (Physics.Raycast(ray, out RaycastHit hit))
                     {
@@ -128,6 +133,7 @@ public class PlayerController : MonoBehaviour
                             variableHolder.GetComponent<MeshRenderer>().materials[1].color = storedColour;
                         }
 
+                        //select new tile
                         variableHolder = hit.collider.gameObject;
                         storedColour = variableHolder.GetComponent<MeshRenderer>().materials[1].color;
                         variableHolder.GetComponent<MeshRenderer>().materials[1].color = highlightColour;
@@ -138,6 +144,7 @@ public class PlayerController : MonoBehaviour
 
 
             ///////////////////         Movement           ///////////////////////////////////
+            
             Vector3 direction = Vector3.zero;
             if (mouseDown)
             {
@@ -145,10 +152,32 @@ public class PlayerController : MonoBehaviour
                 direction = new Vector3(storedMousePos.x - Input.mousePosition.x, 0f, storedMousePos.y - Input.mousePosition.y) * m_cameraDragSpeed;
                 storedMousePos = Input.mousePosition;
             }
-            else
+            else if(Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
             {
                 //move camera with keyboard
                 direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            }
+            else
+            {
+                //move when mouse is off screen
+                if (Input.mousePosition.x < 0)
+                {
+                    direction.x = -1f;
+                }
+                else if (Input.mousePosition.x>Screen.width)
+                {
+                    direction.x = 1f;
+                }
+
+                if (Input.mousePosition.y < 0)
+                {
+                    direction.z = -1f;
+                }
+                else if (Input.mousePosition.y > Screen.height)
+                {
+                    direction.z = 1f;
+                }
+
             }
 
             targetCamPos = m_cameraContainer.transform.position + (direction.normalized * m_cameraSpeed);
