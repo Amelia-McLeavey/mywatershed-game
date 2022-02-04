@@ -18,9 +18,9 @@ public abstract class FlowStyle
 
     public void CacheTiles(int rows, int columns, BaseType baseType)
     {
-        for (int x = rows; x > 0; x--)
+        for (int x = rows - 1; x >= 0; x--)
         {
-            for (int y = columns; y > 0; y--)
+            for (int y = columns - 1; y >= 0; y--)
             {
                 Vector2 tileIndex = new Vector2(x, y);
 
