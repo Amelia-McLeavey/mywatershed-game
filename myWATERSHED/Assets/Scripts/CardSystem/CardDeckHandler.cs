@@ -106,9 +106,6 @@ public class CardDeckHandler : MonoBehaviour
 
     public void DealCards()
     {
-        //pause game time
-        m_gameManager.SetGameState(GameState.Pause, null);
-
         for (int i = 0; i < m_cardDealAmount; i++)
         {
             // Dequeue cards from the deck and add to list of cards dealt
@@ -145,8 +142,7 @@ public class CardDeckHandler : MonoBehaviour
         }
         DiscardDealtCards();
         m_world.ChangeSeason(SeasonState.Summer);
-        //pause game time
-        m_gameManager.SetGameState(GameState.Game, null);
+      
     }
 
     private void DiscardDealtCards()

@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float m_cameraSpeed;
     [SerializeField] private float m_cameraDragSpeed;
-    [SerializeField] private Camera m_camera;
+    public Camera m_camera;
     [SerializeField] private GameObject m_cameraContainer;
     [SerializeField] private float m_cameraPadding;
 
@@ -25,10 +25,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float m_clickSpeed = 0.2f;
 
     //used to find the actual z length of the map as the hexagons stack
-    private float mapHeightMultiplyer = 0.86f;
+    private float mapHeightMultiplyer = 0.857f;
     //as the camera is at an angle the z position needs to be offset
     //this can be calculated with camY / Tan(camAngle), which with the current settings equals 20
-    private float cameraZOffset = 20f;
+    private float cameraZOffset = 14f;
 
     private Vector2 minMaxXPosition;
     private Vector2 minMaxZPosition;
@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     [Header("World Gen")]
     [SerializeField] private GameObject m_loadingPanel;
     [SerializeField] private WorldGenerator m_worldGenScript;
+    private World m_world;
 
     [Header("Tile Variables")]
 
@@ -54,6 +55,7 @@ public class PlayerController : MonoBehaviour
 
 
     [SerializeField] private Heatmap m_heatMap;
+    [SerializeField] private HeatmapClickableOverlay m_heatMapClickableOverlay;
 
     private int mapRows;
     private int mapColumns;
@@ -95,6 +97,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        m_world = FindObjectOfType<World>();
         variableHolder = null;
         m_gameManager = GameManager.Instance;
         GenerateWorldOnClick();
@@ -103,7 +106,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         //if the game is currently playing
-        if (m_gameManager.m_gameState == GameState.Game)
+        if (m_world.m_seasonState == SeasonState.Summer)
         {
             DisplayTileValues();
 
@@ -191,12 +194,14 @@ public class PlayerController : MonoBehaviour
             {
                 m_camera.orthographicSize = Mathf.Max(m_camera.orthographicSize - (m_cameraZoomSpeed * Time.deltaTime), m_minMaxCameraZoom.x);
                 CalculateCameraPadding();
+                m_heatMapClickableOverlay.ChangeSize(m_camera.orthographicSize);
             }
 
             if (Input.GetKey(KeyCode.Minus) && m_camera.orthographicSize < m_minMaxCameraZoom.y)
             {
                 m_camera.orthographicSize = Mathf.Min(m_camera.orthographicSize + (m_cameraZoomSpeed * Time.deltaTime), m_minMaxCameraZoom.y);
                 CalculateCameraPadding();
+                m_heatMapClickableOverlay.ChangeSize(m_camera.orthographicSize);
             }
 
             if (Input.mouseScrollDelta.y != 0)
@@ -204,6 +209,7 @@ public class PlayerController : MonoBehaviour
                 //scroll wheel zoom
                 m_camera.orthographicSize = Mathf.Clamp(m_camera.orthographicSize - (Input.mouseScrollDelta.y * m_cameraZoomSpeed), m_minMaxCameraZoom.x, m_minMaxCameraZoom.y);
                 CalculateCameraPadding();
+                m_heatMapClickableOverlay.ChangeSize(m_camera.orthographicSize);
             }
 
         }
@@ -214,8 +220,8 @@ public class PlayerController : MonoBehaviour
 
     private void CalculateCameraPadding()
     {
-        minMaxXPosition = new Vector2(0 + m_cameraPadding + (m_camera.orthographicSize * 1.75f), mapRows - m_cameraPadding - (m_camera.orthographicSize * 1.75f));
-        minMaxZPosition = new Vector2(-cameraZOffset + m_cameraPadding + (m_camera.orthographicSize * 1.5f), (mapColumns * mapHeightMultiplyer) - cameraZOffset - m_cameraPadding - (m_camera.orthographicSize * 1.5f));
+        minMaxXPosition = new Vector2(m_cameraPadding + (m_camera.orthographicSize * 1.75f), mapRows - m_cameraPadding - (m_camera.orthographicSize * 1.75f));
+        minMaxZPosition = new Vector2(-cameraZOffset + m_cameraPadding + (m_camera.orthographicSize * 1.4f),(-cameraZOffset + mapColumns - m_cameraPadding) * mapHeightMultiplyer - (m_camera.orthographicSize * 1.4f));
     }
 
 
@@ -255,5 +261,16 @@ public class PlayerController : MonoBehaviour
                 m_tileVariableObjects[i].gameObject.SetActive(false);
             }
         }
+    }
+
+    public void SetCamPos(Vector3 position)
+    {
+        m_cameraContainer.transform.position = new Vector3(Mathf.Clamp(position.x, minMaxXPosition.x, minMaxXPosition.y), m_camera.transform.position.y, Mathf.Clamp(position.z - cameraZOffset, minMaxZPosition.x, minMaxZPosition.y));
+        //targetCamPos = m_camera.transform.position;
+    }
+
+    public Vector2 GetCamPos()
+    {
+        return new Vector2(m_camera.transform.position.x, (m_camera.transform.position.z/ 0.857f) + cameraZOffset);
     }
 }
