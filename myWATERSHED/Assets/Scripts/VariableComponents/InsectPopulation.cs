@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class InsectPopulation : VariableClass
 {
-    //public int m_InsectPopulation;
-
     [HideInInspector]
-    public List<int> m_GatheredInsectPopulationValues = new List<int>();
+    public float[] m_gatheredInsectPopValues = new float[6];
+    [HideInInspector]
+    public int m_numGatheredInsectPopValues = 0;
 
     private void Awake()
     {

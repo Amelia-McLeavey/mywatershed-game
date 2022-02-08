@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class WaterTemperature : VariableClass
 {
-    //public float m_waterTemperature;
-    
     [HideInInspector]
-    public List<float> m_GatheredWaterTemperatureValues = new List<float>();
+    public float[] m_gatheredWaterTemperatureValues = new float[6];
+    [HideInInspector]
+    public int m_numGatheredWaterTemperatureValues = 0;
 
     private void Awake()
     {

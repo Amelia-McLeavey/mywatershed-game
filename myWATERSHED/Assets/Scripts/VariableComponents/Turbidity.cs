@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Turbidity : VariableClass
 {
-    //public float m_Turbidity;
-
     [HideInInspector]
-    public List<float> m_GatheredTurbidityValues = new List<float>();
+    public float[] m_gatheredTurbidityValues = new float[6];
+    [HideInInspector]
+    public int m_numGatheredTurbidityValues = 0;
+
     private void Awake()
     {
         variableName = "Turbidity";
