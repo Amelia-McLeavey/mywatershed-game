@@ -6,16 +6,24 @@ using UnityEngine;
 /// Provides different custom math functions specific to the myWatershed project.
 /// </summary>
 
-public class MathUtility : MonoBehaviour
+public abstract class MathUtility
 {
-    public static float FloatArrayAverage(float[] values, int amount)
+    public static float FloatArrayAverage(float[] values, int count)
     {
+        float average; 
+        if (count == 0)
+        {
+            return 0;
+        }
+
         float totalValue = 0;
-        for (int i = 0; i < amount; i++)
+
+        for (int i = 0; i < count; i++)
         {
             totalValue += values[i];
         }
-        float average =  totalValue / amount;
+        average = totalValue / count;
+
         return average;
     }
 }
