@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PollutionLevel : VariableClass
 {
-    //public float m_PolutionLevel;
-
     [HideInInspector]
-    public List<float> m_GatheredPolutionValues = new List<float>();
+    public float[] m_gatheredPollutionValues = new float[6];
+    [HideInInspector]
+    public int m_numGatheredPollutionValues = 0;
 
     private void Awake()
     {

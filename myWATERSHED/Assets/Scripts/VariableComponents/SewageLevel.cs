@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class SewageLevel : VariableClass
 {
-   // public float m_SewageLevel;
-
     [HideInInspector]
-    public List<float> m_GatheredSewageValues = new List<float>();
+    public float[] m_gatheredSewageValues = new float[6];
+    [HideInInspector]
+    public int m_numGatheredSewageValues = 0;
 
     private void Awake()
     {
