@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private TileVariableDisplay[] m_tileVariableObjects;
     [SerializeField] private TMP_Text m_tileTitle;
     [SerializeField] private Image m_tileImage;
+    [SerializeField] private TMP_Text m_volunteerNum;
 
 
     [SerializeField] private Heatmap m_heatMap;
@@ -59,6 +60,8 @@ public class PlayerController : MonoBehaviour
 
     private int mapRows;
     private int mapColumns;
+
+    
     // This region just holds functions for the Dev Generate Buttons
     // Will not be needed in the final game as players will not have these buttons
     #region Dev Generation Functions
@@ -181,6 +184,8 @@ public class PlayerController : MonoBehaviour
                     direction.z = 1f;
                 }
 
+                //Debug.Log(direction);
+
             }
 
             targetCamPos = m_cameraContainer.transform.position + (direction.normalized * m_cameraSpeed);
@@ -247,7 +252,11 @@ public class PlayerController : MonoBehaviour
             VariableClass[] varClass = variableHolder.GetComponents<VariableClass>();
             foreach (VariableClass v in varClass)
             {
-                if (v.value != 0)
+                if (v.variableName == "Volunteers")
+                {
+                    m_volunteerNum.text = v.value.ToString();
+                }
+                else if (v.value != 0)
                 {
                     m_tileVariableObjects[variableNum].SetVariableClass(v);
                     m_tileVariableObjects[variableNum].gameObject.SetActive(true);

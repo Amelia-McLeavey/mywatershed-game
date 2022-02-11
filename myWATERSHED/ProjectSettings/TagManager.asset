@@ -24,6 +24,7 @@ TagManager:
   - UrbanOpenSpace
   - Vacant
   - Wetland
+  - Meeple
   layers:
   - Default
   - TransparentFX

@@ -371,5 +371,7 @@ public class SystemGenerator : MonoBehaviour
                 Debug.LogError($"There is no PhysicalType associated with tile at index {currentTile.GetComponent<Tile>().m_TileIndex}");
                 break;
         }
+
+        currentTile.AddComponent(typeof(Volunteers));
     }
 }
