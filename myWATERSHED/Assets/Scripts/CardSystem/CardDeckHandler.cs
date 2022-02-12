@@ -33,6 +33,8 @@ public class CardDeckHandler : MonoBehaviour
     [SerializeField]
     private PlayedCardHolder m_playedCardHolder;
 
+    private int cardSelected=0;
+
     private void Awake()
     {
         m_world = FindObjectOfType<World>();
@@ -120,6 +122,7 @@ public class CardDeckHandler : MonoBehaviour
                 // Populate card UI elements with data from Card
                 m_cardUIObjects[i].transform.Find("Card Name").GetComponent<TMP_Text>().text = m_cardAssets[cardDealt.cardAssetID].m_name;
                 m_cardUIObjects[i].transform.Find("Card Description").GetComponent<TMP_Text>().text = m_cardAssets[cardDealt.cardAssetID].m_description;
+                m_cardUIObjects[i].transform.Find("Card Stats").GetComponent<TMP_Text>().text = m_cardAssets[cardDealt.cardAssetID].m_amountOfTilesTargeted.ToString();
                 // etc. all other info passed here
                 // Ex:
                 //m_cardUIObjects[i].transform.Find("Card Image").GetComponent<Image>().sprite = m_cardAssets[cardDealt.cardAssetID].m_sprite;
@@ -135,24 +138,27 @@ public class CardDeckHandler : MonoBehaviour
             if (chosenCard.name == m_cardUIObjectHolder.transform.GetChild(i).name)
             {
                 m_cardsInPlay.Add(m_cardsDealt[i]);
-
-                m_playedCardHolder.AddNewCard(m_cardUIObjects[i].transform.Find("Card Name").GetComponent<TMP_Text>().text, m_cardUIObjects[i].transform.Find("Card Description").GetComponent<TMP_Text>().text);
-
+                cardSelected = i;
             }
         }
-        DiscardDealtCards();
+        StartCoroutine(DiscardDealtCards());
         m_world.ChangeSeason(SeasonState.Summer);
       
     }
 
-    private void DiscardDealtCards()
+    private IEnumerator DiscardDealtCards()
     {
+        yield return new WaitForSeconds(1f);
         for (int i = 0; i < m_cardDealAmount; i++)
         {
             m_cardUIObjects[i].SetActive(false);
         }
 
+        m_playedCardHolder.AddNewCard(m_cardUIObjects[cardSelected].transform.Find("Card Name").GetComponent<TMP_Text>().text, m_cardUIObjects[cardSelected].transform.Find("Card Description").GetComponent<TMP_Text>().text);
+
         m_cardsDealt.Clear();
+
+
     }
 
     // TODO: 

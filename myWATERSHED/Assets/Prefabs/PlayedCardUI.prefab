@@ -236,8 +236,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: CARD NAME
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d3a569ef8be49a845892b9824b47779f, type: 2}
-  m_sharedMaterial: {fileID: 8576708207792204297, guid: d3a569ef8be49a845892b9824b47779f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 33e911ad069b9bf4fa67e3b6cbea99d1, type: 2}
+  m_sharedMaterial: {fileID: 3570597248730600831, guid: 33e911ad069b9bf4fa67e3b6cbea99d1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -261,7 +261,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15.55
+  m_fontSize: 15.7
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

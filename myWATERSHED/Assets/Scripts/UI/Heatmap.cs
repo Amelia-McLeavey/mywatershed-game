@@ -55,6 +55,7 @@ public class Heatmap : MonoBehaviour
 
                 SetPixel(new Vector2(x, y), "Turbidity", turbidityTexture, new Color(0.2f, 0.3f, 1f), true);
 
+                
             }
         }
 

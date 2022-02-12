@@ -21,7 +21,7 @@ public class PopupText : MonoBehaviour
     {
         if (text.enabled)
         {
-            rt.anchoredPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y) + offset;
+            rt.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y) + offset;
         }
     }
     public void ShowPopUp(string textToDisplay)
