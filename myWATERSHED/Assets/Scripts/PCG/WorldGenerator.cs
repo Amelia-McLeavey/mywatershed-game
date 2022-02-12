@@ -22,6 +22,11 @@ public class WorldGenerator : MonoBehaviour
 
     private Transform worldHolder;
 
+    private void Awake()
+    {
+        m_Seed = SeedPickerPanel.seed;
+    }
+
     public void GenerateWorld()
     {
         ResetWorld();

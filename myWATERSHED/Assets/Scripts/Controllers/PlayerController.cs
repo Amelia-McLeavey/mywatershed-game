@@ -280,6 +280,6 @@ public class PlayerController : MonoBehaviour
 
     public Vector2 GetCamPos()
     {
-        return new Vector2(m_camera.transform.position.x, (m_camera.transform.position.z/ 0.857f) + cameraZOffset);
+        return new Vector2(m_camera.transform.position.x, (m_camera.transform.position.z/ 0.857f) + cameraZOffset +1f);
     }
 }
