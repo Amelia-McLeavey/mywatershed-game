@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         //if the game is currently playing
-        if (m_world.m_seasonState == SeasonState.Summer)
+        if (m_world.m_seasonState == SeasonState.Summer && m_gameManager.m_gameState == GameState.Game)
         {
             DisplayTileValues();
 

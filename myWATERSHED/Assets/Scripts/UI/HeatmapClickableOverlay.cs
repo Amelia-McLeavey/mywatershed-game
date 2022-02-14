@@ -15,18 +15,20 @@ public class HeatmapClickableOverlay : MonoBehaviour
     public RectTransform cameraOverlay;
 
     private World m_world;
+    private GameManager m_gameManager;
 
     // Start is called before the first frame update
     void Start()
     {
         m_world = FindObjectOfType<World>();
+        m_gameManager = GameManager.Instance;
         rect = this.GetComponent<RectTransform>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(m_world.m_seasonState == SeasonState.Summer && (Input.GetMouseButtonDown(0)|| Input.GetMouseButtonDown(1)))
+        if(m_world.m_seasonState == SeasonState.Summer && m_gameManager.m_gameState == GameState.Game && (Input.GetMouseButtonDown(0)|| Input.GetMouseButtonDown(1)))
         {
             //mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 
