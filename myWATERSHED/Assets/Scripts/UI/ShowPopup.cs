@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 public class ShowPopup : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -10,6 +11,10 @@ public class ShowPopup : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private void Start()
     {
         popupText = GameObject.FindObjectOfType<PopupText>();
+        if (GetComponent<Image>() != null)
+        {
+            this.GetComponent<Image>().alphaHitTestMinimumThreshold = 0.8f;
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)

@@ -138,14 +138,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9339623, g: 0.922788, b: 0.629984, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 27e431093bd212e4380db0488ca125d5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -203,8 +203,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -20.2248}
-  m_SizeDelta: {x: 96.381, y: 35.6495}
+  m_AnchoredPosition: {x: 0.41500092, y: -23.685402}
+  m_SizeDelta: {x: 80.4951, y: 28.7283}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6391743420271650729
 CanvasRenderer:
@@ -261,7 +261,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15.7
+  m_fontSize: 13.1
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -471,8 +471,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.8872, y: -2.3941}
-  m_SizeDelta: {x: 92.9282, y: 52.6066}
+  m_AnchoredPosition: {x: 0.41498184, y: -0.33893}
+  m_SizeDelta: {x: 80.495, y: 56.717}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1334972789380546601
 CanvasRenderer:
@@ -504,8 +504,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: This card makes all the fish cooler
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 33e911ad069b9bf4fa67e3b6cbea99d1, type: 2}
-  m_sharedMaterial: {fileID: 3570597248730600831, guid: 33e911ad069b9bf4fa67e3b6cbea99d1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3d82daf563be9354dbab5d14b0ef07a7, type: 2}
+  m_sharedMaterial: {fileID: 2873192391264514337, guid: 3d82daf563be9354dbab5d14b0ef07a7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -529,7 +529,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14.4
+  m_fontSize: 12.75
   m_fontSizeBase: 13.4
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -537,7 +537,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0

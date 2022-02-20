@@ -8,8 +8,9 @@ public class TileInfo : MonoBehaviour
     [SerializeField] private bool m_showTileInfo;
     [SerializeField] private float m_TileInfoSpeed;
 
+
     private float offscreenYPos;
-    private float onscreenYPos;
+    public float onscreenYPos;
     private float xPos;
 
     private float targetYPos;
@@ -29,7 +30,6 @@ public class TileInfo : MonoBehaviour
         yield return new WaitForEndOfFrame();
         offscreenYPos = rect.rect.height;
         targetYPos = offscreenYPos;
-        onscreenYPos = xPos;
         m_showTileInfo = false;
     }
     

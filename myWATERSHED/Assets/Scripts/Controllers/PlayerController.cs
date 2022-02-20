@@ -61,7 +61,10 @@ public class PlayerController : MonoBehaviour
     private int mapRows;
     private int mapColumns;
 
-    
+    [SerializeField] private PieChart m_pieChart;
+    private char[] TitleChars;
+    private string Capitals = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
     // This region just holds functions for the Dev Generate Buttons
     // Will not be needed in the final game as players will not have these buttons
     #region Dev Generation Functions
@@ -143,7 +146,16 @@ public class PlayerController : MonoBehaviour
                         variableHolder = hit.collider.gameObject;
                         storedColour = variableHolder.GetComponent<MeshRenderer>().materials[1].color;
                         variableHolder.GetComponent<MeshRenderer>().materials[1].color = highlightColour;
-                        m_tileTitle.text = variableHolder.tag;
+                        TitleChars = variableHolder.tag.ToCharArray();
+                        m_tileTitle.text = "";
+                        foreach (char letter in TitleChars)
+                        {
+                            if (Capitals.Contains(letter.ToString()))
+                            {
+                                m_tileTitle.text += " ";
+                            }
+                            m_tileTitle.text += letter;
+                        }
                     }
                 }
             }
@@ -248,6 +260,10 @@ public class PlayerController : MonoBehaviour
 
         if (variableHolder != null)
         {
+            //pie chart//
+            m_pieChart.ResetAllValues();
+            //pie chart//
+
             m_tileInfoObject.ChangeTile();
             VariableClass[] varClass = variableHolder.GetComponents<VariableClass>();
             foreach (VariableClass v in varClass)
@@ -263,9 +279,32 @@ public class PlayerController : MonoBehaviour
                     // tileVariableObjects[variableNum].SetText(v.variableName);
                     variableNum++;
                 }
-            }
 
-            for(int i = variableNum; i< m_tileVariableObjects.Length; i++)
+
+                /////// PIE CHART STUFF //////////////
+                if (v.variableName.Contains("Population"))
+                {
+                    if (v.variableName.Contains("Red"))
+                    {
+                        m_pieChart.redDacePop = v.value;
+                    }
+                    else if(v.variableName.Contains("Chub"))
+                    {
+                        m_pieChart.chubPop = v.value;
+                    }
+                    else if (v.variableName.Contains("Trout"))
+                    {
+                        m_pieChart.troutPop = v.value;
+                    }
+                    else if(v.variableName.Contains("Insect"))
+                    {
+                        m_pieChart.insectPop = v.value;
+                    }     
+                }    
+            }
+            m_pieChart.ShowPie();
+
+            for (int i = variableNum; i< m_tileVariableObjects.Length; i++)
             {
                 m_tileVariableObjects[i].gameObject.SetActive(false);
             }

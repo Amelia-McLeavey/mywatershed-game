@@ -9,9 +9,10 @@ public class Heatmap : MonoBehaviour
     private WorldGenerator m_worldGenerator;
     [SerializeField] private RawImage asphaltDensImage;
     [SerializeField] private RawImage turbidityImage;
+    [SerializeField] private RawImage redDacePopImage;
 
     private float colValue;
-    public enum varOptions { asphaltDensity, turbidity}
+    public enum varOptions { asphaltDensity, turbidity, redDacePop}
 
     private varOptions selectedVar = varOptions.asphaltDensity;
     
@@ -44,6 +45,10 @@ public class Heatmap : MonoBehaviour
         turbidityImage.texture = turbidityTexture;
         turbidityImage.SetNativeSize();
 
+        Texture2D redDaceTexture = new Texture2D(m_worldGenerator.m_rows, m_worldGenerator.m_columns);
+        redDaceTexture.filterMode = FilterMode.Point;
+        redDacePopImage.texture = redDaceTexture;
+        redDacePopImage.SetNativeSize();
         //loop though all tiles once and update all data
         for (int y =0; y < asphaltTexture.height; y++)
         {
@@ -55,7 +60,7 @@ public class Heatmap : MonoBehaviour
 
                 SetPixel(new Vector2(x, y), "Turbidity", turbidityTexture, new Color(0.2f, 0.3f, 1f), true);
 
-                
+                SetPixel(new Vector2(x, y), "RedDacePopulation", redDaceTexture, new Color(0.2f, 0.3f, 1f), true);
             }
         }
 
@@ -106,7 +111,10 @@ public class Heatmap : MonoBehaviour
         switch (newOption)
         {
             case varOptions.turbidity:
-                return turbidityImage.gameObject; 
+                return turbidityImage.gameObject;
+
+            case varOptions.redDacePop:
+                return redDacePopImage.gameObject;
 
             default:
                 return asphaltDensImage.gameObject;
