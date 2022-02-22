@@ -29,6 +29,13 @@ public class PlayedCardHolder : MonoBehaviour
         LayoutCards();
     }
 
+    public void DurationExpired() { 
+    //pass which card's duration is expired
+    //remove it from the cards list
+    //somethingorother rect?
+    //yes
+    }
+
     private void LayoutCards()
     {
         if (cards.Count * m_targetSpacing > rect.rect.width)

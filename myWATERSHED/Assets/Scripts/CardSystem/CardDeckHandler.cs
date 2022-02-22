@@ -34,6 +34,9 @@ public class CardDeckHandler : MonoBehaviour
     private PlayedCardHolder m_playedCardHolder;
 
     private int cardSelected=0;
+    PlayedCardHolder cardHolder;
+
+   
 
     private void Awake()
     {
@@ -44,6 +47,9 @@ public class CardDeckHandler : MonoBehaviour
 
         // Load the deck of card IDs
         LoadDeck();
+
+        //find the played card holder
+        cardHolder = GameObject.Find("PlayedCardHolder").GetComponent<PlayedCardHolder>();
     }
 
     private void Start()
@@ -123,10 +129,13 @@ public class CardDeckHandler : MonoBehaviour
                 m_cardUIObjects[i].transform.Find("Card Name").GetComponent<TMP_Text>().text = m_cardAssets[cardDealt.cardAssetID].m_name;
                 m_cardUIObjects[i].transform.Find("Card Description").GetComponent<TMP_Text>().text = m_cardAssets[cardDealt.cardAssetID].m_description;
                 m_cardUIObjects[i].transform.Find("Card Stats").GetComponent<TMP_Text>().text = m_cardAssets[cardDealt.cardAssetID].m_amountOfTilesTargeted.ToString();
+                //m_cardUIObjects[i].transform.Find("Card Duration").GetComponent<TMP_Text>().text = m.cardAssets[cardDealt.cardAssetID].m_effectDuration;
                 // etc. all other info passed here
                 // Ex:
                 //m_cardUIObjects[i].transform.Find("Card Image").GetComponent<Image>().sprite = m_cardAssets[cardDealt.cardAssetID].m_sprite;
                 //m_cardUIObjects[i].transform.Find("Cost").GetComponent<Text>().text = m_cardAssets[cardDealt.cardAssetID].m_initialCost.ToString();
+
+                
             }
         }
     }
@@ -139,11 +148,20 @@ public class CardDeckHandler : MonoBehaviour
             {
                 m_cardsInPlay.Add(m_cardsDealt[i]);
                 cardSelected = i;
+                
+                
             }
         }
+
+       
+        
+        
+
         StartCoroutine(DiscardDealtCards());
+
         m_world.ChangeSeason(SeasonState.Summer);
-      
+        DiscardPlayedCards();
+       
     }
 
     private IEnumerator DiscardDealtCards()
@@ -164,6 +182,22 @@ public class CardDeckHandler : MonoBehaviour
     // TODO: 
     public void DiscardPlayedCards()
     {
+        //take card being played and access it's duration variable
+        //create an int that stores this number
+        //create a reference to that card (we'll need this for it's effects as well no?)
+        //every time we PlayCard, we change season. therefore remove 1 from this counter int every time
+        //if the duration int is zero, discard that card by destroying the reference.
+        int counter;
+        foreach (CardInstance cardInPlay in m_cardsInPlay)
+        {
+            counter = cardInPlay.durationRemaining;
+            counter--;
+            if (counter <= 0) {
+                //discard the card?
+                cardHolder.DurationExpired();
+            }
+        }
 
+        
     }
 }
