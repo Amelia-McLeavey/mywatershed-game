@@ -8,5 +8,6 @@ public class RiparianLevel : VariableClass
     private void Awake()
     {
         variableName = "Riparian Level";
+        moreIsBad = false;
     }
 }

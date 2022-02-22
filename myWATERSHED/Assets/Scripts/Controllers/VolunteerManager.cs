@@ -23,6 +23,9 @@ public class VolunteerManager : MonoBehaviour
     [SerializeField] private GameObject volunteerPrefab;
     [SerializeField] private GameObject volunteerOverlay;
 
+
+    public List<Volunteers> allVolunteers = new List<Volunteers>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,7 +55,10 @@ public class VolunteerManager : MonoBehaviour
                     volunteer.transform.localPosition = volunteer.transform.localPosition + new Vector3(0f, tile.transform.localScale.z / 6f, 0f);
                     volunteer.transform.eulerAngles = new Vector3(-90f, 0f, 0f);
                     volunteer.transform.SetParent(tile.transform);
+
                 }
+
+                allVolunteers.Add(volScript);
             }
 
             volScript.value += m_numberOfVolunteersPerClick;
@@ -82,11 +88,28 @@ public class VolunteerManager : MonoBehaviour
                         {
                             Destroy(child.gameObject);
                         }
+                        if (child.CompareTag("VolunteerOverlay"))
+                        {
+                            Destroy(child.gameObject);
+                            break;
+                        }
+
                     }
                 }
-                
+
+                allVolunteers.Remove(volScript);
+
             }
         }
 
+    }
+
+
+    public void CallVolunteers()
+    {
+        foreach(Volunteers vol in allVolunteers)
+        {
+            vol.UpdateValues();
+        }
     }
 }

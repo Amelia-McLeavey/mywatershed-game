@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum GameState { MainMenu, Game, Pause }
+public enum GameState { MainMenu, Game, Pause, Frozen }
 
 /// <summary>
 /// This script exists to track the different game state and provide a way to change between states.
@@ -54,6 +54,15 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(sceneName);
         }
+
+        //if(state == GameState.Pause)
+        //{
+        //    Time.timeScale = 0;
+        //}
+        //else
+        //{
+        //    Time.timeScale = 1;
+        //}
     }
 
     public void OnApplicationQuit()

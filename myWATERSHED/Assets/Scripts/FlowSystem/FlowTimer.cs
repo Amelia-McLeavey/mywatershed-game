@@ -15,12 +15,15 @@ public class FlowTimer : MonoBehaviour
     public float m_flowTime;
 
     private World m_world;
+    private GameManager m_gameManager;
 
+    private VolunteerManager volunteerManager;
     private void Awake()
     {
         // Check that the flowTime variable is greater than 0, stop the program if so.
         Debug.Assert(m_flowTime > 0, "flowTime must be greater than 0.");
-
+        m_gameManager = GameManager.Instance;
+        volunteerManager = GameObject.FindObjectOfType<VolunteerManager>();
         m_world = FindObjectOfType<World>();
     }
 
@@ -53,7 +56,15 @@ public class FlowTimer : MonoBehaviour
 
     private IEnumerator SummerLengthTimer()
     {
-        yield return new WaitForSeconds(m_world.m_summerLengthInSeconds);
+        int sec = 0;
+        while (sec < m_world.m_summerLengthInSeconds)
+        {
+            yield return new WaitForSeconds(1f);
+            if (m_gameManager.m_gameState==GameState.Game)
+            {
+                sec++;
+            }
+        }
         m_world.ChangeSeason(SeasonState.Winter);
     }
 
@@ -62,7 +73,11 @@ public class FlowTimer : MonoBehaviour
         while (m_world.m_seasonState == SeasonState.Summer)
         {
             yield return new WaitForSeconds(m_flowTime);
-            OnFlowControlTimerTick?.Invoke();
+            if (m_gameManager.m_gameState == GameState.Game)
+            {
+                OnFlowControlTimerTick?.Invoke();
+                volunteerManager.CallVolunteers();
+            }
             //Debug.Log("TICK");
         }
     }

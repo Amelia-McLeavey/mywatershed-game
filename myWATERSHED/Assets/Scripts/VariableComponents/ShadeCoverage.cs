@@ -9,5 +9,6 @@ public class ShadeCoverage : VariableClass
     private void Awake()
     {
         variableName = "Shade Coverage";
+        moreIsBad = false;
     }
 }

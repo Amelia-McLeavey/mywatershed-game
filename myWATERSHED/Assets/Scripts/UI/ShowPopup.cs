@@ -11,9 +11,9 @@ public class ShowPopup : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private void Start()
     {
         popupText = GameObject.FindObjectOfType<PopupText>();
-        if (GetComponent<Image>() != null)
+        if (GetComponent<Image>() != null && GetComponent<Image>().mainTexture.isReadable)
         {
-            this.GetComponent<Image>().alphaHitTestMinimumThreshold = 0.8f;
+                this.GetComponent<Image>().alphaHitTestMinimumThreshold = 0.8f;
         }
     }
 

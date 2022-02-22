@@ -16,8 +16,7 @@ public class Volunteers : VariableClass
     {
         variableName = "Volunteers";
         value = 0;
-        moreIsBad = false;
-
+        moreIsBad = false;     
     }
 
     public void SetSurroundingTiles(Vector2 tileIndex)
@@ -51,20 +50,24 @@ public class Volunteers : VariableClass
         }
     }
 
-    //TAKE THIS OUT!!!!
-    //DEBUGGING ONLY
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.V) && affectedTiles.Count!=0)
-        {
-            volManager = GameObject.FindObjectOfType<VolunteerManager>();
+    ////TAKE THIS OUT!!!!
+    ////DEBUGGING ONLY
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.V) && affectedTiles.Count!=0)
+    //    {
+    //       
 
-            UpdateValues();
-        }
-    }
+    //        UpdateValues();
+    //    }
+    //}
 
     public void UpdateValues()
     {
+        if (volManager == null)
+        {
+            volManager = GameObject.FindObjectOfType<VolunteerManager>();
+        }
         for(int i = 0; i< affectedTiles.Count; i++)
         {
             foreach (VariablesAffected varAffected in volManager.variablesAffected)

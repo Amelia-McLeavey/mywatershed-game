@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5496504124181410833}
   m_Layer: 0
   m_Name: VolunteerOverlay
-  m_TagString: Meeple
+  m_TagString: VolunteerOverlay
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

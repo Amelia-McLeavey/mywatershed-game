@@ -25,6 +25,7 @@ TagManager:
   - Vacant
   - Wetland
   - Meeple
+  - VolunteerOverlay
   layers:
   - Default
   - TransparentFX

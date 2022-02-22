@@ -29,6 +29,8 @@ public class World : MonoBehaviour
     [SerializeField]
     private Slider m_temperatureSlider;
     [SerializeField]
+    private Slider m_turbiditySlider;
+    [SerializeField]
     private TMP_Text m_temperatureText;
 
     [SerializeField]
@@ -39,15 +41,20 @@ public class World : MonoBehaviour
 
     private int m_redDaceTotalPopulation;
     private int m_averageTemperature;
+    private float m_averageTurbidity;
 
     private GameManager m_gameManager;
     private WorldGenerator m_worldGenerator;
     private CardDeckHandler m_cardDeckHandler;
 
+    private Heatmap heatmap;
+
     public SeasonState m_seasonState { get; private set; }
 
     private void Start()
     {
+        heatmap = GameObject.FindObjectOfType<Heatmap>();
+
         if (m_temperatureSlider == null)
         {
             Debug.LogWarning("m_temperatureSlider is not connected.");
@@ -65,7 +72,7 @@ public class World : MonoBehaviour
         m_worldGenerator = FindObjectOfType<WorldGenerator>();
         m_cardDeckHandler = FindObjectOfType<CardDeckHandler>();
         m_seasonState = SeasonState.Summer;
-        ChangeSeason(m_seasonState);
+        ChangeSeason(m_seasonState); 
     }
 
     private void Update()
@@ -94,15 +101,15 @@ public class World : MonoBehaviour
         {
             m_currentYear++;
             SetYear();
+
+            heatmap.GenerateMaps();
         }
         // Change to winter
         else if (m_seasonState == SeasonState.Summer && season == SeasonState.Winter)
         {
-            UpdateTotalDacePopulation();
-            DisplayTotalDacePopulationInUI();
+            UpdateAllData();
             m_cardDeckHandler.DealCards();
-        }
-        UpdateAverageTemperature();
+        }        
         // Change the season state and callback the event
         m_seasonState = season;
         OnSeasonChange?.Invoke(season);
@@ -117,11 +124,13 @@ public class World : MonoBehaviour
         }    
     }
 
-
-    // TODO: Bug, RSD Population not displaying correct data, not updating
-    public void UpdateTotalDacePopulation()
+    private void UpdateAllData()
     {
-        List<int> dace = new List<int>();
+        int totalDacePop = 0;
+        float totalTemp = 0;
+        float totalTurbidity = 0;
+
+        int numberOfTurbidTiles=0;
 
         for (int x = 0; x < m_worldGenerator.m_rows; x++)
         {
@@ -133,13 +142,64 @@ public class World : MonoBehaviour
                 {
                     if (value.GetComponent<Tile>().m_Basetype == BaseType.Water)
                     {
-                        dace.Add((int)value.GetComponent<RedDacePopulation>().value);
+                        totalDacePop += (int)value.GetComponent<RedDacePopulation>().value;
+                    }
+
+                    if (value.GetComponent<WaterTemperature>() != null)
+                    {
+                        totalTemp += value.GetComponent<WaterTemperature>().value;
+                    }
+
+                    if (value.GetComponent<Turbidity>() != null)
+                    {
+                        numberOfTurbidTiles++;
+                        totalTurbidity += value.GetComponent<Turbidity>().value;
                     }
                 }
             }
         }
 
-        m_redDaceTotalPopulation = dace.Sum();
+        Debug.Log(totalTurbidity);
+
+        m_redDaceTotalPopulation = totalDacePop;
+        DisplayTotalDacePopulationInUI();
+        m_averageTemperature = Mathf.RoundToInt(totalTemp / (m_worldGenerator.m_rows * m_worldGenerator.m_columns));
+        DisplayAverageTemperature();
+
+        m_averageTurbidity = totalTurbidity / numberOfTurbidTiles;
+        Debug.Log(m_averageTurbidity);
+        DisplayAverageTurbidity();
+    }
+
+
+
+    // TODO: Bug, RSD Population not displaying correct data, not updating
+    public void UpdateTotalDacePopulation()
+    {
+        List<int> dace = new List<int>();
+
+        int totalDacePop = 0;
+
+        for (int x = 0; x < m_worldGenerator.m_rows; x++)
+        {
+            for (int y = 0; y < m_worldGenerator.m_columns; y++)
+            {
+                Vector2 tileIndex = new Vector2(x, y);
+
+                if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
+                {
+                    if (value.GetComponent<Tile>().m_Basetype == BaseType.Water)
+                    {
+                        totalDacePop += (int)value.GetComponent<RedDacePopulation>().value;
+                        //dace.Add((int)value.GetComponent<RedDacePopulation>().value);
+                    }
+
+                }
+            }
+        }
+
+        m_redDaceTotalPopulation = totalDacePop;
+        //m_redDaceTotalPopulation = dace.Sum();
         //Debug.Log($"RSD Population: {m_redDaceTotalPopulation}");
     }
 
@@ -168,7 +228,7 @@ public class World : MonoBehaviour
 
     private void DisplayTotalDacePopulationInUI()
     {
-        m_daceHealthScript.SetHealth(m_redDaceTotalPopulation);
+        //m_daceHealthScript.SetHealth(m_redDaceTotalPopulation);
         // TODO: Share UI across scenes
         if (m_redDacePopulationText != null)
         {
@@ -191,5 +251,15 @@ public class World : MonoBehaviour
             m_temperatureText.text = m_averageTemperature.ToString();
         }
         
+    }
+
+    private void DisplayAverageTurbidity()
+    {
+        // TODO: Share UI across scenes
+        if (m_turbiditySlider != null)
+        {
+            m_turbiditySlider.value = m_averageTurbidity;
+        }
+
     }
 }

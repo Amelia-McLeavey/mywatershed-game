@@ -53,7 +53,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private TMP_Text m_tileTitle;
     [SerializeField] private Image m_tileImage;
     [SerializeField] private TMP_Text m_volunteerNum;
-
+    [SerializeField] private GameObject m_volunteerData;
+    [SerializeField] private GameObject m_volunteerFillerText;
 
     [SerializeField] private Heatmap m_heatMap;
     [SerializeField] private HeatmapClickableOverlay m_heatMapClickableOverlay;
@@ -112,7 +113,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         //if the game is currently playing
-        if (m_world.m_seasonState == SeasonState.Summer && m_gameManager.m_gameState == GameState.Game)
+        if (m_world.m_seasonState == SeasonState.Summer && m_gameManager.m_gameState != GameState.Pause)
         {
             DisplayTileValues();
 
@@ -263,6 +264,23 @@ public class PlayerController : MonoBehaviour
             //pie chart//
             m_pieChart.ResetAllValues();
             //pie chart//
+            bool canAddVol = true;
+            foreach(Transform child in variableHolder.transform)
+            {
+                if (child.CompareTag("VolunteerOverlay"))
+                {
+                    canAddVol = false;                                       
+                }
+                if (child.CompareTag("Meeple"))
+                {
+                    canAddVol = true;
+                    break;
+                }
+            }
+
+                m_volunteerData.SetActive(canAddVol);
+                m_volunteerFillerText.SetActive(!canAddVol);
+
 
             m_tileInfoObject.ChangeTile();
             VariableClass[] varClass = variableHolder.GetComponents<VariableClass>();

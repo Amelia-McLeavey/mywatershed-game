@@ -13,11 +13,14 @@ public class PauseTimeButton : MonoBehaviour
     }
     public void PauseClicked()
     {
-        m_gameManager.SetGameState(GameState.Pause, null);
+        if(m_gameManager.m_gameState == GameState.Frozen)
+        {
+            m_gameManager.SetGameState(GameState.Game, null);
+        }
+        else
+        {
+            m_gameManager.SetGameState(GameState.Frozen, null);
+        }
     }
 
-    public void PlayClicked()
-    {
-        m_gameManager.SetGameState(GameState.Game, null);
-    }
 }
