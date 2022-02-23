@@ -8,5 +8,6 @@ public class Sinuosity : VariableClass
     private void Awake()
     {
         variableName = "Sinuosity";
+        targetValue = 0.5f;
     }
 }

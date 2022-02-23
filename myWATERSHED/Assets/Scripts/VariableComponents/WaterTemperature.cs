@@ -13,5 +13,7 @@ public class WaterTemperature : VariableClass
     {
         variableName = "Temperature";
         moreIsBad = false;
+        maxValue = 30f;
+        targetValue = 12f;
     }
 }

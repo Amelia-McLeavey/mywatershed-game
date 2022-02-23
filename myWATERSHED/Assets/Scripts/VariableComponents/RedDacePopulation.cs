@@ -10,5 +10,6 @@ public class RedDacePopulation : VariableClass
         variableName = "Red Dace Population";
         moreIsBad = false;
         wholeNumbers = true;
+        maxValue = 100;
     }
 }

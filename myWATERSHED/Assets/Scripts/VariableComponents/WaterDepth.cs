@@ -9,5 +9,6 @@ public class WaterDepth : VariableClass
     {
         variableName = "Water Depth";
         moreIsBad = false;
+        maxValue = 10f;
     }
 }

@@ -14,5 +14,8 @@ public class InsectPopulation : VariableClass
         variableName = "Insect Population";
         moreIsBad = false;
         wholeNumbers = true;
+
+        maxValue = 1000;
+        targetValue = 1000;
     }
 }

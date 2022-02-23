@@ -9,4 +9,10 @@ public class VariableClass : MonoBehaviour
     public float value;
     public bool wholeNumbers = false;
     public bool moreIsBad = true;
+
+
+    public float maxValue = 1f;
+    public float minValue = 0f;
+    public float targetValue = 0f;
+
 }

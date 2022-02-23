@@ -8,5 +8,6 @@ public class RateOfFlow : VariableClass
     private void Awake()
     {
         variableName = "Rate of Flow";
+        targetValue = 0.5f;
     }
 }

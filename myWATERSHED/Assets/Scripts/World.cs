@@ -48,12 +48,14 @@ public class World : MonoBehaviour
     private CardDeckHandler m_cardDeckHandler;
 
     private Heatmap heatmap;
+    [SerializeField] private EndResultManager m_endResultManager;
 
     public SeasonState m_seasonState { get; private set; }
 
     private void Start()
     {
         heatmap = GameObject.FindObjectOfType<Heatmap>();
+        m_endResultManager.CallStart();
 
         if (m_temperatureSlider == null)
         {
@@ -109,6 +111,8 @@ public class World : MonoBehaviour
         {
             UpdateAllData();
             m_cardDeckHandler.DealCards();
+
+            m_endResultManager.AddDataPoint(m_currentYear, m_redDaceTotalPopulation);
         }        
         // Change the season state and callback the event
         m_seasonState = season;

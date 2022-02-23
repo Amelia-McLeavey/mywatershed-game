@@ -9,5 +9,8 @@ public class LandHeight : VariableClass
     {
         variableName = "Land Height";
         moreIsBad = false;
+
+        maxValue = 50;
+        targetValue = 25;
     }
 }

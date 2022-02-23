@@ -110,13 +110,15 @@ public class Heatmap : MonoBehaviour
             //if it can find a variableClass component with the name provided
             if (value.GetComponent(varName) as VariableClass)
             {
+                VariableClass variableClass = value.GetComponent(varName) as VariableClass;
+
                 if (moreIsBad)
                 {
-                    colValue = (1f - (value.GetComponent(varName) as VariableClass).value) * 0.3f;
+                    colValue = (variableClass.maxValue - variableClass.value)/ variableClass.maxValue * 0.3f;
                 }
                 else
                 {
-                    colValue = ((value.GetComponent(varName) as VariableClass).value) * 0.3f;
+                    colValue = variableClass.value / variableClass.maxValue * 0.3f;
                 }
                 //hue shifts colours intead of just using RGB
                 //the 0.3f above is to limit the range of colours - change this if you want more/less variety

@@ -10,5 +10,7 @@ public class RiverbedHealth : VariableClass
     {
         variableName = "Riverbed Health";
         moreIsBad = false;
+        maxValue = 200;
+        targetValue = 200;
     }
 }

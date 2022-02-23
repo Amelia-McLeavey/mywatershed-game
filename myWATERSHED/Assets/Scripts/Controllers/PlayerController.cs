@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
     [Header("Select Tile Variables")]
     
     public GameObject variableHolder;
+    private GameObject preVariableHolder;
     private Color storedColour;
     [SerializeField] private Color highlightColour;
 
@@ -62,7 +63,7 @@ public class PlayerController : MonoBehaviour
     private int mapRows;
     private int mapColumns;
 
-    [SerializeField] private PieChart m_pieChart;
+    [SerializeField] private BarGraph m_barGraph;
     private char[] TitleChars;
     private string Capitals = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -255,17 +256,19 @@ public class PlayerController : MonoBehaviour
         m_tileInfoObject.DeselectTile();
     }
 
+
+    
     private void DisplayTileValues()
     {
         int variableNum = 0;
-
+        
         if (variableHolder != null)
         {
-            //pie chart//
-            m_pieChart.ResetAllValues();
-            //pie chart//
+            m_barGraph.gameObject.SetActive(false);
             bool canAddVol = true;
-            foreach(Transform child in variableHolder.transform)
+            bool canShowBiotic = false;
+
+            foreach (Transform child in variableHolder.transform)
             {
                 if (child.CompareTag("VolunteerOverlay"))
                 {
@@ -278,11 +281,17 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-                m_volunteerData.SetActive(canAddVol);
-                m_volunteerFillerText.SetActive(!canAddVol);
+            m_volunteerData.SetActive(canAddVol);
+            m_volunteerFillerText.SetActive(!canAddVol);
 
+            m_barGraph.ResetAllValues();
 
-            m_tileInfoObject.ChangeTile();
+            if (variableHolder != preVariableHolder)
+            {
+                m_tileInfoObject.ChangeTile();
+                preVariableHolder = variableHolder;
+            }
+
             VariableClass[] varClass = variableHolder.GetComponents<VariableClass>();
             foreach (VariableClass v in varClass)
             {
@@ -290,37 +299,50 @@ public class PlayerController : MonoBehaviour
                 {
                     m_volunteerNum.text = v.value.ToString();
                 }
-                else if (v.value != 0)
+                else if (v.variableName.Contains("Population") || v.variableName.Contains("Riverbed") || v.variableName.Contains("Riparian"))
                 {
-                    m_tileVariableObjects[variableNum].SetVariableClass(v);
-                    m_tileVariableObjects[variableNum].gameObject.SetActive(true);
-                    // tileVariableObjects[variableNum].SetText(v.variableName);
-                    variableNum++;
-                }
-
-
-                /////// PIE CHART STUFF //////////////
-                if (v.variableName.Contains("Population"))
-                {
+                    canShowBiotic = true;
+                    m_tileInfoObject.showButtons = true;
                     if (v.variableName.Contains("Red"))
                     {
-                        m_pieChart.redDacePop = v.value;
+                        m_barGraph.redDacePop = v.value;
                     }
-                    else if(v.variableName.Contains("Chub"))
+                    else if (v.variableName.Contains("Chub"))
                     {
-                        m_pieChart.chubPop = v.value;
+                        m_barGraph.chubPop = v.value;
                     }
                     else if (v.variableName.Contains("Trout"))
                     {
-                        m_pieChart.troutPop = v.value;
+                        m_barGraph.troutPop = v.value;
                     }
-                    else if(v.variableName.Contains("Insect"))
+                    else
                     {
-                        m_pieChart.insectPop = v.value;
-                    }     
-                }    
+                        m_tileVariableObjects[variableNum].SetVariableClass(v);
+                        m_tileVariableObjects[variableNum].abiotic = false; 
+                        m_tileVariableObjects[variableNum].gameObject.SetActive(!m_tileInfoObject.displayAbiotic);
+                        variableNum++;
+                    }
+                }
+                else if (v.value != 0)
+                {
+                    m_tileVariableObjects[variableNum].SetVariableClass(v);
+                    m_tileVariableObjects[variableNum].abiotic = true;
+                    m_tileVariableObjects[variableNum].gameObject.SetActive(m_tileInfoObject.displayAbiotic);
+                    // tileVariableObjects[variableNum].SetText(v.variableName);
+                    variableNum++;
+                }                
             }
-            m_pieChart.ShowPie();
+
+            if(!m_tileInfoObject.displayAbiotic && !canShowBiotic)
+            {
+                m_tileInfoObject.displayAbiotic = true;
+            }
+            
+            if (!m_tileInfoObject.displayAbiotic)
+            {
+                m_barGraph.gameObject.SetActive(true);
+                m_barGraph.ShowGraph();
+            }
 
             for (int i = variableNum; i< m_tileVariableObjects.Length; i++)
             {

@@ -10,5 +10,6 @@ public class ShadeCoverage : VariableClass
     {
         variableName = "Shade Coverage";
         moreIsBad = false;
+        targetValue = 1;
     }
 }

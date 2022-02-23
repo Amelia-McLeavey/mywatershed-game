@@ -9,5 +9,6 @@ public class RiparianLevel : VariableClass
     {
         variableName = "Riparian Level";
         moreIsBad = false;
+        targetValue = 1f;
     }
 }

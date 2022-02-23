@@ -7,13 +7,19 @@ public class TileInfo : MonoBehaviour
     private RectTransform rect;
     [SerializeField] private bool m_showTileInfo;
     [SerializeField] private float m_TileInfoSpeed;
+    [SerializeField] private GameObject buttons;
 
+    public bool displayAbiotic = true;
+
+    public bool showButtons=false;
 
     private float offscreenYPos;
     public float onscreenYPos;
     private float xPos;
 
     private float targetYPos;
+
+
 
     private void Awake()
     {
@@ -43,10 +49,13 @@ public class TileInfo : MonoBehaviour
         {
             rect.anchoredPosition = new Vector2(xPos, Mathf.Min(rect.anchoredPosition.y + (Time.deltaTime * m_TileInfoSpeed), targetYPos));
         }
+
+        buttons.SetActive(showButtons);
     }
 
     public void ChangeTile()
     {
+        showButtons = false;
         if (!m_showTileInfo)
         {
             targetYPos = onscreenYPos;
@@ -62,5 +71,10 @@ public class TileInfo : MonoBehaviour
             offscreenYPos = rect.rect.height;
             targetYPos = offscreenYPos;
         }
+    }
+
+    public void ChangeInfo(bool showAbiotic)
+    {
+        displayAbiotic = showAbiotic;
     }
 }
