@@ -36,7 +36,8 @@ public class CardDeckHandler : MonoBehaviour
     private int cardSelected=0;
     PlayedCardHolder cardHolder;
 
-   
+    [SerializeField] private PlaceableCardUI m_placeableCard;
+
 
     private void Awake()
     {
@@ -106,7 +107,30 @@ public class CardDeckHandler : MonoBehaviour
         CardInstance dealtCard = new CardInstance
         {
             cardAssetID = id,
-            durationRemaining = m_cardAssets[id].m_effectDuration
+            cardName = m_cardAssets[id].m_name,
+            cardDescription = m_cardAssets[id].m_description,
+            durationRemaining = m_cardAssets[id].m_effectDuration,
+            delayBeforeEffect = m_cardAssets[id].m_timeBeforeEffect,
+            tileType = m_cardAssets[id].m_tileTypesAffected,
+            numberOfTiles = m_cardAssets[id].m_amountOfTilesTargeted,
+            global = (m_cardAssets[id].m_tileModificationScreen==0),
+            brownTroutInfluence = m_cardAssets[id].m_brownTroutPopulation,
+            creekChubInfluence = m_cardAssets[id].m_creekChubPopulation,
+            insectInfluence = m_cardAssets[id].m_insectPopulation,
+            redDaceInfluence = m_cardAssets[id].m_redDacePopulation,
+            riparianInfluence = m_cardAssets[id].m_riparianQuality,
+            riverbedHealthInfluence = m_cardAssets[id].m_riverbedHealth,
+            asphaltDensityInfluence = m_cardAssets[id].m_asphaltDensity,
+            erosionInfluence = m_cardAssets[id].m_erosionRate,
+            landHeightInfluence = m_cardAssets[id].m_landHeight,
+            pollutionInfluence = m_cardAssets[id].m_pollutionLevel,
+            flowRateInfluence = m_cardAssets[id].m_flowRate,
+            sewageInfluence = m_cardAssets[id].m_sewageLevel,
+            sinuousityInfluence = m_cardAssets[id].m_sinuosity,
+            shadeInfluence = m_cardAssets[id].m_shadeCoverage,
+            turbidityInfluence = m_cardAssets[id].m_turbidity,
+            waterDepthInfluence = m_cardAssets[id].m_waterDepth,
+            waterTempInfluence = m_cardAssets[id].m_waterTemperature
         };
 
         return dealtCard;
@@ -126,9 +150,21 @@ public class CardDeckHandler : MonoBehaviour
                 m_cardUIObjects[i].SetActive(true);
 
                 // Populate card UI elements with data from Card
-                m_cardUIObjects[i].transform.Find("Card Name").GetComponent<TMP_Text>().text = m_cardAssets[cardDealt.cardAssetID].m_name;
-                m_cardUIObjects[i].transform.Find("Card Description").GetComponent<TMP_Text>().text = m_cardAssets[cardDealt.cardAssetID].m_description;
-                m_cardUIObjects[i].transform.Find("Card Stats").GetComponent<TMP_Text>().text = m_cardAssets[cardDealt.cardAssetID].m_amountOfTilesTargeted.ToString();
+                m_cardUIObjects[i].transform.Find("Card Name").GetComponent<TMP_Text>().text = cardDealt.cardName;
+                m_cardUIObjects[i].transform.Find("Card Description").GetComponent<TMP_Text>().text = cardDealt.cardDescription;
+
+                string cardStats = cardDealt.tileType;
+
+                cardStats += "\n\nTiles affected: " + cardDealt.numberOfTiles;
+
+                cardStats += "\nDuration of Effect: " + cardDealt.durationRemaining;
+
+                if (cardDealt.delayBeforeEffect != 0)
+                {
+                    cardStats += "\nDelay before Effect: " + cardDealt.delayBeforeEffect;
+                }
+
+                m_cardUIObjects[i].transform.Find("Card Stats").GetComponent<TMP_Text>().text = cardStats;
                 //m_cardUIObjects[i].transform.Find("Card Duration").GetComponent<TMP_Text>().text = m.cardAssets[cardDealt.cardAssetID].m_effectDuration;
                 // etc. all other info passed here
                 // Ex:
@@ -147,15 +183,9 @@ public class CardDeckHandler : MonoBehaviour
             if (chosenCard.name == m_cardUIObjectHolder.transform.GetChild(i).name)
             {
                 m_cardsInPlay.Add(m_cardsDealt[i]);
-                cardSelected = i;
-                
-                
+                cardSelected = i;              
             }
         }
-
-       
-        
-        
 
         StartCoroutine(DiscardDealtCards());
 
@@ -172,7 +202,16 @@ public class CardDeckHandler : MonoBehaviour
             m_cardUIObjects[i].SetActive(false);
         }
 
-        m_playedCardHolder.AddNewCard(m_cardUIObjects[cardSelected].transform.Find("Card Name").GetComponent<TMP_Text>().text, m_cardUIObjects[cardSelected].transform.Find("Card Description").GetComponent<TMP_Text>().text);
+        if (m_cardsDealt[cardSelected].global)
+        {
+            m_playedCardHolder.AddNewCard(m_cardsDealt[cardSelected]);
+        }
+        else
+        {
+            m_placeableCard.SetUpCard(m_cardsDealt[cardSelected]);
+            
+            m_gameManager.SetGameState(GameState.Frozen, null);
+        }
 
         m_cardsDealt.Clear();
 

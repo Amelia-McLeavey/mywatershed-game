@@ -93,6 +93,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_cardSpeed: 5
   m_hoverOverYPos: 100
+  cardName: {fileID: 4883553003194682053}
+  cardDescription: {fileID: 7654386919839707582}
 --- !u!1 &6555106606914336678
 GameObject:
   m_ObjectHideFlags: 0

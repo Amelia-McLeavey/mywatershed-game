@@ -67,6 +67,10 @@ public class PlayerController : MonoBehaviour
     private char[] TitleChars;
     private string Capitals = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+    [SerializeField] private CardPlacementOverlay m_cardOverlay;
+    [SerializeField] private GameObject cardPlacementMessage;
+    [SerializeField] private GameObject cardPlaceButton;
+
 
     private bool freshClick = true;
     // This region just holds functions for the Dev Generate Buttons
@@ -350,6 +354,29 @@ public class PlayerController : MonoBehaviour
             {
                 m_tileVariableObjects[i].gameObject.SetActive(false);
             }
+
+
+            //Card Placement UI
+
+            if (m_cardOverlay.gameObject.activeSelf)
+            {
+                if (m_cardOverlay.ableToPlaceCard)
+                {
+                    cardPlaceButton.SetActive(true);
+                    cardPlacementMessage.SetActive(false);
+                }
+                else 
+                {
+                    cardPlaceButton.SetActive(false);
+                    cardPlacementMessage.SetActive(true);
+                }
+            }
+            else
+            {
+                cardPlaceButton.SetActive(false);
+                cardPlacementMessage.SetActive(false);
+            }
+
 
         }
 

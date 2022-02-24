@@ -26,14 +26,6 @@ public class Heatmap : MonoBehaviour
         m_worldGenerator = FindObjectOfType<WorldGenerator>();
     }
 
-    //Just for debuggging
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            GenerateMaps();
-        }
-    }
 
     public void GenerateMaps()
     {

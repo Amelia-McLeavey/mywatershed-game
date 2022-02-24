@@ -20,6 +20,8 @@ public class Tile : MonoBehaviour
 
     private MeshRenderer m_meshRenderer;
 
+    public CardInstance currentCard;
+
     private void Awake()
     {
         m_meshRenderer = GetComponent<MeshRenderer>();
