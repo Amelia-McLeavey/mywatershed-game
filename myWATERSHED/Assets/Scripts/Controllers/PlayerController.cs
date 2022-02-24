@@ -67,6 +67,8 @@ public class PlayerController : MonoBehaviour
     private char[] TitleChars;
     private string Capitals = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+
+    private bool freshClick = true;
     // This region just holds functions for the Dev Generate Buttons
     // Will not be needed in the final game as players will not have these buttons
     #region Dev Generation Functions
@@ -158,6 +160,8 @@ public class PlayerController : MonoBehaviour
                             }
                             m_tileTitle.text += letter;
                         }
+
+                        freshClick = true;
                     }
                 }
             }
@@ -257,14 +261,18 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    
+    private int variableNum = 0;
+    private VariableClass vols;
     private void DisplayTileValues()
     {
-        int variableNum = 0;
-        
-        if (variableHolder != null)
+        if (variableHolder != null && freshClick)
         {
+            freshClick = false;
+            variableNum = 0;
+            m_tileImage.color = variableHolder.GetComponent<MeshRenderer>().material.color + new Color(0f, 0f, 0f, 1f);
+
             m_barGraph.gameObject.SetActive(false);
+
             bool canAddVol = true;
             bool canShowBiotic = false;
 
@@ -272,7 +280,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (child.CompareTag("VolunteerOverlay"))
                 {
-                    canAddVol = false;                                       
+                    canAddVol = false;
                 }
                 if (child.CompareTag("Meeple"))
                 {
@@ -297,7 +305,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (v.variableName == "Volunteers")
                 {
-                    m_volunteerNum.text = v.value.ToString();
+                    vols = v;
                 }
                 else if (v.variableName.Contains("Population") || v.variableName.Contains("Riverbed") || v.variableName.Contains("Riparian"))
                 {
@@ -318,8 +326,8 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         m_tileVariableObjects[variableNum].SetVariableClass(v);
-                        m_tileVariableObjects[variableNum].abiotic = false; 
-                        m_tileVariableObjects[variableNum].gameObject.SetActive(!m_tileInfoObject.displayAbiotic);
+                        m_tileVariableObjects[variableNum].abiotic = false;
+
                         variableNum++;
                     }
                 }
@@ -327,27 +335,39 @@ public class PlayerController : MonoBehaviour
                 {
                     m_tileVariableObjects[variableNum].SetVariableClass(v);
                     m_tileVariableObjects[variableNum].abiotic = true;
-                    m_tileVariableObjects[variableNum].gameObject.SetActive(m_tileInfoObject.displayAbiotic);
+
                     // tileVariableObjects[variableNum].SetText(v.variableName);
                     variableNum++;
-                }                
+                }
             }
 
-            if(!m_tileInfoObject.displayAbiotic && !canShowBiotic)
+            if (!m_tileInfoObject.displayAbiotic && !canShowBiotic)
             {
                 m_tileInfoObject.displayAbiotic = true;
             }
-            
-            if (!m_tileInfoObject.displayAbiotic)
-            {
-                m_barGraph.gameObject.SetActive(true);
-                m_barGraph.ShowGraph();
-            }
 
-            for (int i = variableNum; i< m_tileVariableObjects.Length; i++)
+            for (int i = variableNum; i < m_tileVariableObjects.Length; i++)
             {
                 m_tileVariableObjects[i].gameObject.SetActive(false);
             }
+
+        }
+
+        if (!m_tileInfoObject.displayAbiotic)
+        {
+            m_barGraph.ShowGraph();
+        }
+
+        m_barGraph.gameObject.SetActive(!m_tileInfoObject.displayAbiotic);
+
+        for (int i = 0; i < variableNum; i++)
+        {
+            m_tileVariableObjects[i].gameObject.SetActive(m_tileVariableObjects[i].abiotic == m_tileInfoObject.displayAbiotic);
+        }
+
+        if (vols != null)
+        {
+            m_volunteerNum.text = vols.value.ToString();
         }
     }
 
