@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class TileInfo : MonoBehaviour
 {
@@ -19,7 +20,9 @@ public class TileInfo : MonoBehaviour
 
     private float targetYPos;
 
-
+    [SerializeField] private GameObject tileCardUI;
+    [SerializeField] private TMP_Text tileCardName;
+    [SerializeField] private TMP_Text tileCardDesc;
 
     private void Awake()
     {
@@ -76,5 +79,19 @@ public class TileInfo : MonoBehaviour
     public void ChangeInfo(bool showAbiotic)
     {
         displayAbiotic = showAbiotic;
+    }
+
+    public void UpdateTileCard(CardInstance card)
+    {
+        if (card.cardName == null)
+        {
+            tileCardUI.SetActive(false);
+        }
+        else
+        {
+            tileCardName.text = card.cardName;
+            tileCardDesc.text = card.cardDescription;
+            tileCardUI.SetActive(true);
+        }
     }
 }

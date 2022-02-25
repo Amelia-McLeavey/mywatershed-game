@@ -377,7 +377,7 @@ public class PlayerController : MonoBehaviour
                 cardPlacementMessage.SetActive(false);
             }
 
-
+            m_tileInfoObject.UpdateTileCard(variableHolder.GetComponent<Tile>().currentCard);
         }
 
         if (!m_tileInfoObject.displayAbiotic)
@@ -407,5 +407,13 @@ public class PlayerController : MonoBehaviour
     public Vector2 GetCamPos()
     {
         return new Vector2(m_camera.transform.position.x, (m_camera.transform.position.z/ 0.857f) + cameraZOffset +1f);
+    }
+
+    public void CallUpdateTileCard()
+    {
+        if (variableHolder != null)
+        {
+            m_tileInfoObject.UpdateTileCard(variableHolder.GetComponent<Tile>().currentCard);
+        }
     }
 }
