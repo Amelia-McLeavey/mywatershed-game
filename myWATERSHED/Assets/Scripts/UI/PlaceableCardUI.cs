@@ -19,6 +19,8 @@ public class PlaceableCardUI : MonoBehaviour
     [SerializeField] private Vector2 offScreenPos;
 
     [SerializeField] private GameObject m_overlay;
+
+    private CardPlacementOverlay cpo;
     private RectTransform rect;
     // Start is called before the first frame update
     void Start()
@@ -26,6 +28,7 @@ public class PlaceableCardUI : MonoBehaviour
         playerController = GameObject.FindObjectOfType<PlayerController>();
         rect = this.GetComponent<RectTransform>();
         m_gameManager = GameManager.Instance;
+        cpo = m_overlay.GetComponent<CardPlacementOverlay>();
     }
 
     public void SetUpCard(CardInstance card)
@@ -39,7 +42,7 @@ public class PlaceableCardUI : MonoBehaviour
 
     public void cardPlaced()
     {
-        playerController.variableHolder.GetComponent<Tile>().currentCard = cardInstance;
+        //playerController.variableHolder.GetComponent<Tile>().currentCard = cardInstance;
         m_gameManager.SetGameState(GameState.Game, null);
         rect.anchoredPosition = offScreenPos;
         m_overlay.SetActive(false);

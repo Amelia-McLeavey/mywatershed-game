@@ -20,7 +20,7 @@ public class Tile : MonoBehaviour
 
     private MeshRenderer m_meshRenderer;
 
-    public CardInstance currentCard;
+    public PlayedCard currentCard;
 
     private void Awake()
     {

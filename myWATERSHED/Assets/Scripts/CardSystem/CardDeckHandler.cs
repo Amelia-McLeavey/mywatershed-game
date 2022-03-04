@@ -38,10 +38,12 @@ public class CardDeckHandler : MonoBehaviour
 
     [SerializeField] private PlaceableCardUI m_placeableCard;
 
+    private PlayerController playerController;
 
     private void Awake()
     {
         m_world = FindObjectOfType<World>();
+        playerController = FindObjectOfType<PlayerController>();
 
         // Reset leftover data 
         m_idDeck.Clear();
@@ -126,7 +128,7 @@ public class CardDeckHandler : MonoBehaviour
             pollutionInfluence = m_cardAssets[id].m_pollutionLevel,
             flowRateInfluence = m_cardAssets[id].m_flowRate,
             sewageInfluence = m_cardAssets[id].m_sewageLevel,
-            sinuousityInfluence = m_cardAssets[id].m_sinuosity,
+            sinuosityInfluence = m_cardAssets[id].m_sinuosity,
             shadeInfluence = m_cardAssets[id].m_shadeCoverage,
             turbidityInfluence = m_cardAssets[id].m_turbidity,
             waterDepthInfluence = m_cardAssets[id].m_waterDepth,
@@ -138,6 +140,7 @@ public class CardDeckHandler : MonoBehaviour
 
     public void DealCards()
     {
+        playerController.DeselectTile();
         for (int i = 0; i < m_cardDealAmount; i++)
         {
             // Dequeue cards from the deck and add to list of cards dealt
@@ -152,6 +155,7 @@ public class CardDeckHandler : MonoBehaviour
                 // Populate card UI elements with data from Card
                 m_cardUIObjects[i].transform.Find("Card Name").GetComponent<TMP_Text>().text = cardDealt.cardName;
                 m_cardUIObjects[i].transform.Find("Card Description").GetComponent<TMP_Text>().text = cardDealt.cardDescription;
+                m_cardUIObjects[i].transform.Find("Card Duration").GetComponent<TMP_Text>().text = cardDealt.durationRemaining.ToString();
 
                 string cardStats = cardDealt.tileType;
 
@@ -187,9 +191,8 @@ public class CardDeckHandler : MonoBehaviour
             }
         }
 
-        StartCoroutine(DiscardDealtCards());
-
         m_world.ChangeSeason(SeasonState.Summer);
+        StartCoroutine(DiscardDealtCards());
         DiscardPlayedCards();
        
     }
@@ -202,16 +205,18 @@ public class CardDeckHandler : MonoBehaviour
             m_cardUIObjects[i].SetActive(false);
         }
 
-        if (m_cardsDealt[cardSelected].global)
-        {
-            m_playedCardHolder.AddNewCard(m_cardsDealt[cardSelected]);
-        }
-        else
-        {
-            m_placeableCard.SetUpCard(m_cardsDealt[cardSelected]);
-            
-            m_gameManager.SetGameState(GameState.Frozen, null);
-        }
+        //if (m_cardsDealt[cardSelected].global)
+        //{
+        //    m_playedCardHolder.AddNewCard(m_cardsDealt[cardSelected]);
+        //}
+        //else
+        //{
+        //    m_placeableCard.SetUpCard(m_cardsDealt[cardSelected]);
+
+        //    m_gameManager.SetGameState(GameState.Frozen, null);
+        //}
+
+        m_playedCardHolder.AddNewCard(m_cardsDealt[cardSelected]);
 
         m_cardsDealt.Clear();
 

@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     private float mapHeightMultiplyer = 0.857f;
     //as the camera is at an angle the z position needs to be offset
     //this can be calculated with camY / Tan(camAngle), which with the current settings equals 20
-    private float cameraZOffset = 14f;
+    public float cameraZOffset = 14f;
 
     private Vector2 minMaxXPosition;
     private Vector2 minMaxZPosition;
@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject cardPlacementMessage;
     [SerializeField] private GameObject cardPlaceButton;
 
-
+    private PlayedCard prevCard;
     private bool freshClick = true;
     // This region just holds functions for the Dev Generate Buttons
     // Will not be needed in the final game as players will not have these buttons
@@ -144,28 +144,7 @@ public class PlayerController : MonoBehaviour
                    
                     if (Physics.Raycast(ray, out RaycastHit hit))
                     {
-                        //reset current material 
-                        if (variableHolder != null)
-                        {
-                            variableHolder.GetComponent<MeshRenderer>().materials[1].color = storedColour;
-                        }
-
-                        //select new tile
-                        variableHolder = hit.collider.gameObject;
-                        storedColour = variableHolder.GetComponent<MeshRenderer>().materials[1].color;
-                        variableHolder.GetComponent<MeshRenderer>().materials[1].color = highlightColour;
-                        TitleChars = variableHolder.tag.ToCharArray();
-                        m_tileTitle.text = "";
-                        foreach (char letter in TitleChars)
-                        {
-                            if (Capitals.Contains(letter.ToString()))
-                            {
-                                m_tileTitle.text += " ";
-                            }
-                            m_tileTitle.text += letter;
-                        }
-
-                        freshClick = true;
+                        SelectTile(hit.collider.gameObject);
                     }
                 }
             }
@@ -251,6 +230,29 @@ public class PlayerController : MonoBehaviour
         minMaxZPosition = new Vector2(-cameraZOffset + m_cameraPadding + (m_camera.orthographicSize * 1.4f),(-cameraZOffset + mapColumns - m_cameraPadding) * mapHeightMultiplyer - (m_camera.orthographicSize * 1.4f));
     }
 
+    public void SelectTile(GameObject tileObject)
+    {
+        if (variableHolder != null)
+        {
+            variableHolder.GetComponent<MeshRenderer>().materials[1].color = storedColour;
+        }
+
+        //select new tile
+        variableHolder = tileObject;
+        storedColour = variableHolder.GetComponent<MeshRenderer>().materials[1].color;
+        variableHolder.GetComponent<MeshRenderer>().materials[1].color = highlightColour;
+        TitleChars = variableHolder.tag.ToCharArray();
+        m_tileTitle.text = "";
+        foreach (char letter in TitleChars)
+        {
+            if (Capitals.Contains(letter.ToString()))
+            {
+                m_tileTitle.text += " ";
+            }
+            m_tileTitle.text += letter;
+        }
+        freshClick = true;
+    }
 
     public void DeselectTile()
     {
@@ -260,7 +262,7 @@ public class PlayerController : MonoBehaviour
         }
 
         variableHolder = null;
-
+        preVariableHolder = null;
         m_tileInfoObject.DeselectTile();
     }
 
@@ -358,7 +360,7 @@ public class PlayerController : MonoBehaviour
 
             //Card Placement UI
 
-            if (m_cardOverlay.gameObject.activeSelf)
+            if (m_cardOverlay.placing)
             {
                 if (m_cardOverlay.ableToPlaceCard)
                 {
@@ -377,7 +379,16 @@ public class PlayerController : MonoBehaviour
                 cardPlacementMessage.SetActive(false);
             }
 
-            m_tileInfoObject.UpdateTileCard(variableHolder.GetComponent<Tile>().currentCard);
+            if(prevCard != null)
+            {
+                prevCard.doPopUp = false;
+            }
+            if (variableHolder.GetComponent<Tile>().currentCard != null)
+            {  
+                prevCard = variableHolder.GetComponent<Tile>().currentCard;
+                prevCard.doPopUp = true;
+            }
+            //m_tileInfoObject.UpdateTileCard(variableHolder.GetComponent<Tile>().currentCard);
         }
 
         if (!m_tileInfoObject.displayAbiotic)
@@ -413,7 +424,7 @@ public class PlayerController : MonoBehaviour
     {
         if (variableHolder != null)
         {
-            m_tileInfoObject.UpdateTileCard(variableHolder.GetComponent<Tile>().currentCard);
+           // m_tileInfoObject.UpdateTileCard(variableHolder.GetComponent<Tile>().currentCard);
         }
     }
 }

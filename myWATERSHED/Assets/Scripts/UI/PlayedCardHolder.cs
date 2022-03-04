@@ -12,6 +12,9 @@ public class PlayedCardHolder : MonoBehaviour
     
     private RectTransform rect;
     private List<RectTransform> cards = new List<RectTransform>();
+    public List<RectTransform> extinctCards = new List<RectTransform>();
+
+    public PlayedCard newestCard; 
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +25,8 @@ public class PlayedCardHolder : MonoBehaviour
     public void AddNewCard(CardInstance card)
     {  
             GameObject newCard = Instantiate(m_cardPrefab, rect);
-            newCard.GetComponent<PlayedCard>().SetUpCard(card);
+            newestCard = newCard.GetComponent<PlayedCard>();
+            newestCard.SetUpCard(card);
             RectTransform newCardRect = newCard.GetComponent<RectTransform>();
             newCardRect.anchoredPosition = new Vector3(newCardRect.anchoredPosition.x, -50f);
             cards.Add(newCardRect);
@@ -42,22 +46,63 @@ public class PlayedCardHolder : MonoBehaviour
         {
             for (int i = 0; i < cards.Count; i++)
             {
-                cards[i].anchoredPosition = new Vector2(i * (rect.rect.width / cards.Count), cards[i].anchoredPosition.y);
+                cards[i].anchoredPosition = new Vector2((cards.Count - 1 - i) * (rect.rect.width / cards.Count), cards[i].anchoredPosition.y);
             }
         }
         else
         {
             for (int i = 0; i < cards.Count; i++)
             {
-                cards[i].anchoredPosition = new Vector2(i * m_targetSpacing, cards[i].anchoredPosition.y);
+                cards[i].anchoredPosition = new Vector2((cards.Count-1-i) * m_targetSpacing, cards[i].anchoredPosition.y);
             }
         }
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void NewYear()
     {
-        
+        foreach (RectTransform card in extinctCards)
+        {
+            if (cards.Contains(card))
+            {
+                cards.Remove(card);
+            }
+        }
+
+        LayoutCards();
+
+        extinctCards.Clear();
+    }
+
+    public IEnumerator UpdateValues()
+    {
+        foreach (RectTransform rect in cards)
+        {
+            if (rect != null)
+            {
+                if (rect.gameObject.activeSelf)
+                {
+                    rect.gameObject.GetComponent<PlayedCard>().StartCoroutine("NewYear");
+                }
+            }
+            yield return new WaitForSeconds(0.8f);
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        NewYear();
+    }
+
+    //public void RemoveCard(GameObject card)
+    //{
+    //    if (cards.Contains(card.GetComponent<RectTransform>()))
+    //    {
+    //        cards.Remove(card.GetComponent<RectTransform>());
+    //    }
+    //}
+
+    public void PlaceCard()
+    {
+        newestCard.CardPlaced();
     }
 }

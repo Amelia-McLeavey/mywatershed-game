@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum GameState { MainMenu, Game, Pause, Frozen }
+public enum GameState { MainMenu, Game, Pause, Frozen, Placing}
 
 /// <summary>
 /// This script exists to track the different game state and provide a way to change between states.
 /// </summary>
+/// 
 
 public class GameManager : MonoBehaviour
 {
     private static GameManager s_instance = null;
+    private PlayedCardHolder cardHolder;
 
     public GameState m_gameState { get; private set; }
 
     private void Awake()
     {
+        cardHolder = GameObject.FindObjectOfType<PlayedCardHolder>();
         if (s_instance == null)
         {
             // Store the static variable
@@ -48,6 +51,11 @@ public class GameManager : MonoBehaviour
 
     public void SetGameState(GameState state, string sceneName)
     {
+        if(m_gameState == GameState.Placing && state == GameState.Game)
+        {
+            // UPDATE TILES 
+            cardHolder.StartCoroutine("UpdateValues");
+        }
         m_gameState = state;
 
         if (sceneName != null)
@@ -55,6 +63,7 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(sceneName);
         }
 
+        
         //if(state == GameState.Pause)
         //{
         //    Time.timeScale = 0;

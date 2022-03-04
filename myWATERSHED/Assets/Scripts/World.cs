@@ -52,8 +52,10 @@ public class World : MonoBehaviour
 
     public SeasonState m_seasonState { get; private set; }
 
+
     private void Start()
     {
+        
         heatmap = GameObject.FindObjectOfType<Heatmap>();
         m_endResultManager.CallStart();
 

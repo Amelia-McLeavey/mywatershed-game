@@ -34,7 +34,7 @@ public struct CardInstance
     public float pollutionInfluence;
     public float flowRateInfluence;
     public float sewageInfluence;
-    public float sinuousityInfluence;
+    public float sinuosityInfluence;
     public float shadeInfluence;
     public float turbidityInfluence;
     public float waterDepthInfluence;
