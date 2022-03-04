@@ -501,7 +501,7 @@ MonoBehaviour:
   cardDescription: {fileID: 7654386919839707582}
   cardDuration: {fileID: 8169130062569994438}
   placingYPos: 130
-  popUpPos: 100
+  popUpPos: 80
   doPopUp: 0
   tilesAffected: []
   m_tileButton: {fileID: 5905774065649554852}

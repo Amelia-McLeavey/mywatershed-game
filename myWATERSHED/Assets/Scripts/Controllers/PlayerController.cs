@@ -260,7 +260,10 @@ public class PlayerController : MonoBehaviour
         {
             variableHolder.GetComponent<MeshRenderer>().materials[1].color = storedColour;
         }
-
+        if (prevCard != null)
+        {
+            prevCard.doPopUp = false;
+        }
         variableHolder = null;
         preVariableHolder = null;
         m_tileInfoObject.DeselectTile();
