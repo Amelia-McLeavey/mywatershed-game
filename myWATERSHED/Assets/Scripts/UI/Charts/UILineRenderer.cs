@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class UILineRenderer : Graphic
 {
-
     public UIGridRenderer grid;
     public Vector2Int gridSize;
     public float thickness;
@@ -19,7 +18,6 @@ public class UILineRenderer : Graphic
 
     protected override void OnPopulateMesh(VertexHelper vh)
     {
-
         vh.Clear();
 
         width = rectTransform.rect.width;

@@ -88,12 +88,27 @@ public class PlayerController : MonoBehaviour
     private void hideLoadingPanel(int rows, int columns)
     {
         //center camera in the middle of the map
-        targetCamPos = new Vector3(rows / 2, 20f, (columns * mapHeightMultiplyer / 2)-cameraZOffset);
+        targetCamPos = new Vector3(rows / 2, 20f, (columns * mapHeightMultiplyer / 2) - cameraZOffset);
         mapRows = rows;
         mapColumns = columns;
+        Debug.Log("Camera: " + m_camera + "   Container: " + m_cameraContainer + "   Target pos: " + targetCamPos);
+
+        if (m_camera == null)
+        {
+            m_camera = GameObject.Find("Main Camera").GetComponent<Camera>();
+        }
+
+        if (m_cameraContainer == null)
+        {
+            m_cameraContainer = GameObject.Find("CameraContainer");
+        }
+
+        Debug.Log("Camera: " + m_camera + "   Container: " + m_cameraContainer + "   Target pos: " + targetCamPos);
+
         m_cameraContainer.transform.position = targetCamPos;
         //calculate camera restraints
         CalculateCameraPadding();
+
         m_heatMap.GenerateMaps();
         m_loadingPanel.SetActive(false);
     }

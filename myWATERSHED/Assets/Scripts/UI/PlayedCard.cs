@@ -14,6 +14,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     [SerializeField] private TMP_Text cardName;
     [SerializeField] private TMP_Text cardDescription;
+    [SerializeField] private TMP_Text cardStats;
     [SerializeField] private TMP_Text cardDuration;
 
     private float targetYPos=0f;
@@ -34,6 +35,8 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private PlayedCardHolder cardHolder;
     private World m_world;
+
+    private Animator anim;
     void Awake()
     {
         m_world = FindObjectOfType<World>();
@@ -42,8 +45,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         m_gameManager = GameManager.Instance;
         playerController = GameObject.FindObjectOfType<PlayerController>();
         rect = GetComponent<RectTransform>();
-
-        Debug.Log(m_overlay.name);
+        anim = GetComponent<Animator>();
     }
 
     public void SetUpCard(CardInstance card)
@@ -52,10 +54,26 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         cardName.text = cardInstance.cardName;
         cardDescription.text = cardInstance.cardDescription;
         cardDuration.text = cardInstance.durationRemaining.ToString();
+
+        string stats = card.tileType;
+
+        stats += "\n\nTiles affected: " + card.numberOfTiles;
+
+        stats += "\nDuration of Effect: " + card.durationRemaining;
+
+        if (card.delayBeforeEffect != 0)
+        {
+            stats += "\nDelay before Effect: " + card.delayBeforeEffect;
+        }
+
+        cardStats.text = stats;
+
         if (!cardInstance.global)
         {
             PlacingCard();
         }
+
+
     }
 
     // Update is called once per frame
@@ -108,8 +126,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 tilesAffected.Add(value);
                 value.GetComponent<Tile>().currentCard = this;
-                Debug.Log(value.GetComponent<Tile>().currentCard);
-                Debug.Log(this);
+                      
             }
         }
 
@@ -127,13 +144,14 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public IEnumerator NewYear()
     {
         doPopUp = true;
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.5f);
         UpdateTileValues();
         cardInstance.durationRemaining--;
         if (cardInstance.durationRemaining <= 0)
         {
             //Destroy card
-
+            anim.SetTrigger("Destroy");
+            yield return new WaitForSeconds(0.5f);
             //remove references from all tiles
             foreach (GameObject tileObject in tilesAffected)
             {
@@ -143,9 +161,10 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
         else
         {
+            anim.SetTrigger("Shake");
+            yield return new WaitForSeconds(0.3f);
             cardDuration.text = cardInstance.durationRemaining.ToString();
         }
-        yield return new WaitForSeconds(0.3f);
         doPopUp = false;
     }
 

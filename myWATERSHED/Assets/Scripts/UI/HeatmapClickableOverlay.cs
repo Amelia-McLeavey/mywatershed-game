@@ -28,7 +28,7 @@ public class HeatmapClickableOverlay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(m_world.m_seasonState == SeasonState.Summer && m_gameManager.m_gameState == GameState.Game && (Input.GetMouseButtonDown(0)|| Input.GetMouseButtonDown(1)))
+        if(m_world.m_seasonState == SeasonState.Summer && m_gameManager.m_gameState != GameState.Pause && (Input.GetMouseButtonDown(0)|| Input.GetMouseButtonDown(1)))
         {
             //mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 

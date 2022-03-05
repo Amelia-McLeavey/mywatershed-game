@@ -43,9 +43,14 @@ public class World : MonoBehaviour
     private int m_averageTemperature;
     private float m_averageTurbidity;
 
+    [SerializeField] private int m_chubTotalPopulation;
+    [SerializeField] private int m_troutTotalPopulation;
+
     private GameManager m_gameManager;
     private WorldGenerator m_worldGenerator;
     private CardDeckHandler m_cardDeckHandler;
+
+    [SerializeField] private GameObject pauseScreen;
 
     private Heatmap heatmap;
     [SerializeField] private EndResultManager m_endResultManager;
@@ -55,7 +60,8 @@ public class World : MonoBehaviour
 
     private void Start()
     {
-        
+        m_gameManager = GameManager.Instance;
+        m_gameManager.SetGameState(GameState.Game, null);
         heatmap = GameObject.FindObjectOfType<Heatmap>();
         m_endResultManager.CallStart();
 
@@ -72,7 +78,7 @@ public class World : MonoBehaviour
             Debug.LogWarning("m_currentYearText is not connected.");
         }
 
-        m_gameManager = GameManager.Instance;
+        
         m_worldGenerator = FindObjectOfType<WorldGenerator>();
         m_cardDeckHandler = FindObjectOfType<CardDeckHandler>();
         m_seasonState = SeasonState.Summer;
@@ -83,14 +89,9 @@ public class World : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            m_gameManager.SetGameState(GameState.MainMenu, "PrototypeMenuScene");
-        }
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
             m_gameManager.SetGameState(GameState.Pause, null);
-        }
-      
+            pauseScreen.SetActive(true);
+        }      
     }
 
     public void OnClickReturnToMenu()
@@ -114,7 +115,7 @@ public class World : MonoBehaviour
             UpdateAllData();
             m_cardDeckHandler.DealCards();
 
-            m_endResultManager.AddDataPoint(m_currentYear, m_redDaceTotalPopulation);
+            m_endResultManager.AddDataPoint(m_currentYear, m_redDaceTotalPopulation, m_chubTotalPopulation, m_troutTotalPopulation);
         }        
         // Change the season state and callback the event
         m_seasonState = season;
@@ -132,7 +133,9 @@ public class World : MonoBehaviour
 
     private void UpdateAllData()
     {
-        int totalDacePop = 0;
+        int totalDacePop = 0; 
+        int totalChubPop = 0; 
+        int totalTroutPop = 0;
         float totalTemp = 0;
         float totalTurbidity = 0;
 
@@ -149,6 +152,8 @@ public class World : MonoBehaviour
                     if (value.GetComponent<Tile>().m_Basetype == BaseType.Water)
                     {
                         totalDacePop += (int)value.GetComponent<RedDacePopulation>().value;
+                        totalChubPop += (int)value.GetComponent<CreekChubPopulation>().value;
+                        totalTroutPop += (int)value.GetComponent<BrownTroutPopulation>().value;
                     }
 
                     if (value.GetComponent<WaterTemperature>() != null)
@@ -165,9 +170,10 @@ public class World : MonoBehaviour
             }
         }
 
-        Debug.Log(totalTurbidity);
-
         m_redDaceTotalPopulation = totalDacePop;
+        m_chubTotalPopulation = totalChubPop;
+        m_troutTotalPopulation = totalTroutPop;
+
         DisplayTotalDacePopulationInUI();
         m_averageTemperature = Mathf.RoundToInt(totalTemp / (m_worldGenerator.m_rows * m_worldGenerator.m_columns));
         DisplayAverageTemperature();

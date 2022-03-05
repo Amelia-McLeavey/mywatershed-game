@@ -15,16 +15,19 @@ public class GameManager : MonoBehaviour
     private static GameManager s_instance = null;
     private PlayedCardHolder cardHolder;
 
+    private GameObject fishCam;
+
     public GameState m_gameState { get; private set; }
 
     private void Awake()
     {
+        fishCam = GameObject.Find("Fishcam-Camera");
         cardHolder = GameObject.FindObjectOfType<PlayedCardHolder>();
         if (s_instance == null)
         {
             // Store the static variable
             s_instance = this;
-            DontDestroyOnLoad(s_instance);
+            //DontDestroyOnLoad(s_instance);
         }
         else
         {
@@ -51,6 +54,15 @@ public class GameManager : MonoBehaviour
 
     public void SetGameState(GameState state, string sceneName)
     {
+        if(state == GameState.Game)
+        {
+            fishCam.SetActive(true);
+        }
+        else
+        {
+            fishCam.SetActive(false);
+        }
+
         if(m_gameState == GameState.Placing && state == GameState.Game)
         {
             // UPDATE TILES 
@@ -62,16 +74,6 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(sceneName);
         }
-
-        
-        //if(state == GameState.Pause)
-        //{
-        //    Time.timeScale = 0;
-        //}
-        //else
-        //{
-        //    Time.timeScale = 1;
-        //}
     }
 
     public void OnApplicationQuit()
