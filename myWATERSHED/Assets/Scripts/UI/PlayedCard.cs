@@ -32,7 +32,6 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     [SerializeField] private GameObject m_tileButton;
 
-
     private PlayedCardHolder cardHolder;
     private World m_world;
 
@@ -130,11 +129,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             }
         }
 
-        //foreach(GameObject tileObject in tilesAffected)
-        //{
-        //    tileObject.GetComponent<Tile>().currentCard = this;
-        //}
-
+        m_world.m_endResultManager.cardInstances.Add(cardInstance);
         m_world.ChangeSeason(SeasonState.Summer);
         m_overlay.placing=false;
 

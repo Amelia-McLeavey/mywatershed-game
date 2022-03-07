@@ -52,7 +52,8 @@ public class RecordDataToCSV : MonoBehaviour
 
     private string GetData(Vector2 tileIndex)
     {
-        string dataList = "";
+        string dataList = tileIndex.x+","+ tileIndex.y + ",";
+        dataList = dataList + GetTileType(tileIndex) + ",";
 
         dataList = dataList + GetVariable(tileIndex, "AsphaltDensity") + ",";
         dataList = dataList + GetVariable(tileIndex, "BrownTroutPopulation") + ",";
@@ -87,5 +88,19 @@ public class RecordDataToCSV : MonoBehaviour
         }
 
         return 0f;
+    }
+
+    private string GetTileType(Vector2 tileIndex)
+    {
+        if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
+        {
+            //if it can find a variableClass component with the name provided
+            if (value.GetComponent<Tile>())
+            {
+                return (value.GetComponent<Tile>().m_PhysicalType.ToString());
+            }
+        }
+
+        return "Unknown";
     }
 }

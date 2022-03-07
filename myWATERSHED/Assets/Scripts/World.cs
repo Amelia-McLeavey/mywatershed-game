@@ -53,7 +53,7 @@ public class World : MonoBehaviour
     [SerializeField] private GameObject pauseScreen;
 
     private Heatmap heatmap;
-    [SerializeField] private EndResultManager m_endResultManager;
+    public EndResultManager m_endResultManager;
 
     public SeasonState m_seasonState { get; private set; }
 
@@ -89,9 +89,14 @@ public class World : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            m_gameManager.SetGameState(GameState.Pause, null);
-            pauseScreen.SetActive(true);
+            PauseGame();
         }      
+    }
+
+    public void PauseGame()
+    {
+        m_gameManager.SetGameState(GameState.Pause, null);
+        pauseScreen.SetActive(true);
     }
 
     public void OnClickReturnToMenu()
@@ -115,7 +120,7 @@ public class World : MonoBehaviour
             UpdateAllData();
             m_cardDeckHandler.DealCards();
 
-            m_endResultManager.AddDataPoint(m_currentYear, m_redDaceTotalPopulation, m_chubTotalPopulation, m_troutTotalPopulation);
+            m_endResultManager.AddDataPoint(m_currentYear, m_redDaceTotalPopulation, m_chubTotalPopulation, m_troutTotalPopulation, m_averageTemperature, m_averageTurbidity);
         }        
         // Change the season state and callback the event
         m_seasonState = season;
