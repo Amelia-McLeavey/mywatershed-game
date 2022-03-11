@@ -45,6 +45,7 @@ public class World : MonoBehaviour
 
     [SerializeField] private int m_chubTotalPopulation;
     [SerializeField] private int m_troutTotalPopulation;
+    [SerializeField] private int m_insectTotalPopulation;
 
     private GameManager m_gameManager;
     private WorldGenerator m_worldGenerator;
@@ -120,7 +121,7 @@ public class World : MonoBehaviour
             UpdateAllData();
             m_cardDeckHandler.DealCards();
 
-            m_endResultManager.AddDataPoint(m_currentYear, m_redDaceTotalPopulation, m_chubTotalPopulation, m_troutTotalPopulation, m_averageTemperature, m_averageTurbidity);
+            m_endResultManager.AddDataPoint(m_currentYear, m_redDaceTotalPopulation, m_chubTotalPopulation, m_troutTotalPopulation, m_insectTotalPopulation, m_averageTemperature, m_averageTurbidity);
         }        
         // Change the season state and callback the event
         m_seasonState = season;
@@ -141,6 +142,7 @@ public class World : MonoBehaviour
         int totalDacePop = 0; 
         int totalChubPop = 0; 
         int totalTroutPop = 0;
+        int totalInsect = 0;
         float totalTemp = 0;
         float totalTurbidity = 0;
 
@@ -159,6 +161,7 @@ public class World : MonoBehaviour
                         totalDacePop += (int)value.GetComponent<RedDacePopulation>().value;
                         totalChubPop += (int)value.GetComponent<CreekChubPopulation>().value;
                         totalTroutPop += (int)value.GetComponent<BrownTroutPopulation>().value;
+                        totalInsect += (int)value.GetComponent<InsectPopulation>().value;
                     }
 
                     if (value.GetComponent<WaterTemperature>() != null)
@@ -178,6 +181,7 @@ public class World : MonoBehaviour
         m_redDaceTotalPopulation = totalDacePop;
         m_chubTotalPopulation = totalChubPop;
         m_troutTotalPopulation = totalTroutPop;
+        m_insectTotalPopulation = totalInsect;
 
         DisplayTotalDacePopulationInUI();
         m_averageTemperature = Mathf.RoundToInt(totalTemp / (m_worldGenerator.m_rows * m_worldGenerator.m_columns));

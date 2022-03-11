@@ -6,23 +6,34 @@ using TMPro;
 
 public class EndResultManager : MonoBehaviour
 {
+    [Header("LINES")]
     [SerializeField] private UIGridRenderer grid; 
     [SerializeField] private UILineRenderer redDaceLine;
     [SerializeField] private UILineRenderer chubLine;
     [SerializeField] private UILineRenderer troutLine;
+    [SerializeField] private UILineRenderer tempLine;
+
+    [Header("HOVERING")]
     [SerializeField] private RectTransform playerLine;
     [SerializeField] private RectTransform daceDot;
     [SerializeField] private RectTransform chubDot;
     [SerializeField] private RectTransform troutDot;
 
+    [Header("SELECTED")]
     [SerializeField] private RectTransform selectedLine;
     [SerializeField] private RectTransform selectedDaceDot;
     [SerializeField] private RectTransform selectedChubDot;
     [SerializeField] private RectTransform selectedTroutDot;
 
+    [Header("DISPLAY")]
     [SerializeField] private Slider tempSlider;
+    [SerializeField] private TMP_Text tempNumber;
     [SerializeField] private Slider turbiditySlider;
     [SerializeField] private TMP_Text yearTitle;
+    [SerializeField] private TMP_Text daceNumText;
+    [SerializeField] private TMP_Text chubNumText;
+    [SerializeField] private TMP_Text troutNumText;
+    [SerializeField] private TMP_Text insectNumText;
 
     [SerializeField] private TMP_Text[] xAxisNumbers;
     [SerializeField] private TMP_Text[] yAxisNumbers;
@@ -39,7 +50,12 @@ public class EndResultManager : MonoBehaviour
     private float maxTroutValue = 0f;
     private float minTroutValue = 999999f;
 
+    private List<float> insectValues = new List<float>();
+
     private List<float> globalTemps = new List<float>();
+    private float maxTempValue = 0f;
+    private float minTempValue = 999999f;
+
     private List<float> globalTurbidity = new List<float>();
 
     private int graphSize;
@@ -59,6 +75,7 @@ public class EndResultManager : MonoBehaviour
     [Header("Togglable Bools")]
     public bool showChub = true;
     public bool showTrout = true;
+    public bool showTemp = true;
 
     public void CallStart()
     {
@@ -70,10 +87,11 @@ public class EndResultManager : MonoBehaviour
         redDaceLine.points.Clear();
         chubLine.points.Clear();
         troutLine.points.Clear();
+        tempLine.points.Clear();
         //redDaceLine.points.Add(new Vector2(0f, 0f));
     }
 
-    public void AddDataPoint(int year, float redDacePop, float chubPop, float troutPop, float temp, float turbidity)
+    public void AddDataPoint(int year, float redDacePop, float chubPop, float troutPop, float insectPop, float temp, float turbidity)
     {    
         if (redDacePop > maxRedDaceValue)
         {
@@ -99,13 +117,28 @@ public class EndResultManager : MonoBehaviour
         {
             minTroutValue = troutPop;
         }
+        if (temp > maxTempValue)
+        {
+            maxTempValue = temp;
 
+        }
+        if (temp < minTempValue)
+        {
+            minTempValue = temp;
+            if (minTempValue == maxTempValue)
+            {
+                maxTempValue += 5f;
+                minTempValue -= 5f;
+            }
+        }
 
         graphSize = (Mathf.FloorToInt(year / 10) + 1) * 10;
         grid.gridSize = new Vector2Int(graphSize, 50);
         redDaceLine.gridSize = new Vector2Int(graphSize, 50);
         chubLine.gridSize = new Vector2Int(graphSize, 50);
         troutLine.gridSize = new Vector2Int(graphSize, 50);
+        tempLine.gridSize = new Vector2Int(graphSize, 50);
+
 
         if (year == 1)
         {
@@ -119,6 +152,8 @@ public class EndResultManager : MonoBehaviour
             troutLine.points.Add(new Vector2(0, 0f));
 
             globalTemps.Add(temp);
+            tempLine.points.Add(new Vector2(0, 0f));
+
             globalTurbidity.Add(turbidity);
         }
         redDaceValues.Add(redDacePop);
@@ -132,7 +167,11 @@ public class EndResultManager : MonoBehaviour
 
 
         globalTemps.Add(temp);
+        tempLine.points.Add(new Vector2(year, 0f));
+
         globalTurbidity.Add(turbidity);
+
+        insectValues.Add(insectPop);
 
         for (int i=0; i< xAxisNumbers.Length; i++)
         {
@@ -169,6 +208,7 @@ public class EndResultManager : MonoBehaviour
         redDaceLine.gameObject.SetActive(false);
         chubLine.gameObject.SetActive(false);
         troutLine.gameObject.SetActive(false);
+        tempLine.gameObject.SetActive(false);
 
 
         for (int i = 0; i < redDaceLine.points.Count; i++)
@@ -185,6 +225,11 @@ public class EndResultManager : MonoBehaviour
                 troutLine.points[i] = new Vector2(i, (troutValues[i] - minGraphValue) / (maxGraphValue - minGraphValue) * 50);
             }
 
+            if (showTemp)
+            {
+                tempLine.points[i] = new Vector2(i, (globalTemps[i] - minTempValue) / (maxTempValue - minTempValue) * 50);
+            }
+
         }
 
         redDaceLine.gameObject.SetActive(true);
@@ -195,6 +240,10 @@ public class EndResultManager : MonoBehaviour
         if (showTrout)
         {
             troutLine.gameObject.SetActive(true);
+        }
+        if (showTemp)
+        {
+            tempLine.gameObject.SetActive(true);
         }
     }
 
@@ -269,10 +318,17 @@ public class EndResultManager : MonoBehaviour
 
         yearTitle.text = "Year " + selectedYear;
         tempSlider.value = globalTemps[selectedYear];
+        tempNumber.text = globalTemps[selectedYear].ToString();
         turbiditySlider.value = globalTurbidity[selectedYear];
+
         if (selectedYear > 0 && cardInstances.Count>= selectedYear)
         {
             ShowCardInfo(selectedYear-1);
+
+            daceNumText.text = redDaceValues[selectedYear - 1].ToString();
+            chubNumText.text = chubValues[selectedYear-1].ToString();
+            troutNumText.text = troutValues[selectedYear-1].ToString();
+            insectNumText.text = insectValues[selectedYear-1].ToString();
         }
     }
 
@@ -305,6 +361,12 @@ public class EndResultManager : MonoBehaviour
     public void toggleTrout()
     {
         showTrout = !showTrout;
+        LayoutPoints();
+    }
+
+    public void toggleTemp()
+    {
+        showTemp = !showTemp;
         LayoutPoints();
     }
 }

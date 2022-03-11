@@ -119,7 +119,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         tilesAffected.Add(playerController.variableHolder);
         playerController.variableHolder.GetComponent<Tile>().currentCard = this;
 
-        for (int i = 0; i < cardInstance.numberOfTiles - 1; i++)
+        for (int i = 0; i < cardInstance.numberOfTiles - 1 && i< m_overlay.tileIndexOffsets.Length; i++)
         {
             if (TileManager.s_TilesDictonary.TryGetValue(m_overlay.GetAdditionalTileIndex(playerController.variableHolder.GetComponent<Tile>().m_TileIndex, i), out GameObject value))
             {
