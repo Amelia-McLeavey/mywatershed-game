@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 
@@ -12,10 +13,15 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public CardInstance cardInstance;
 
+    private int maxDelayTime;
+
     [SerializeField] private TMP_Text cardName;
     [SerializeField] private TMP_Text cardDescription;
     [SerializeField] private TMP_Text cardStats;
     [SerializeField] private TMP_Text cardDuration;
+    [SerializeField] private Image cardDurationRing;
+    [SerializeField] private Image cardDurationCircle;
+    [SerializeField] private Color cardDurationGreen;
 
     private float targetYPos=0f;
 
@@ -34,11 +40,13 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private PlayedCardHolder cardHolder;
     private World m_world;
+    private WorldGenerator m_worldGenerator;
 
     private Animator anim;
     void Awake()
     {
         m_world = FindObjectOfType<World>();
+        m_worldGenerator = FindObjectOfType<WorldGenerator>();
         cardHolder = GameObject.FindObjectOfType<PlayedCardHolder>();
         m_overlay = GameObject.FindObjectOfType<CardPlacementOverlay>();
         m_gameManager = GameManager.Instance;
@@ -52,7 +60,9 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         cardInstance = card;
         cardName.text = cardInstance.cardName;
         cardDescription.text = cardInstance.cardDescription;
-        cardDuration.text = cardInstance.durationRemaining.ToString();
+        cardDuration.text = (cardInstance.durationRemaining + cardInstance.delayBeforeEffect).ToString();
+
+        maxDelayTime = cardInstance.delayBeforeEffect;
 
         string stats = card.tileType;
 
@@ -67,9 +77,30 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         cardStats.text = stats;
 
+        if (cardInstance.delayBeforeEffect <= 0)
+        {
+            ChangeDurationColours();
+        }
+
         if (!cardInstance.global)
         {
             PlacingCard();
+        }
+        else
+        {
+            for (int y = 0; y < m_worldGenerator.m_rows; y++)
+            {
+                for (int x = 0; x < m_worldGenerator.m_columns; x++)
+                {
+                    if (TileManager.s_TilesDictonary.TryGetValue(new Vector2(x,y), out GameObject value))
+                    {
+                        if(value.GetComponent<Tile>().m_Basetype == BaseType.Water)
+                        {
+                            tilesAffected.Add(value);
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -101,7 +132,6 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         targetYPos = 0f;
     }
 
-
     private void PlacingCard()
     {
         placingCurrently = true;
@@ -119,15 +149,25 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         tilesAffected.Add(playerController.variableHolder);
         playerController.variableHolder.GetComponent<Tile>().currentCard = this;
 
-        for (int i = 0; i < cardInstance.numberOfTiles - 1 && i< m_overlay.tileIndexOffsets.Length; i++)
+        for (int i = 0; i < m_overlay.tilesWithSuccessfulPlacement.Count; i++)
         {
-            if (TileManager.s_TilesDictonary.TryGetValue(m_overlay.GetAdditionalTileIndex(playerController.variableHolder.GetComponent<Tile>().m_TileIndex, i), out GameObject value))
+            if (m_overlay.tilesWithSuccessfulPlacement[i].transform.GetComponentInParent<Tile>() !=null)
             {
-                tilesAffected.Add(value);
-                value.GetComponent<Tile>().currentCard = this;
+                tilesAffected.Add(m_overlay.tilesWithSuccessfulPlacement[i].transform.parent.gameObject);
+                m_overlay.tilesWithSuccessfulPlacement[i].transform.GetComponentInParent<Tile>().currentCard = this;
                       
             }
         }
+
+        //for (int i = 0; i < cardInstance.numberOfTiles - 1 && i < m_overlay.tileIndexOffsets.Length; i++)
+        //{
+        //    if (TileManager.s_TilesDictonary.TryGetValue(m_overlay.GetAdditionalTileIndex(playerController.variableHolder.GetComponent<Tile>().m_TileIndex, i), out GameObject value))
+        //    {
+        //        tilesAffected.Add(value);
+        //        value.GetComponent<Tile>().currentCard = this;
+
+        //    }
+        //}
 
         m_world.m_endResultManager.cardInstances.Add(cardInstance);
         m_world.ChangeSeason(SeasonState.Summer);
@@ -141,26 +181,56 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         doPopUp = true;
         yield return new WaitForSeconds(0.5f);
         UpdateTileValues();
-        cardInstance.durationRemaining--;
-        if (cardInstance.durationRemaining <= 0)
+        if (cardInstance.delayBeforeEffect > 0)
         {
-            //Destroy card
-            anim.SetTrigger("Destroy");
-            yield return new WaitForSeconds(0.5f);
-            //remove references from all tiles
-            foreach (GameObject tileObject in tilesAffected)
+            cardInstance.delayBeforeEffect--;
+            cardDurationRing.fillAmount = (float)cardInstance.delayBeforeEffect / (float)maxDelayTime;
+
+            if (cardInstance.delayBeforeEffect <= 0)
             {
-                tileObject.GetComponent<Tile>().currentCard = null;
+                ChangeDurationColours();
             }
-            Disappear();
+            yield return new WaitForSeconds(0.3f);
+            cardDuration.text = (cardInstance.durationRemaining + cardInstance.delayBeforeEffect).ToString();  
         }
         else
-        {
-            anim.SetTrigger("Shake");
-            yield return new WaitForSeconds(0.3f);
-            cardDuration.text = cardInstance.durationRemaining.ToString();
+        {       
+            cardInstance.durationRemaining--;
+            if (cardInstance.durationRemaining <= 0)
+            {
+                //Destroy card
+                anim.SetTrigger("Destroy");
+                yield return new WaitForSeconds(0.5f);
+                //remove references from all tiles
+                foreach (GameObject tileObject in tilesAffected)
+                {
+                    foreach (Transform child in tileObject.transform)
+                    {
+                        if (child.CompareTag("CardOverlay"))
+                        {
+                            Destroy(child.gameObject);
+                        }
+                    }
+                    tileObject.GetComponent<Tile>().currentCard = null;
+                }
+                Disappear();
+            }
+            else
+            {
+                anim.SetTrigger("Shake");
+                yield return new WaitForSeconds(0.3f);
+                cardDuration.text = cardInstance.durationRemaining.ToString();
+            }
         }
+        
         doPopUp = false;
+    }
+
+    private void ChangeDurationColours()
+    {
+        cardDuration.color = Color.white;
+        cardDurationCircle.color = cardDurationGreen;
+        cardDurationRing.enabled = false;
     }
 
     public void Disappear()
@@ -178,7 +248,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<BrownTroutPopulation>() != null)
                 {
-                    tileObject.GetComponent<BrownTroutPopulation>().value += cardInstance.brownTroutInfluence;
+                    tileObject.GetComponent<BrownTroutPopulation>().value *= 1+(cardInstance.brownTroutInfluence/100);
                 }
             }
 
@@ -186,7 +256,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<CreekChubPopulation>() != null)
                 {
-                    tileObject.GetComponent<CreekChubPopulation>().value += cardInstance.creekChubInfluence;
+                    tileObject.GetComponent<CreekChubPopulation>().value *= 1 + (cardInstance.creekChubInfluence/100);
                 }
             }
 
@@ -194,7 +264,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<InsectPopulation>() != null)
                 {
-                    tileObject.GetComponent<InsectPopulation>().value += cardInstance.insectInfluence;
+                    tileObject.GetComponent<InsectPopulation>().value *= 1 + (cardInstance.insectInfluence/100);
                 }
             }
 
@@ -202,7 +272,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<RedDacePopulation>() != null)
                 {
-                    tileObject.GetComponent<RedDacePopulation>().value += cardInstance.redDaceInfluence;
+                    tileObject.GetComponent<RedDacePopulation>().value *= 1 + (cardInstance.redDaceInfluence/100);
                 }
             }
 
@@ -210,7 +280,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<RiparianLevel>() != null)
                 {
-                    tileObject.GetComponent<RiparianLevel>().value += cardInstance.riparianInfluence;
+                    tileObject.GetComponent<RiparianLevel>().value *= 1 + (cardInstance.riparianInfluence/100);
                 }
             }
 
@@ -218,7 +288,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<RiverbedHealth>() != null)
                 {
-                    tileObject.GetComponent<RiverbedHealth>().value += cardInstance.riverbedHealthInfluence;
+                    tileObject.GetComponent<RiverbedHealth>().value *= 1 + (cardInstance.riverbedHealthInfluence/100);
                 }
             }
 
@@ -226,7 +296,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<AsphaltDensity>() != null)
                 {
-                    tileObject.GetComponent<AsphaltDensity>().value += cardInstance.asphaltDensityInfluence;
+                    tileObject.GetComponent<AsphaltDensity>().value *= 1 + (cardInstance.asphaltDensityInfluence/100);
                 }
             }
 
@@ -234,7 +304,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<ErosionRate>() != null)
                 {
-                    tileObject.GetComponent<ErosionRate>().value += cardInstance.erosionInfluence;
+                    tileObject.GetComponent<ErosionRate>().value *= 1 + (cardInstance.erosionInfluence/100);
                 }
             }
 
@@ -242,7 +312,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<LandHeight>() != null)
                 {
-                    tileObject.GetComponent<LandHeight>().value += cardInstance.landHeightInfluence;
+                    tileObject.GetComponent<LandHeight>().value *= 1 + (cardInstance.landHeightInfluence/100);
                 }
             }
 
@@ -250,7 +320,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<PollutionLevel>() != null)
                 {
-                    tileObject.GetComponent<PollutionLevel>().value += cardInstance.pollutionInfluence;
+                    tileObject.GetComponent<PollutionLevel>().value *= 1 + (cardInstance.pollutionInfluence/100);
                 }
             }
 
@@ -258,7 +328,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<RateOfFlow>() != null)
                 {
-                    tileObject.GetComponent<RateOfFlow>().value += cardInstance.flowRateInfluence;
+                    tileObject.GetComponent<RateOfFlow>().value *= 1 + (cardInstance.flowRateInfluence/100);
                 }
             }
 
@@ -266,7 +336,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<SewageLevel>() != null)
                 {
-                    tileObject.GetComponent<SewageLevel>().value += cardInstance.sewageInfluence;
+                    tileObject.GetComponent<SewageLevel>().value *= 1 + (cardInstance.sewageInfluence/100);
                 }
             }
 
@@ -274,7 +344,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<Sinuosity>() != null)
                 {
-                    tileObject.GetComponent<Sinuosity>().value += cardInstance.sinuosityInfluence;
+                    tileObject.GetComponent<Sinuosity>().value *= 1 + (cardInstance.sinuosityInfluence/100);
                 }
             }
 
@@ -282,7 +352,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<ShadeCoverage>() != null)
                 {
-                    tileObject.GetComponent<ShadeCoverage>().value += cardInstance.shadeInfluence;
+                    tileObject.GetComponent<ShadeCoverage>().value *= 1 + (cardInstance.shadeInfluence/100);
                 }
             }
 
@@ -290,7 +360,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<Turbidity>() != null)
                 {
-                    tileObject.GetComponent<Turbidity>().value += cardInstance.turbidityInfluence;
+                    tileObject.GetComponent<Turbidity>().value *= 1 + (cardInstance.turbidityInfluence/100);
                 }
             }
 
@@ -298,7 +368,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<WaterDepth>() != null)
                 {
-                    tileObject.GetComponent<WaterDepth>().value += cardInstance.waterDepthInfluence;
+                    tileObject.GetComponent<WaterDepth>().value *= 1 + (cardInstance.waterDepthInfluence/100);
                 }
             }
 
@@ -306,7 +376,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (tileObject.GetComponent<WaterTemperature>() != null)
                 {
-                    tileObject.GetComponent<WaterTemperature>().value += cardInstance.waterTempInfluence;
+                    tileObject.GetComponent<WaterTemperature>().value *= 1 + (cardInstance.waterTempInfluence/100);
                 }
             }
         }

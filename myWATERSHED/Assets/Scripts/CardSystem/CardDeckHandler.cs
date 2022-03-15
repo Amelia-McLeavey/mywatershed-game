@@ -40,6 +40,10 @@ public class CardDeckHandler : MonoBehaviour
 
     private PlayerController playerController;
 
+    [SerializeField] private Color durationGreen;
+    [SerializeField] private Color durationRed;
+
+
     private void Awake()
     {
         m_world = FindObjectOfType<World>();
@@ -155,7 +159,20 @@ public class CardDeckHandler : MonoBehaviour
                 // Populate card UI elements with data from Card
                 m_cardUIObjects[i].transform.Find("Card Name").GetComponent<TMP_Text>().text = cardDealt.cardName;
                 m_cardUIObjects[i].transform.Find("Card Description").GetComponent<TMP_Text>().text = cardDealt.cardDescription;
-                m_cardUIObjects[i].transform.Find("Card Duration").GetComponent<TMP_Text>().text = cardDealt.durationRemaining.ToString();
+                m_cardUIObjects[i].transform.Find("Card Duration").GetComponent<TMP_Text>().text = (cardDealt.durationRemaining + cardDealt.delayBeforeEffect).ToString();
+                
+                if (cardDealt.delayBeforeEffect > 0) 
+                {
+                    m_cardUIObjects[i].transform.Find("YearBox").GetComponent<Image>().color = Color.white;
+                    m_cardUIObjects[i].transform.Find("Card Duration").GetComponent<TMP_Text>().color = durationRed;
+                    m_cardUIObjects[i].transform.Find("YearBox").Find("Ring").gameObject.SetActive(true);
+                }
+                else
+                {
+                    m_cardUIObjects[i].transform.Find("YearBox").GetComponent<Image>().color = durationGreen;
+                    m_cardUIObjects[i].transform.Find("Card Duration").GetComponent<TMP_Text>().color = Color.white;
+                    m_cardUIObjects[i].transform.Find("YearBox").Find("Ring").gameObject.SetActive(false);
+                }
 
                 string cardStats = cardDealt.tileType;
 

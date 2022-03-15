@@ -19,7 +19,7 @@ public class CardPlacementOverlay : MonoBehaviour
     public Vector3[] tileIndexOffsets;
     public Transform[] additionalOverlays;
     [SerializeField] private List<MeshRenderer> additionalMR = new List<MeshRenderer>();
-    [SerializeField] private List<GameObject> tilesWithSuccessfulPlacement = new List<GameObject>();
+    public List<GameObject> tilesWithSuccessfulPlacement = new List<GameObject>();
 
     private List<GameObject> clickedOverlays = new List<GameObject>();
 
@@ -30,6 +30,7 @@ public class CardPlacementOverlay : MonoBehaviour
     private bool followMouse = true;
 
     public GameObject clickOverlayObject;
+    public GameObject cardPlacedObject;
     void Start()
     {
         m_world = FindObjectOfType<World>();
@@ -181,10 +182,18 @@ public class CardPlacementOverlay : MonoBehaviour
 
     public void PlacedOnTile()
     {
+        bool firstTile = true;
         if (clickedOverlays.Count > 0)
         {
             foreach(GameObject clickedOverlay in clickedOverlays)
             {
+                if (firstTile)
+                {
+                    GameObject cardIcon = Instantiate(cardPlacedObject, clickedOverlay.transform);
+                    cardIcon.transform.eulerAngles = Vector3.zero;
+                    cardIcon.transform.localPosition = Vector3.zero;
+                    firstTile = false;
+                }
                 if (tilesWithSuccessfulPlacement.Contains(clickedOverlay))
                 {
                     clickedOverlay.GetComponent<MeshRenderer>().material.color = cardActive;

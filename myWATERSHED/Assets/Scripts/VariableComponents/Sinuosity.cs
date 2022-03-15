@@ -9,5 +9,6 @@ public class Sinuosity : VariableClass
     {
         variableName = "Sinuosity";
         targetValue = 0.5f;
+        moreIsBad = false;
     }
 }

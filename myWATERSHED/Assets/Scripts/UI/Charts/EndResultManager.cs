@@ -13,6 +13,11 @@ public class EndResultManager : MonoBehaviour
     [SerializeField] private UILineRenderer troutLine;
     [SerializeField] private UILineRenderer tempLine;
 
+    [Header("AREAS")]
+    [SerializeField] private UIAreaRenderer redDaceArea;
+    [SerializeField] private UIAreaRenderer chubArea;
+    [SerializeField] private UIAreaRenderer troutArea;
+
     [Header("HOVERING")]
     [SerializeField] private RectTransform playerLine;
     [SerializeField] private RectTransform daceDot;
@@ -59,6 +64,7 @@ public class EndResultManager : MonoBehaviour
     private List<float> globalTurbidity = new List<float>();
 
     private int graphSize;
+    public int graphHeight = 25;
 
     [SerializeField] private RectTransform rect;
 
@@ -76,13 +82,15 @@ public class EndResultManager : MonoBehaviour
     public bool showChub = true;
     public bool showTrout = true;
     public bool showTemp = true;
+    public bool showArea = true;
+
 
     public void CallStart()
     {
-        grid.gridSize = new Vector2Int(10, 50);
-        redDaceLine.gridSize = new Vector2Int(10, 50);
-        chubLine.gridSize = new Vector2Int(10, 50);
-        troutLine.gridSize = new Vector2Int(10, 50);
+        grid.gridSize = new Vector2Int(10, graphHeight);
+        redDaceLine.gridSize = new Vector2Int(10, graphHeight);
+        chubLine.gridSize = new Vector2Int(10, graphHeight);
+        troutLine.gridSize = new Vector2Int(10, graphHeight);
 
         redDaceLine.points.Clear();
         chubLine.points.Clear();
@@ -133,11 +141,14 @@ public class EndResultManager : MonoBehaviour
         }
 
         graphSize = (Mathf.FloorToInt(year / 10) + 1) * 10;
-        grid.gridSize = new Vector2Int(graphSize, 50);
-        redDaceLine.gridSize = new Vector2Int(graphSize, 50);
-        chubLine.gridSize = new Vector2Int(graphSize, 50);
-        troutLine.gridSize = new Vector2Int(graphSize, 50);
-        tempLine.gridSize = new Vector2Int(graphSize, 50);
+        grid.gridSize = new Vector2Int(graphSize, graphHeight);
+        redDaceLine.gridSize = new Vector2Int(graphSize, graphHeight);
+        chubLine.gridSize = new Vector2Int(graphSize, graphHeight);
+        troutLine.gridSize = new Vector2Int(graphSize, graphHeight);
+        tempLine.gridSize = new Vector2Int(graphSize, graphHeight);
+        redDaceArea.gridSize = new Vector2Int(graphSize, graphHeight);
+        chubArea.gridSize = new Vector2Int(graphSize, graphHeight);
+        troutArea.gridSize = new Vector2Int(graphSize, graphHeight);
 
 
         if (year == 1)
@@ -164,7 +175,6 @@ public class EndResultManager : MonoBehaviour
 
         troutValues.Add(troutPop);
         troutLine.points.Add(new Vector2(year, 0f));
-
 
         globalTemps.Add(temp);
         tempLine.points.Add(new Vector2(year, 0f));
@@ -209,25 +219,27 @@ public class EndResultManager : MonoBehaviour
         chubLine.gameObject.SetActive(false);
         troutLine.gameObject.SetActive(false);
         tempLine.gameObject.SetActive(false);
-
+        redDaceArea.gameObject.SetActive(false);
+        chubArea.gameObject.SetActive(false);
+        troutArea.gameObject.SetActive(false);
 
         for (int i = 0; i < redDaceLine.points.Count; i++)
         {
-            redDaceLine.points[i] = new Vector2(i, (redDaceValues[i] - minGraphValue) / (maxGraphValue - minGraphValue) * 50);//new Vector2((i*10f)/(float)graphSize, (redDaceValues[i]-minGraphValue)/(maxGraphValue-minGraphValue) *50);//redDaceValues[i]/
+            redDaceLine.points[i] = new Vector2(i, (redDaceValues[i] - minGraphValue) / (maxGraphValue - minGraphValue) * graphHeight);//new Vector2((i*10f)/(float)graphSize, (redDaceValues[i]-minGraphValue)/(maxGraphValue-minGraphValue) *50);//redDaceValues[i]/
 
             if (showChub)
             {
-                chubLine.points[i] = new Vector2(i, (chubValues[i] - minGraphValue) / (maxGraphValue - minGraphValue) * 50);
+                chubLine.points[i] = new Vector2(i, (chubValues[i] - minGraphValue) / (maxGraphValue - minGraphValue) * graphHeight);
             }
 
             if (showTrout)
             {
-                troutLine.points[i] = new Vector2(i, (troutValues[i] - minGraphValue) / (maxGraphValue - minGraphValue) * 50);
+                troutLine.points[i] = new Vector2(i, (troutValues[i] - minGraphValue) / (maxGraphValue - minGraphValue) * graphHeight);
             }
 
             if (showTemp)
             {
-                tempLine.points[i] = new Vector2(i, (globalTemps[i] - minTempValue) / (maxTempValue - minTempValue) * 50);
+                tempLine.points[i] = new Vector2(i, (globalTemps[i] - minTempValue) / (maxTempValue - minTempValue) * graphHeight);
             }
 
         }
@@ -245,6 +257,15 @@ public class EndResultManager : MonoBehaviour
         {
             tempLine.gameObject.SetActive(true);
         }
+
+        redDaceArea.points = redDaceLine.points;
+        chubArea.points = chubLine.points;
+        troutArea.points = troutLine.points;
+
+        redDaceArea.gameObject.SetActive(showArea);
+        chubArea.gameObject.SetActive(showArea&&showChub);
+        troutArea.gameObject.SetActive(showArea&&showTrout);
+
     }
 
     private void Update()
@@ -272,7 +293,7 @@ public class EndResultManager : MonoBehaviour
         if (redDaceLine.points.Count > yearNum)
         {
             daceDot.gameObject.SetActive(true);
-            daceDot.anchoredPosition = new Vector2(0f, redDaceLine.points[yearNum].y * rect.rect.height / 50f);
+            daceDot.anchoredPosition = new Vector2(0f, redDaceLine.points[yearNum].y * rect.rect.height / graphHeight);
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -288,7 +309,7 @@ public class EndResultManager : MonoBehaviour
         if (chubLine.points.Count > yearNum && showChub)
         {
             chubDot.gameObject.SetActive(true);
-            chubDot.anchoredPosition = new Vector2(0f, chubLine.points[yearNum].y * rect.rect.height / 50f);
+            chubDot.anchoredPosition = new Vector2(0f, chubLine.points[yearNum].y * rect.rect.height / graphHeight);
         }
         else
         {
@@ -298,21 +319,21 @@ public class EndResultManager : MonoBehaviour
         if (troutLine.points.Count > yearNum && showTrout)
         {
             troutDot.gameObject.SetActive(true);
-            troutDot.anchoredPosition = new Vector2(0f, troutLine.points[yearNum].y * rect.rect.height / 50f);
+            troutDot.anchoredPosition = new Vector2(0f, troutLine.points[yearNum].y * rect.rect.height / graphHeight);
         }
         else
         {
             troutDot.gameObject.SetActive(false);
-        }       
+        }
     }
 
     public void ShowSelectedYearData()
     {
         float gapBetweenLines = grid.rectTransform.rect.width / grid.gridSize.x;
         selectedLine.anchoredPosition = new Vector2(selectedYear*gapBetweenLines, 0f);
-        selectedDaceDot.anchoredPosition = new Vector2(0f, redDaceLine.points[selectedYear].y * rect.rect.height / 50f);
-        selectedChubDot.anchoredPosition = new Vector2(0f, chubLine.points[selectedYear].y * rect.rect.height / 50f);
-        selectedTroutDot.anchoredPosition = new Vector2(0f, troutLine.points[selectedYear].y * rect.rect.height / 50f);
+        selectedDaceDot.anchoredPosition = new Vector2(0f, redDaceLine.points[selectedYear].y * rect.rect.height / graphHeight);
+        selectedChubDot.anchoredPosition = new Vector2(0f, chubLine.points[selectedYear].y * rect.rect.height / graphHeight);
+        selectedTroutDot.anchoredPosition = new Vector2(0f, troutLine.points[selectedYear].y * rect.rect.height / graphHeight);
         selectedChubDot.gameObject.SetActive(showChub);
         selectedTroutDot.gameObject.SetActive(showTrout);
 
@@ -367,6 +388,12 @@ public class EndResultManager : MonoBehaviour
     public void toggleTemp()
     {
         showTemp = !showTemp;
+        LayoutPoints();
+    }
+
+    public void toggleArea()
+    {
+        showArea = !showArea;
         LayoutPoints();
     }
 }
