@@ -2257,6 +2257,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 142997092}
+  - component: {fileID: 142997093}
   m_Layer: 5
   m_Name: HandHolder
   m_TagString: Untagged
@@ -2271,19 +2272,37 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 142997091}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1001569736}
   m_Father: {fileID: 526860042}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -26.964949, y: -4.77}
+  m_AnchoredPosition: {x: -26.965002, y: 0}
   m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &142997093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 142997091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a8a9612bcc6bc74b9f6b386ca9b73cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seasonImage: {fileID: 1694850119}
+  seasonSprites:
+  - {fileID: 21300000, guid: d66ad8ff339f7fc428893a2d7925960f, type: 3}
+  - {fileID: 21300000, guid: e647a7f4b67a5584387d2dc4fb54628a, type: 3}
+  - {fileID: 21300000, guid: 918682cd0e6609f43957cc281a4713d4, type: 3}
+  - {fileID: 21300000, guid: a866a634b3c4a08479166846bb68cf1e, type: 3}
 --- !u!1 &144940673
 GameObject:
   m_ObjectHideFlags: 0
@@ -12190,10 +12209,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 541567112}
+  - {fileID: 1748490675}
+  - {fileID: 690468786}
   - {fileID: 142997092}
   - {fileID: 1975943993}
-  - {fileID: 690468786}
-  - {fileID: 1748490675}
   - {fileID: 627662350}
   - {fileID: 821484450}
   - {fileID: 826102324}
@@ -20519,7 +20538,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 526860042}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -24697,7 +24716,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.000003614, y: -1.0024}
+  m_AnchoredPosition: {x: 0, y: -4.7}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1001569737
@@ -27860,14 +27879,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   variablesAffected:
-  - variableName: RiparianLevel
-    influencePerVol: 0.001
-    targetValue: 1
-    dropOffRate: 0.75
-  - variableName: PollutionLevel
+  - variableName: ErosionRate
     influencePerVol: -0.001
     targetValue: 0
     dropOffRate: 0.5
+  - variableName: Turbidity
+    influencePerVol: -0.001
+    targetValue: 0
+    dropOffRate: 0.5
+  - variableName: ShadeCoverage
+    influencePerVol: 0.001
+    targetValue: 0.75
+    dropOffRate: 0.5
+  - variableName: PollutionLevel
+    influencePerVol: -0.001
+    targetValue: 0
+    dropOffRate: 0.8
+  - variableName: InsectPopulation
+    influencePerVol: 0.001
+    targetValue: 0.8
+    dropOffRate: 0.2
+  - variableName: Sinuosity
+    influencePerVol: 0.0001
+    targetValue: 0.8
+    dropOffRate: 0.6
+  - variableName: BrownTroutPopulation
+    influencePerVol: -0.0001
+    targetValue: 0.5
+    dropOffRate: 0.1
   m_totalVolunteers: 80
   m_totalVolunteerText: {fileID: 40194080}
   m_numberOfVolunteersPerClick: 5
@@ -29353,6 +29392,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21f7627604a8ab4080eb119eb31d848, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  image: {fileID: 0}
+  sprite: []
 --- !u!114 &1277935951 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5455320145270763325, guid: 46c2750b5752cac438c09ef280b66368, type: 3}
@@ -37870,7 +37911,7 @@ RectTransform:
   m_LocalScale: {x: 0.286, y: 0.286, z: 0.286}
   m_Children: []
   m_Father: {fileID: 526860042}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -41265,11 +41306,11 @@ RectTransform:
   - {fileID: 1635820897}
   - {fileID: 141119445}
   m_Father: {fileID: 526860042}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -26.965, y: -0.0000025222}
+  m_AnchoredPosition: {x: -26.965, y: -0}
   m_SizeDelta: {x: 33.3444, y: 33.1688}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1975943994
@@ -41378,6 +41419,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21f7627604a8ab4080eb119eb31d848, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  image: {fileID: 141119446}
+  sprite:
+  - {fileID: 21300000, guid: f04c3a19b50f89247a1a2774a6617b94, type: 3}
+  - {fileID: 21300000, guid: 90ee39352e7df7e4799800fc5f915bf3, type: 3}
 --- !u!1 &1982620132
 GameObject:
   m_ObjectHideFlags: 0

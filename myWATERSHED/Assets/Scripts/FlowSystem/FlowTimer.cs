@@ -18,6 +18,8 @@ public class FlowTimer : MonoBehaviour
     private GameManager m_gameManager;
 
     private VolunteerManager volunteerManager;
+
+    private WatchHand watchHand;
     private void Awake()
     {
         // Check that the flowTime variable is greater than 0, stop the program if so.
@@ -25,6 +27,7 @@ public class FlowTimer : MonoBehaviour
         m_gameManager = GameManager.Instance;
         volunteerManager = GameObject.FindObjectOfType<VolunteerManager>();
         m_world = FindObjectOfType<World>();
+        watchHand = FindObjectOfType<WatchHand>();
     }
 
     private void OnEnable()
@@ -57,12 +60,14 @@ public class FlowTimer : MonoBehaviour
     private IEnumerator SummerLengthTimer()
     {
         int sec = 0;
+        watchHand.UpdateHandPos(0f);
         while (sec < m_world.m_summerLengthInSeconds)
         {
             yield return new WaitForSeconds(1f);
             if (m_gameManager.m_gameState==GameState.Game)
             {
                 sec++;
+                watchHand.UpdateHandPos((float)(sec/ m_world.m_summerLengthInSeconds));
             }
         }
         m_world.ChangeSeason(SeasonState.Winter);

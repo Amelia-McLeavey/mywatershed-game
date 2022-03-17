@@ -12,5 +12,6 @@ public class Turbidity : VariableClass
     private void Awake()
     {
         variableName = "Turbidity";
+        targetValue = 0.1f;
     }
 }

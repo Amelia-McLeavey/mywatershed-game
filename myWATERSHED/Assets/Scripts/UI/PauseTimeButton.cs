@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PauseTimeButton : MonoBehaviour
 {
     private GameManager m_gameManager;
+    public Image image;
     public Sprite[] sprite;
      
     private void Start()
@@ -19,13 +20,13 @@ public class PauseTimeButton : MonoBehaviour
         if(m_gameManager.m_gameState == GameState.Frozen)
         {
             m_gameManager.SetGameState(GameState.Game, null);
-            gameObject.GetComponent<Image>().sprite = sprite[0];
+            image.sprite = sprite[0];
             
         }
         else
         {
             m_gameManager.SetGameState(GameState.Frozen, null);
-            gameObject.GetComponent<Image>().sprite = sprite[1];
+            image.sprite = sprite[1];
         }
     }
 
