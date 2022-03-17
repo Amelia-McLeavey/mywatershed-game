@@ -77,6 +77,10 @@ public class PlayerController : MonoBehaviour
     // Will not be needed in the final game as players will not have these buttons
     #region Dev Generation Functions
 
+    private void OnDestroy()
+    {
+        WorldGenerator.OnWorldGenerationComplete -= hideLoadingPanel;
+    }
 
     public void GenerateWorldOnClick()
     {

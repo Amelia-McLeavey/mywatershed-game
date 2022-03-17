@@ -23,7 +23,9 @@ public class Heatmap : MonoBehaviour
     private void Start()
     {
         m_gameManager = GameManager.Instance;
+        Debug.Assert(m_gameManager != null, "Heatmap needs GameManager.");
         m_worldGenerator = FindObjectOfType<WorldGenerator>();
+        Debug.Assert(m_worldGenerator != null, "Heatmap needs WorldGenerator.");
     }
 
 

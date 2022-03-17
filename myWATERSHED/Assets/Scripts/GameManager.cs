@@ -21,20 +21,21 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        fishCam = GameObject.Find("Fishcam-Camera");
-        cardHolder = GameObject.FindObjectOfType<PlayedCardHolder>();
         if (s_instance == null)
         {
             // Store the static variable
             s_instance = this;
             DontDestroyOnLoad(s_instance);
+
+            // Force state transition code to run because sometimes we playtest game without first running MainMenu scene
+            m_gameState = GameState.MainMenu;
+            SetGameState(GameState.Game, null);
         }
         else
         {
             Debug.LogWarning("There is already an instance of GameManager");
             Destroy(gameObject);
         }
-        m_gameState = GameState.Game;
     }
 
     /// <summary>
@@ -54,6 +55,12 @@ public class GameManager : MonoBehaviour
 
     public void SetGameState(GameState state, string sceneName)
     {
+        // Initialize references so that they are not lost in state transition after going from Game to MainMenu to Game again
+        if(m_gameState == GameState.MainMenu && state == GameState.Game)
+        {
+            OnState_MainMenuToGame();
+        }
+
         if(state == GameState.Game)
         {
             fishCam.SetActive(true);
@@ -74,6 +81,12 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         }
+    }
+
+    private void OnState_MainMenuToGame()
+    {
+        fishCam = GameObject.Find("Fishcam-Camera");
+        cardHolder = GameObject.FindObjectOfType<PlayedCardHolder>();
     }
 
     public void OnApplicationQuit()
