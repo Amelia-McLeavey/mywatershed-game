@@ -23,6 +23,9 @@ using UnityEditor;
 //// 7. Save this script.
 //// 8. You will see a new batch of CardAsset objects in version control. Commit and Push those.
 
+//// Q: Why do we need to uncomment and comment this code in the first place? Why can't we just leave it uncommented?
+//// A: If this code is left uncommented then the game will not build or will be errors in the build.
+
 
 public class GoogleSheetParser : MonoBehaviour
 {
@@ -32,7 +35,7 @@ public class GoogleSheetParser : MonoBehaviour
     public static void LoadCardDeck()
     {
         //// Read through the google sheet, convert each row into a single string
-
+        //// This whole script only runs when the application is the Unity Editor
         if (Application.isEditor)
         {
             //// ------------------------------------------------------------------------------------

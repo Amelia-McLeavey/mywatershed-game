@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+// This is the script component where the GUI button will appear
 [CustomEditor(typeof(CardDeckHandler))]
 public class CardImporterEditor : Editor
 {
