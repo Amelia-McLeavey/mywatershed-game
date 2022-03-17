@@ -28,12 +28,12 @@ public class TileVariableDisplay : MonoBehaviour
         {
             if (variableClassToRead.wholeNumbers)
             {
-                nameText.text = variableClassToRead.variableName + " : " + variableClassToRead.value;
+                nameText.text = variableClassToRead.variableName;// + " : " + variableClassToRead.value;
                 slider.maxValue = 50;
             }
             else
             {
-                nameText.text = variableClassToRead.variableName + " : " + variableClassToRead.value.ToString("F3");
+                nameText.text = variableClassToRead.variableName;// + " : " + variableClassToRead.value.ToString("F3");
                 slider.maxValue = 1;
             }
             slider.maxValue = variableClassToRead.maxValue;

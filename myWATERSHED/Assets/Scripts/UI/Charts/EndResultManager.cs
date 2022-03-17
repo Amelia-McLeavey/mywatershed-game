@@ -6,23 +6,39 @@ using TMPro;
 
 public class EndResultManager : MonoBehaviour
 {
+    [Header("LINES")]
     [SerializeField] private UIGridRenderer grid; 
     [SerializeField] private UILineRenderer redDaceLine;
     [SerializeField] private UILineRenderer chubLine;
     [SerializeField] private UILineRenderer troutLine;
+    [SerializeField] private UILineRenderer tempLine;
+
+    [Header("AREAS")]
+    [SerializeField] private UIAreaRenderer redDaceArea;
+    [SerializeField] private UIAreaRenderer chubArea;
+    [SerializeField] private UIAreaRenderer troutArea;
+
+    [Header("HOVERING")]
     [SerializeField] private RectTransform playerLine;
     [SerializeField] private RectTransform daceDot;
     [SerializeField] private RectTransform chubDot;
     [SerializeField] private RectTransform troutDot;
 
+    [Header("SELECTED")]
     [SerializeField] private RectTransform selectedLine;
     [SerializeField] private RectTransform selectedDaceDot;
     [SerializeField] private RectTransform selectedChubDot;
     [SerializeField] private RectTransform selectedTroutDot;
 
+    [Header("DISPLAY")]
     [SerializeField] private Slider tempSlider;
+    [SerializeField] private TMP_Text tempNumber;
     [SerializeField] private Slider turbiditySlider;
     [SerializeField] private TMP_Text yearTitle;
+    [SerializeField] private TMP_Text daceNumText;
+    [SerializeField] private TMP_Text chubNumText;
+    [SerializeField] private TMP_Text troutNumText;
+    [SerializeField] private TMP_Text insectNumText;
 
     [SerializeField] private TMP_Text[] xAxisNumbers;
     [SerializeField] private TMP_Text[] yAxisNumbers;
@@ -39,10 +55,16 @@ public class EndResultManager : MonoBehaviour
     private float maxTroutValue = 0f;
     private float minTroutValue = 999999f;
 
+    private List<float> insectValues = new List<float>();
+
     private List<float> globalTemps = new List<float>();
+    private float maxTempValue = 0f;
+    private float minTempValue = 999999f;
+
     private List<float> globalTurbidity = new List<float>();
 
     private int graphSize;
+    public int graphHeight = 25;
 
     [SerializeField] private RectTransform rect;
 
@@ -59,21 +81,25 @@ public class EndResultManager : MonoBehaviour
     [Header("Togglable Bools")]
     public bool showChub = true;
     public bool showTrout = true;
+    public bool showTemp = true;
+    public bool showArea = true;
+
 
     public void CallStart()
     {
-        grid.gridSize = new Vector2Int(10, 50);
-        redDaceLine.gridSize = new Vector2Int(10, 50);
-        chubLine.gridSize = new Vector2Int(10, 50);
-        troutLine.gridSize = new Vector2Int(10, 50);
+        grid.gridSize = new Vector2Int(10, graphHeight);
+        redDaceLine.gridSize = new Vector2Int(10, graphHeight);
+        chubLine.gridSize = new Vector2Int(10, graphHeight);
+        troutLine.gridSize = new Vector2Int(10, graphHeight);
 
         redDaceLine.points.Clear();
         chubLine.points.Clear();
         troutLine.points.Clear();
+        tempLine.points.Clear();
         //redDaceLine.points.Add(new Vector2(0f, 0f));
     }
 
-    public void AddDataPoint(int year, float redDacePop, float chubPop, float troutPop, float temp, float turbidity)
+    public void AddDataPoint(int year, float redDacePop, float chubPop, float troutPop, float insectPop, float temp, float turbidity)
     {    
         if (redDacePop > maxRedDaceValue)
         {
@@ -99,13 +125,31 @@ public class EndResultManager : MonoBehaviour
         {
             minTroutValue = troutPop;
         }
+        if (temp > maxTempValue)
+        {
+            maxTempValue = temp;
 
+        }
+        if (temp < minTempValue)
+        {
+            minTempValue = temp;
+            if (minTempValue == maxTempValue)
+            {
+                maxTempValue += 5f;
+                minTempValue -= 5f;
+            }
+        }
 
         graphSize = (Mathf.FloorToInt(year / 10) + 1) * 10;
-        grid.gridSize = new Vector2Int(graphSize, 50);
-        redDaceLine.gridSize = new Vector2Int(graphSize, 50);
-        chubLine.gridSize = new Vector2Int(graphSize, 50);
-        troutLine.gridSize = new Vector2Int(graphSize, 50);
+        grid.gridSize = new Vector2Int(graphSize, graphHeight);
+        redDaceLine.gridSize = new Vector2Int(graphSize, graphHeight);
+        chubLine.gridSize = new Vector2Int(graphSize, graphHeight);
+        troutLine.gridSize = new Vector2Int(graphSize, graphHeight);
+        tempLine.gridSize = new Vector2Int(graphSize, graphHeight);
+        redDaceArea.gridSize = new Vector2Int(graphSize, graphHeight);
+        chubArea.gridSize = new Vector2Int(graphSize, graphHeight);
+        troutArea.gridSize = new Vector2Int(graphSize, graphHeight);
+
 
         if (year == 1)
         {
@@ -119,6 +163,8 @@ public class EndResultManager : MonoBehaviour
             troutLine.points.Add(new Vector2(0, 0f));
 
             globalTemps.Add(temp);
+            tempLine.points.Add(new Vector2(0, 0f));
+
             globalTurbidity.Add(turbidity);
         }
         redDaceValues.Add(redDacePop);
@@ -130,9 +176,12 @@ public class EndResultManager : MonoBehaviour
         troutValues.Add(troutPop);
         troutLine.points.Add(new Vector2(year, 0f));
 
-
         globalTemps.Add(temp);
+        tempLine.points.Add(new Vector2(year, 0f));
+
         globalTurbidity.Add(turbidity);
+
+        insectValues.Add(insectPop);
 
         for (int i=0; i< xAxisNumbers.Length; i++)
         {
@@ -169,20 +218,28 @@ public class EndResultManager : MonoBehaviour
         redDaceLine.gameObject.SetActive(false);
         chubLine.gameObject.SetActive(false);
         troutLine.gameObject.SetActive(false);
-
+        tempLine.gameObject.SetActive(false);
+        redDaceArea.gameObject.SetActive(false);
+        chubArea.gameObject.SetActive(false);
+        troutArea.gameObject.SetActive(false);
 
         for (int i = 0; i < redDaceLine.points.Count; i++)
         {
-            redDaceLine.points[i] = new Vector2(i, (redDaceValues[i] - minGraphValue) / (maxGraphValue - minGraphValue) * 50);//new Vector2((i*10f)/(float)graphSize, (redDaceValues[i]-minGraphValue)/(maxGraphValue-minGraphValue) *50);//redDaceValues[i]/
+            redDaceLine.points[i] = new Vector2(i, (redDaceValues[i] - minGraphValue) / (maxGraphValue - minGraphValue) * graphHeight);//new Vector2((i*10f)/(float)graphSize, (redDaceValues[i]-minGraphValue)/(maxGraphValue-minGraphValue) *50);//redDaceValues[i]/
 
             if (showChub)
             {
-                chubLine.points[i] = new Vector2(i, (chubValues[i] - minGraphValue) / (maxGraphValue - minGraphValue) * 50);
+                chubLine.points[i] = new Vector2(i, (chubValues[i] - minGraphValue) / (maxGraphValue - minGraphValue) * graphHeight);
             }
 
             if (showTrout)
             {
-                troutLine.points[i] = new Vector2(i, (troutValues[i] - minGraphValue) / (maxGraphValue - minGraphValue) * 50);
+                troutLine.points[i] = new Vector2(i, (troutValues[i] - minGraphValue) / (maxGraphValue - minGraphValue) * graphHeight);
+            }
+
+            if (showTemp)
+            {
+                tempLine.points[i] = new Vector2(i, (globalTemps[i] - minTempValue) / (maxTempValue - minTempValue) * graphHeight);
             }
 
         }
@@ -196,6 +253,19 @@ public class EndResultManager : MonoBehaviour
         {
             troutLine.gameObject.SetActive(true);
         }
+        if (showTemp)
+        {
+            tempLine.gameObject.SetActive(true);
+        }
+
+        redDaceArea.points = redDaceLine.points;
+        chubArea.points = chubLine.points;
+        troutArea.points = troutLine.points;
+
+        redDaceArea.gameObject.SetActive(showArea);
+        chubArea.gameObject.SetActive(showArea&&showChub);
+        troutArea.gameObject.SetActive(showArea&&showTrout);
+
     }
 
     private void Update()
@@ -223,7 +293,7 @@ public class EndResultManager : MonoBehaviour
         if (redDaceLine.points.Count > yearNum)
         {
             daceDot.gameObject.SetActive(true);
-            daceDot.anchoredPosition = new Vector2(0f, redDaceLine.points[yearNum].y * rect.rect.height / 50f);
+            daceDot.anchoredPosition = new Vector2(0f, redDaceLine.points[yearNum].y * rect.rect.height / graphHeight);
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -239,7 +309,7 @@ public class EndResultManager : MonoBehaviour
         if (chubLine.points.Count > yearNum && showChub)
         {
             chubDot.gameObject.SetActive(true);
-            chubDot.anchoredPosition = new Vector2(0f, chubLine.points[yearNum].y * rect.rect.height / 50f);
+            chubDot.anchoredPosition = new Vector2(0f, chubLine.points[yearNum].y * rect.rect.height / graphHeight);
         }
         else
         {
@@ -249,30 +319,37 @@ public class EndResultManager : MonoBehaviour
         if (troutLine.points.Count > yearNum && showTrout)
         {
             troutDot.gameObject.SetActive(true);
-            troutDot.anchoredPosition = new Vector2(0f, troutLine.points[yearNum].y * rect.rect.height / 50f);
+            troutDot.anchoredPosition = new Vector2(0f, troutLine.points[yearNum].y * rect.rect.height / graphHeight);
         }
         else
         {
             troutDot.gameObject.SetActive(false);
-        }       
+        }
     }
 
     public void ShowSelectedYearData()
     {
         float gapBetweenLines = grid.rectTransform.rect.width / grid.gridSize.x;
         selectedLine.anchoredPosition = new Vector2(selectedYear*gapBetweenLines, 0f);
-        selectedDaceDot.anchoredPosition = new Vector2(0f, redDaceLine.points[selectedYear].y * rect.rect.height / 50f);
-        selectedChubDot.anchoredPosition = new Vector2(0f, chubLine.points[selectedYear].y * rect.rect.height / 50f);
-        selectedTroutDot.anchoredPosition = new Vector2(0f, troutLine.points[selectedYear].y * rect.rect.height / 50f);
+        selectedDaceDot.anchoredPosition = new Vector2(0f, redDaceLine.points[selectedYear].y * rect.rect.height / graphHeight);
+        selectedChubDot.anchoredPosition = new Vector2(0f, chubLine.points[selectedYear].y * rect.rect.height / graphHeight);
+        selectedTroutDot.anchoredPosition = new Vector2(0f, troutLine.points[selectedYear].y * rect.rect.height / graphHeight);
         selectedChubDot.gameObject.SetActive(showChub);
         selectedTroutDot.gameObject.SetActive(showTrout);
 
         yearTitle.text = "Year " + selectedYear;
         tempSlider.value = globalTemps[selectedYear];
+        tempNumber.text = globalTemps[selectedYear].ToString();
         turbiditySlider.value = globalTurbidity[selectedYear];
+
         if (selectedYear > 0 && cardInstances.Count>= selectedYear)
         {
             ShowCardInfo(selectedYear-1);
+
+            daceNumText.text = redDaceValues[selectedYear - 1].ToString();
+            chubNumText.text = chubValues[selectedYear-1].ToString();
+            troutNumText.text = troutValues[selectedYear-1].ToString();
+            insectNumText.text = insectValues[selectedYear-1].ToString();
         }
     }
 
@@ -305,6 +382,18 @@ public class EndResultManager : MonoBehaviour
     public void toggleTrout()
     {
         showTrout = !showTrout;
+        LayoutPoints();
+    }
+
+    public void toggleTemp()
+    {
+        showTemp = !showTemp;
+        LayoutPoints();
+    }
+
+    public void toggleArea()
+    {
+        showArea = !showArea;
         LayoutPoints();
     }
 }

@@ -26,6 +26,7 @@ TagManager:
   - Wetland
   - Meeple
   - VolunteerOverlay
+  - CardOverlay
   layers:
   - Default
   - TransparentFX

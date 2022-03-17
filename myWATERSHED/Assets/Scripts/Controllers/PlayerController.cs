@@ -266,6 +266,12 @@ public class PlayerController : MonoBehaviour
             }
             m_tileTitle.text += letter;
         }
+
+        if (m_cardOverlay.placing)
+        {
+            m_cardOverlay.ClickedOnTile();
+        }
+
         freshClick = true;
     }
 

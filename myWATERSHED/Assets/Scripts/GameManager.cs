@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
         {
             // Store the static variable
             s_instance = this;
-            //DontDestroyOnLoad(s_instance);
+            DontDestroyOnLoad(s_instance);
         }
         else
         {
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
 
         if (sceneName != null)
         {
-            SceneManager.LoadScene(sceneName);
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         }
     }
 
