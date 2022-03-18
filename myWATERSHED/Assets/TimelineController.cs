@@ -9,8 +9,11 @@ public class TimelineController : MonoBehaviour
     PlayableDirector director;
     public string Scene1;
         public string Scene2;
+
+    private GameManager gameManager;
     private void Start()
     {
+        gameManager = GameObject.FindObjectOfType<GameManager>();
         director = GetComponent<PlayableDirector>();
     }
 
@@ -33,6 +36,7 @@ public class TimelineController : MonoBehaviour
     }
 
     public void loadScene2() {
-        SceneManager.LoadScene(Scene2);
+        // SceneManager.LoadScene(Scene2);
+        gameManager.SetGameState(GameState.MainMenu, Scene2);
     }
 }
