@@ -16,6 +16,9 @@ public class WorldGenerator : MonoBehaviour
     public int m_columns = 0;
 
     [SerializeField]
+    private bool m_heightsOn = false;
+
+    [SerializeField]
     private GameObject m_tile;
 
     private Vector2 tileStep = new Vector2(0.5f, 0.87f);
@@ -89,7 +92,14 @@ public class WorldGenerator : MonoBehaviour
                 TileManager.s_TilesDictonary.Add(new Vector2(x, y), cloneTile = Instantiate(m_tile, position, Quaternion.Euler(-90f, 0f, 0f)));
 
                 // Set the tile height.. Z because of the orientation of the asset
-                cloneTile.transform.localScale = new Vector3(1f, 1f, HeightmapGenerator.s_Heightmap[x, y]);
+                if (m_heightsOn)
+                {
+                    cloneTile.transform.localScale = new Vector3(1f, 1f, HeightmapGenerator.s_Heightmap[x, y]);
+                }
+                else
+                {
+                    cloneTile.transform.localScale = new Vector3(1f, 1f, 4f);
+                }
                 
                 // Set a reference for the tile's Index on Tile
                 Tile tileScript = cloneTile.GetComponent<Tile>();
