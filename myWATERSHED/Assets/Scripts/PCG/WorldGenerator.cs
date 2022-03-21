@@ -42,7 +42,7 @@ public class WorldGenerator : MonoBehaviour
 
        
         GetComponent<TileTypeAllocator>().AllocateTypes(m_Seed, m_rows, m_columns);
-        GetComponent<MinatureManager>().PlaceMinatures(m_rows, m_columns);
+        GetComponent<MinatureManager>().PlaceMinatures(m_rows, m_columns, m_heightsOn);
 
         //8
         //Place the objects on the tiles

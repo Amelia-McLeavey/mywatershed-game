@@ -25,7 +25,7 @@ public class MinatureManager : MonoBehaviour
         
     }
 
-    public void PlaceMinatures(int rows, int columns)
+    public void PlaceMinatures(int rows, int columns, bool heightsOn)
     {
         m_rows = rows;
         m_columns = columns;
@@ -33,6 +33,10 @@ public class MinatureManager : MonoBehaviour
         {
             for (int y = 0; y < m_columns; y++)
             {
+                if (heightsOn)
+                {
+
+                }
                 GameObject myMinature;
                 Vector2 tileIndex = new Vector2(x, y);
                 Vector3 position;
@@ -51,10 +55,31 @@ public class MinatureManager : MonoBehaviour
                     position = value.transform.position;
                     yPosition = ((value.transform.localScale.z * 0.3574679f) / 2f) - (value.transform.localScale.z * 0.006f);
 
-                    position.y = yPosition;
+                    
+                    
                     //Reference and store physical type from game object
                     PhysicalType physicalType = value.GetComponent<Tile>().m_PhysicalType;
                     minatureToSpawn = m_TileManager.m_minatures[(int)physicalType];
+
+                    //Set height based on world type (Flat or height)
+                    if (heightsOn)
+                    {
+                        position.y = yPosition;
+                    }
+                    else
+                    {
+                        if ((int)physicalType == 17)
+                        {
+                            position.y = 0.75f;
+                        } else if ((int)physicalType == 8)
+                        {
+                            position.y = 0.8f;
+                        }
+                        else
+                        {
+                            position.y = 0.7f;
+                        }   
+                    }
 
                     //assign correct minature from referenced list to the gameobject using the index
                     //minatureToSpawn = GetComponent<TileManager>().m_minature[physicalType];
