@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ba0cd76515e55244974da64004fc1e7, type: 3}
-  m_Name: CardDataAsset_29
+  m_Name: CardDataAsset_64
   m_EditorClassIdentifier: 
-  m_id: 29
-  m_name: Winding river
-  m_description: Decrease turbidity and increase sinuosity on steams
-  m_quantity: 2
-  m_effectDuration: 3
+  m_id: 64
+  m_name: Chubb, please
+  m_description: Clear the water for more creek chubb
+  m_quantity: 3
+  m_effectDuration: 6
   m_timeBeforeEffect: 0
   m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
@@ -26,7 +26,7 @@ MonoBehaviour:
   m_activity: N
   m_unlockableCArdID: 0
   m_brownTroutPopulation: 0
-  m_creekChubPopulation: 0
+  m_creekChubPopulation: 20
   m_insectPopulation: 0
   m_redDacePopulation: 0
   m_riparianQuality: 0
@@ -37,8 +37,8 @@ MonoBehaviour:
   m_pollutionLevel: 0
   m_flowRate: 0
   m_sewageLevel: 0
-  m_sinuosity: 10
+  m_sinuosity: 0
   m_shadeCoverage: 0
-  m_turbidity: -10
+  m_turbidity: 0
   m_waterDepth: 0
   m_waterTemperature: 0

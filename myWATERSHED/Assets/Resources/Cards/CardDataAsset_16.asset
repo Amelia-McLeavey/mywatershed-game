@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_id: 16
   m_name: 4 more years!
-  m_description: increase riverbed healthfor4 years
+  m_description: increase riverbed health for 4 years
   m_quantity: 2
   m_effectDuration: 4
   m_timeBeforeEffect: 0
   m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: NaturalReservoir
-  m_amountOfTilesTargeted: 5
+  m_amountOfTilesTargeted: 7
   m_tileModificationScreen: 1
   m_activity: N
   m_unlockableCArdID: 0

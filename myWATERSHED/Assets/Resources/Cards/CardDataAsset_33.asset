@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardDataAsset_33
   m_EditorClassIdentifier: 
   m_id: 33
-  m_name: card 33
+  m_name: Wanderlust
   m_description: Increases sinuosity on steams
   m_quantity: 2
   m_effectDuration: 10
@@ -21,7 +21,7 @@ MonoBehaviour:
   m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: NaturalStream
-  m_amountOfTilesTargeted: 8
+  m_amountOfTilesTargeted: 7
   m_tileModificationScreen: 1
   m_activity: N
   m_unlockableCArdID: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardDataAsset_43
   m_EditorClassIdentifier: 
   m_id: 43
-  m_name: card 43
+  m_name: Parking to parks
   m_description: Reduce asphalt density
   m_quantity: 3
   m_effectDuration: 9
@@ -21,7 +21,7 @@ MonoBehaviour:
   m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: UrbanOpenSpace
-  m_amountOfTilesTargeted: 2
+  m_amountOfTilesTargeted: 3
   m_tileModificationScreen: 1
   m_activity: N
   m_unlockableCArdID: 0

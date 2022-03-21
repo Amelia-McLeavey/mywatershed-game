@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardDataAsset_49
   m_EditorClassIdentifier: 
   m_id: 49
-  m_name: card 49
+  m_name: Engineering like the 70s
   m_description: Decrease erosion rate, increase land height and asphalt density
     in high density areas
   m_quantity: 3

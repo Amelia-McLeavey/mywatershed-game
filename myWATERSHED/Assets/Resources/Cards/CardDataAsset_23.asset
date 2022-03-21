@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_id: 23
   m_name: Card Restoration
-  m_description: increasse riverbed health drastically in reservoirs
+  m_description: increase riverbed health drastically in reservoirs
   m_quantity: 2
   m_effectDuration: 3
   m_timeBeforeEffect: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardDataAsset_32
   m_EditorClassIdentifier: 
   m_id: 32
-  m_name: card 32
+  m_name: Chill out
   m_description: Decrease water temp on any on steams
   m_quantity: 4
   m_effectDuration: 5
@@ -21,7 +21,7 @@ MonoBehaviour:
   m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: NaturalStream
-  m_amountOfTilesTargeted: 10
+  m_amountOfTilesTargeted: 19
   m_tileModificationScreen: 1
   m_activity: N
   m_unlockableCArdID: 0

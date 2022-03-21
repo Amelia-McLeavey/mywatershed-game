@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardDataAsset_39
   m_EditorClassIdentifier: 
   m_id: 39
-  m_name: card 39
+  m_name: Go car go!
   m_description: Increase pollution and asphalt density
   m_quantity: 2
   m_effectDuration: 7
