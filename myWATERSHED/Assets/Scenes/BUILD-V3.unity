@@ -28425,6 +28425,7 @@ MonoBehaviour:
   m_Seed: 231
   m_rows: 55
   m_columns: 45
+  m_heightsOn: 0
   m_tile: {fileID: 8496806235136799508, guid: 1264be803a532da429cdae63bff909d4, type: 3}
 --- !u!4 &1115008490
 Transform:
@@ -34126,7 +34127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59dca2fdc1968f4449bed15b8b3c9596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_flowTime: 0.5
+  m_flowTime: 1
 --- !u!114 &1445818909
 MonoBehaviour:
   m_ObjectHideFlags: 0
