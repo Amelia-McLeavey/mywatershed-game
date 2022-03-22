@@ -12,5 +12,6 @@ public class SewageLevel : VariableClass
     private void Awake()
     {
         variableName = "Sewage Level";
+        targetValue = 0.1f;
     }
 }

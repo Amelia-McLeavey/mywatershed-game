@@ -57,7 +57,7 @@ public class CardPlacementOverlay : MonoBehaviour
                 {
                     tileHit = hit.collider.gameObject.GetComponent<Tile>();
 
-                    if (tileHit.m_PhysicalType.ToString() == playedCardHolder.newestCard.cardInstance.tileType)
+                    if (tileHit.m_PhysicalType.ToString() == playedCardHolder.newestCard.cardInstance.tileType && tileHit.currentCard == null)
                     {
                         overlay.material.color = canBePlaced;
                         ableToPlaceCard = true;
@@ -89,7 +89,7 @@ public class CardPlacementOverlay : MonoBehaviour
                                 Vector3 pos = value.transform.position + new Vector3(0f, value.transform.localScale.z / 6f, 0f);
                                 additionalOverlays[i].position = pos;
 
-                                if (value.GetComponent<Tile>().m_PhysicalType.ToString() == playedCardHolder.newestCard.cardInstance.tileType)
+                                if (value.GetComponent<Tile>().m_PhysicalType.ToString() == playedCardHolder.newestCard.cardInstance.tileType && value.GetComponent<Tile>().currentCard==null)
                                 {
                                     additionalMR[i].material.color = canBePlaced;
                                 }
@@ -168,7 +168,7 @@ public class CardPlacementOverlay : MonoBehaviour
                     newOverlay.transform.eulerAngles = new Vector3(-90f, 0f, 0f);
                     newOverlay.GetComponent<MeshRenderer>().material.color = additionalMR[i].material.color + new Color(0f,0f,0f,0.2f); //make colour stronger
 
-                    if(tile.GetComponent<Tile>().m_PhysicalType.ToString() == playedCardHolder.newestCard.cardInstance.tileType)
+                    if(tile.GetComponent<Tile>().m_PhysicalType.ToString() == playedCardHolder.newestCard.cardInstance.tileType && tile.GetComponent<Tile>().currentCard == null)
                     {
                         tilesWithSuccessfulPlacement.Add(newOverlay);
                     }

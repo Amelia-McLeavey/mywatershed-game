@@ -19,9 +19,11 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [SerializeField] private TMP_Text cardDescription;
     [SerializeField] private TMP_Text cardStats;
     [SerializeField] private TMP_Text cardDuration;
+    [SerializeField] private TMP_Text cardTileType;
     [SerializeField] private Image cardDurationRing;
     [SerializeField] private Image cardDurationCircle;
     [SerializeField] private Color cardDurationGreen;
+    [SerializeField] private Image cardIcon;
 
     private float targetYPos=0f;
 
@@ -30,7 +32,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public bool doPopUp = false;
     private CardPlacementOverlay m_overlay;
 
-    private bool placingCurrently = false;
+    public bool placingCurrently = false;
     private PlayerController playerController;
     private GameManager m_gameManager;
 
@@ -39,15 +41,19 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [SerializeField] private GameObject m_tileButton;
 
     private PlayedCardHolder cardHolder;
+    private CardDeckHandler cardDeckHandler;
     private World m_world;
     private WorldGenerator m_worldGenerator;
 
     private Animator anim;
+    private string Capitals = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
     void Awake()
     {
         m_world = FindObjectOfType<World>();
         m_worldGenerator = FindObjectOfType<WorldGenerator>();
         cardHolder = GameObject.FindObjectOfType<PlayedCardHolder>();
+        cardDeckHandler = GameObject.FindObjectOfType<CardDeckHandler>();
         m_overlay = GameObject.FindObjectOfType<CardPlacementOverlay>();
         m_gameManager = GameManager.Instance;
         playerController = GameObject.FindObjectOfType<PlayerController>();
@@ -61,18 +67,41 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         cardName.text = cardInstance.cardName;
         cardDescription.text = cardInstance.cardDescription;
         cardDuration.text = (cardInstance.durationRemaining + cardInstance.delayBeforeEffect).ToString();
-
+        cardIcon.sprite = cardDeckHandler.icons[cardInstance.iconNumber];
         maxDelayTime = cardInstance.delayBeforeEffect;
 
-        string stats = card.tileType;
 
-        stats += "\n\nTiles affected: " + card.numberOfTiles;
-
-        stats += "\nDuration of Effect: " + card.durationRemaining;
-
-        if (card.delayBeforeEffect != 0)
+        string tileType = "";
+        foreach (char letter in cardInstance.tileType)
         {
-            stats += "\nDelay before Effect: " + card.delayBeforeEffect;
+            if (Capitals.Contains(letter.ToString()) && tileType != "")
+            {
+                tileType += " ";
+            }
+            tileType += letter;
+        }
+
+        cardTileType.text = tileType;
+
+        string stats = "<b>TILES AFFECTED:</b>\n";
+        if (cardInstance.numberOfTiles == 0)
+        {
+            stats += " All water tiles";
+        }
+        else
+        {
+            stats += cardInstance.numberOfTiles + " tiles";
+        }
+
+        stats += "\n\n<b>DURATION OF EFFECT: </b>\n" + cardInstance.durationRemaining + " years";
+
+        if (cardInstance.delayBeforeEffect != 0)
+        {
+            stats += "\n\n<b>DELAY BEFORE EFFECT: </b>\n " + cardInstance.delayBeforeEffect + " years";
+        }
+        else
+        {
+            stats += "\n\n<b>NO DELAY</b>";
         }
 
         cardStats.text = stats;

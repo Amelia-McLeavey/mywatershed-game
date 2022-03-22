@@ -77,6 +77,8 @@ public class EndResultManager : MonoBehaviour
     [SerializeField] private TMP_Text cardStats;
     [SerializeField] private TMP_Text cardDuration;
 
+    [SerializeField] private EndBarGraphManager barGraphManager;
+
 
     [Header("Togglable Bools")]
     public bool showChub = true;
@@ -351,6 +353,8 @@ public class EndResultManager : MonoBehaviour
             troutNumText.text = troutValues[selectedYear-1].ToString();
             insectNumText.text = insectValues[selectedYear-1].ToString();
         }
+
+        barGraphManager.UpdateBarGraph();
     }
 
     private void ShowCardInfo(int cardIndex)

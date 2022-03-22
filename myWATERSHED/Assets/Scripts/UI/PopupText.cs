@@ -8,6 +8,7 @@ public class PopupText : MonoBehaviour
 {
     private RectTransform rt;
     private TMP_Text text;
+    public float letterScale;
 
     public Vector2 offset;
 
@@ -21,7 +22,15 @@ public class PopupText : MonoBehaviour
     {
         if (text.enabled)
         {
-            rt.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y) + offset;
+
+            if(Screen.width - Input.mousePosition.x < text.text.Length * letterScale)
+            {
+                rt.position = new Vector2(Input.mousePosition.x - (text.text.Length * letterScale), Input.mousePosition.y) + offset;
+            }
+            else
+            {
+                rt.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y) + offset;
+            }
         }
     }
     public void ShowPopUp(string textToDisplay)

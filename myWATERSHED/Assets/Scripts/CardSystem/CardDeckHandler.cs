@@ -43,7 +43,9 @@ public class CardDeckHandler : MonoBehaviour
     [SerializeField] private Color durationGreen;
     [SerializeField] private Color durationRed;
 
+    private string Capitals = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+    public Sprite[] icons;
     private void Awake()
     {
         m_world = FindObjectOfType<World>();
@@ -151,6 +153,7 @@ public class CardDeckHandler : MonoBehaviour
             if (m_shuffledIDDeck.Count != 0)
             {
                 CardInstance cardDealt = CreateCardInstance(m_shuffledIDDeck.Dequeue());
+                cardDealt.iconNumber = PickCardIcon(cardDealt);
                 m_cardsDealt.Add(cardDealt);
 
                 // Activate UI card 
@@ -160,7 +163,24 @@ public class CardDeckHandler : MonoBehaviour
                 m_cardUIObjects[i].transform.Find("Card Name").GetComponent<TMP_Text>().text = cardDealt.cardName;
                 m_cardUIObjects[i].transform.Find("Card Description").GetComponent<TMP_Text>().text = cardDealt.cardDescription;
                 m_cardUIObjects[i].transform.Find("Card Duration").GetComponent<TMP_Text>().text = (cardDealt.durationRemaining + cardDealt.delayBeforeEffect).ToString();
-                
+                if(cardDealt.tileType == "None")
+                {
+                    cardDealt.tileType = "Global";
+                }
+
+                string tileType = "";
+                foreach (char letter in cardDealt.tileType)
+                {
+                    if (Capitals.Contains(letter.ToString()) && tileType != "")
+                    {
+                        tileType += " ";
+                    }
+                    tileType += letter;
+                }
+                m_cardUIObjects[i].transform.Find("Card Tile Name").GetComponent<TMP_Text>().text = tileType;
+
+                m_cardUIObjects[i].transform.Find("TopTab").transform.Find("Icon").GetComponent<Image>().sprite = icons[cardDealt.iconNumber];
+
                 if (cardDealt.delayBeforeEffect > 0) 
                 {
                     m_cardUIObjects[i].transform.Find("YearBox").GetComponent<Image>().color = Color.white;
@@ -174,15 +194,25 @@ public class CardDeckHandler : MonoBehaviour
                     m_cardUIObjects[i].transform.Find("YearBox").Find("Ring").gameObject.SetActive(false);
                 }
 
-                string cardStats = cardDealt.tileType;
+                string cardStats = "<b>TILES AFFECTED:</b>\n" ;
+                if(cardDealt.numberOfTiles == 0)
+                {
+                    cardStats += " All water tiles";
+                }
+                else
+                {
+                    cardStats += cardDealt.numberOfTiles + " tiles";
+                }
 
-                cardStats += "\n\nTiles affected: " + cardDealt.numberOfTiles;
-
-                cardStats += "\nDuration of Effect: " + cardDealt.durationRemaining;
+                cardStats += "\n\n<b>DURATION OF EFFECT: </b>\n" + cardDealt.durationRemaining + " years";
 
                 if (cardDealt.delayBeforeEffect != 0)
                 {
-                    cardStats += "\nDelay before Effect: " + cardDealt.delayBeforeEffect;
+                    cardStats += "\n\n<b>DELAY BEFORE EFFECT: </b>\n " + cardDealt.delayBeforeEffect + " years";
+                }
+                else
+                {
+                    cardStats += "\n\n<b>NO DELAY</b>";
                 }
 
                 m_cardUIObjects[i].transform.Find("Card Stats").GetComponent<TMP_Text>().text = cardStats;
@@ -260,5 +290,38 @@ public class CardDeckHandler : MonoBehaviour
         }
 
         
+    }
+
+    private int PickCardIcon(CardInstance card)
+    {
+        
+
+        if (card.waterTempInfluence != 0)
+        {
+            return 0;
+        }
+        else if (card.turbidityInfluence != 0)
+        {
+            return 1;
+        }
+        else if(card.redDaceInfluence!=0 || card.brownTroutInfluence!=0 || card.creekChubInfluence!=0)
+        {
+            return 2;
+        }
+        else if (card.asphaltDensityInfluence != 0)
+        {
+            return 3;
+        }
+        else if(card.pollutionInfluence!=0 || card.sewageInfluence!=0)
+        {
+            return 4;
+        }
+        else if(card.erosionInfluence!=0|| card.landHeightInfluence != 0)
+        {
+            return 5;
+        }
+
+        return 6;
+
     }
 }

@@ -14,7 +14,8 @@ public class TileVariableDisplay : MonoBehaviour
     [SerializeField] private Image sliderFill;
 
     public VariableClass variableClassToRead;
-
+    [SerializeField] private Color goodColor;
+    [SerializeField] private Color badColor;
 
     public bool abiotic = true;
     public void SetVariableClass(VariableClass varClass)
@@ -34,20 +35,28 @@ public class TileVariableDisplay : MonoBehaviour
             else
             {
                 nameText.text = variableClassToRead.variableName;// + " : " + variableClassToRead.value.ToString("F3");
-                slider.maxValue = 1;
             }
             slider.maxValue = variableClassToRead.maxValue;
             slider.value = variableClassToRead.value;
 
             float targetPos = (variableClassToRead.targetValue / variableClassToRead.maxValue) * slider.GetComponent<RectTransform>().rect.width;
             targetArea.anchoredPosition = new Vector2(Mathf.Clamp(targetPos, targetArea.rect.width/2f, slider.GetComponent<RectTransform>().rect.width - targetArea.rect.width / 2f), 0f);
-            if (variableClassToRead.moreIsBad)
+            //if (variableClassToRead.moreIsBad)
+            //{
+            //    sliderFill.color = new Color((1f* (slider.value / slider.maxValue)), (1f* (1f- (slider.value / slider.maxValue))), 0f);
+            //}
+            //else
+            //{
+            //    sliderFill.color = new Color((1f * (1f - (slider.value / slider.maxValue))), (1f * (slider.value / slider.maxValue)), 0f);
+            //}
+
+            if(Mathf.Abs(variableClassToRead.value - variableClassToRead.targetValue) > variableClassToRead.maxValue / 10)
             {
-                sliderFill.color = new Color((1f* (slider.value / slider.maxValue)), (1f* (1f- (slider.value / slider.maxValue))), 0f);
+                sliderFill.color = badColor;
             }
             else
             {
-                sliderFill.color = new Color((1f * (1f - (slider.value / slider.maxValue))), (1f * (slider.value / slider.maxValue)), 0f);
+                sliderFill.color = goodColor;
             }
         }
     }

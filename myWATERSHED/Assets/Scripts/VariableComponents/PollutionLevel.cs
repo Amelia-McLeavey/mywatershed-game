@@ -12,5 +12,6 @@ public class PollutionLevel : VariableClass
     private void Awake()
     {
         variableName = "Pollution Level";
+        targetValue = 0.1f;
     }
 }

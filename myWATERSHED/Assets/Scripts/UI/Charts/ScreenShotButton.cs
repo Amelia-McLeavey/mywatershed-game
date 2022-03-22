@@ -4,20 +4,16 @@ using UnityEngine;
 
 public class ScreenShotButton : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    public Animator fishPopUp;
     public void Clicked()
     {
-        ScreenCapture.CaptureScreenshot("Screenshot.png");
+        if (Application.platform == RuntimePlatform.WebGLPlayer) {
+            fishPopUp.SetTrigger("Enter");
+        }
+        else
+        {
+            Debug.Log(System.DateTime.Now);
+            ScreenCapture.CaptureScreenshot("Screenshot.png");
+        }
     }
 }

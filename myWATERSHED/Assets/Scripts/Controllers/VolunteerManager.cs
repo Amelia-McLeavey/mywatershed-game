@@ -16,13 +16,15 @@ public class VolunteerManager : MonoBehaviour
     public VariablesAffected[] variablesAffected;
 
     [SerializeField] private int m_totalVolunteers;
-     private int m_maxVolunteers;
+
+    private int m_maxVolunteers;
     [SerializeField] private TMP_Text m_totalVolunteerText;
     [SerializeField] private int m_numberOfVolunteersPerClick=5;
     [SerializeField] private PlayerController playerController;
     [SerializeField] private GameObject volunteerPrefab;
     [SerializeField] private GameObject volunteerOverlay;
 
+    [SerializeField] private int m_maximumVolunteersAllowed;
 
     public List<Volunteers> allVolunteers = new List<Volunteers>();
 
@@ -31,6 +33,16 @@ public class VolunteerManager : MonoBehaviour
     {
         m_totalVolunteerText.text = m_totalVolunteers.ToString();
         m_maxVolunteers = m_totalVolunteers;
+    }
+
+    public void AddVolunteers()
+    {
+        if (m_maxVolunteers< m_maximumVolunteersAllowed)
+        {
+            m_totalVolunteers += 5;
+            m_totalVolunteerText.text = m_totalVolunteers.ToString();
+            m_maxVolunteers += 5;
+        }
     }
 
     public void AddVolunteersToTile()
