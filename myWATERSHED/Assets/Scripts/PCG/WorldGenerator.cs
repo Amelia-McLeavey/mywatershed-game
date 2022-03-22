@@ -40,7 +40,28 @@ public class WorldGenerator : MonoBehaviour
 
         WorldSetup();
 
+       
         GetComponent<TileTypeAllocator>().AllocateTypes(m_Seed, m_rows, m_columns);
+        GetComponent<MinatureManager>().PlaceMinatures(m_rows, m_columns);
+
+        //8
+        //Place the objects on the tiles
+        //GetComponent<PlaceMinature>().Place(m_rows, m_columns);
+        //for (int x = 0; x < m_rows; x++)
+        //{
+        //    for (int y = 0; y < m_columns; y++)
+        //    {
+        //        Vector2 tileIndex = new Vector2(x, y);
+        //        if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
+        //        {
+        //            //Reference and store physical type from game object
+        //            PhysicalType physicalType = value.GetComponent<Tile>().m_PhysicalType;
+
+        //            //assign correct minature from referenced list to the gameobject using the index
+        //            Instantiate (TileManager.m_minatures[(int)physicalType] value.GetComponentInChildren<GameObject>() = TileManager.m_minatures[(int)physicalType];
+        //        }
+        //    }
+        //}
 
         OnWorldGenerationComplete?.Invoke(m_rows, m_columns);
     }

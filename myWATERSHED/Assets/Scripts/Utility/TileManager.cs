@@ -49,6 +49,9 @@ public class TileManager : MonoBehaviour
     [SerializeField]
     private List<Color> m_baseColors;
 
+    [SerializeField]
+    public List<GameObject> m_minatures;
+
     /// <summary>
     /// Finds the corresponding colour given a type.
     /// </summary>
