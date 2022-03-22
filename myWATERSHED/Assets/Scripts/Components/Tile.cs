@@ -18,9 +18,12 @@ public class Tile : MonoBehaviour
 
     public List<GameObject> m_receiverNeighbours = new List<GameObject>();
 
-    private MeshRenderer m_meshRenderer;
-
     public PlayedCard currentCard;
+
+    [SerializeField]
+    private float m_tileOutline;
+
+    private MeshRenderer m_meshRenderer;
 
     private void Awake()
     {
@@ -34,7 +37,7 @@ public class Tile : MonoBehaviour
     public void SetTypeColor(Color colour)
     {
         m_meshRenderer.materials[0].color = colour;
-        m_meshRenderer.materials[1].color = new Color(colour.r - 0.07f, colour.g - 0.07f, colour.b - 0.07f);
+        m_meshRenderer.materials[1].color = colour; //new Color(colour.r - 0.01f, colour.g - 0.01f, colour.b - 0.01f);
     }
 
 

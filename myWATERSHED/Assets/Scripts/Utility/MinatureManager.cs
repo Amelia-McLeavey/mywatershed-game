@@ -13,17 +13,6 @@ public class MinatureManager : MonoBehaviour
     GameObject minatureToSpawn;
 
     private Vector2 tileStep = new Vector2(0.5f, 0.87f);
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void PlaceMinatures(int rows, int columns)
     {
