@@ -40,5 +40,5 @@ public struct CardInstance
     public float waterDepthInfluence;
     public float waterTempInfluence;
 
-
+    public int iconNumber;
 }

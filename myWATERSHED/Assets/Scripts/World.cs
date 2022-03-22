@@ -58,12 +58,14 @@ public class World : MonoBehaviour
 
     public SeasonState m_seasonState { get; private set; }
 
+    private VolunteerManager volunteerManager;
 
     private void Start()
     {
         m_gameManager = GameManager.Instance;
         m_gameManager.SetGameState(GameState.Game, null);
         heatmap = GameObject.FindObjectOfType<Heatmap>();
+        volunteerManager = GameObject.FindObjectOfType<VolunteerManager>();
         m_endResultManager.CallStart();
 
         if (m_temperatureSlider == null)
@@ -112,7 +114,7 @@ public class World : MonoBehaviour
         {
             m_currentYear++;
             SetYear();
-
+            volunteerManager.AddVolunteers();
             heatmap.GenerateMaps();
         }
         // Change to winter

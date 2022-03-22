@@ -133,6 +133,8 @@ MonoBehaviour:
   targetArea: {fileID: 8524677587836856405}
   sliderFill: {fileID: 7248584214808929584}
   variableClassToRead: {fileID: 0}
+  goodColor: {r: 0.18039216, g: 1, b: 0.7176471, a: 1}
+  badColor: {r: 0.9245283, g: 0.15263437, b: 0.83943474, a: 1}
   abiotic: 1
 --- !u!1 &3208590645344001633
 GameObject:
@@ -427,8 +429,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Asphalt Density
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d3a569ef8be49a845892b9824b47779f, type: 2}
-  m_sharedMaterial: {fileID: 8576708207792204297, guid: d3a569ef8be49a845892b9824b47779f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 33e911ad069b9bf4fa67e3b6cbea99d1, type: 2}
+  m_sharedMaterial: {fileID: 3570597248730600831, guid: 33e911ad069b9bf4fa67e3b6cbea99d1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -452,14 +454,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12.15
-  m_fontSizeBase: 0
+  m_fontSize: 11
+  m_fontSizeBase: 11
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 1
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0

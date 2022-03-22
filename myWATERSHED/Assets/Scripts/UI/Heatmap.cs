@@ -73,11 +73,25 @@ public class Heatmap : MonoBehaviour
                 //here to change the defalut colour for the maps
                 SetPixel(new Vector2(x,y), "AsphaltDensity", asphaltTexture, new Color(0.2f, 0.3f, 1f), true);
 
-                SetPixel(new Vector2(x, y), "Turbidity", turbidityTexture, new Color(0.2f, 0.3f, 1f), true);
+                if (TileManager.s_TilesDictonary.TryGetValue(new Vector2(x, y), out GameObject value))
+                {
+                    if (value.GetComponent<Tile>().m_PhysicalType != PhysicalType.Highway) {
+                        SetPixel(new Vector2(x, y), "Turbidity", turbidityTexture, new Color(0.2f, 0.3f, 1f), true);
 
-                SetPixel(new Vector2(x, y), "RedDacePopulation", redDaceTexture, new Color(0.2f, 0.3f, 1f), false);
+                        SetPixel(new Vector2(x, y), "RedDacePopulation", redDaceTexture, new Color(0.2f, 0.3f, 1f), false);
 
-                SetPixel(new Vector2(x, y), "InsectPopulation", insectTexture, new Color(0.2f, 0.3f, 1f), false);
+                        SetPixel(new Vector2(x, y), "InsectPopulation", insectTexture, new Color(0.2f, 0.3f, 1f), false);
+                    }
+                    else
+                    {
+                        SetPixelDefault(new Vector2(x, y), turbidityTexture, new Color(0.2f, 0.3f, 1f));
+
+                        SetPixelDefault(new Vector2(x, y), redDaceTexture, new Color(0.2f, 0.3f, 1f));
+
+                        SetPixelDefault(new Vector2(x, y), insectTexture, new Color(0.2f, 0.3f, 1f));
+                    }
+                
+                }             
 
                 SetPixel(new Vector2(x, y), "WaterTemperature", tempTexture, new Color(0.2f, 0.3f, 1f), true);
 
@@ -121,6 +135,11 @@ public class Heatmap : MonoBehaviour
         }
 
         texture.SetPixel((int)tileIndex.x, (int)tileIndex.y, color);
+    }
+
+    private void SetPixelDefault(Vector2 tileIndex, Texture2D texture, Color defaultCol)
+    {
+        texture.SetPixel((int)tileIndex.x, (int)tileIndex.y, defaultCol);
     }
 
 

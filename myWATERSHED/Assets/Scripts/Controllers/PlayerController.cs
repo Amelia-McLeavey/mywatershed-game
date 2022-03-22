@@ -287,7 +287,7 @@ public class PlayerController : MonoBehaviour
         }
         if (prevCard != null)
         {
-            prevCard.doPopUp = false;
+            prevCard.placingCurrently = false;
         }
         variableHolder = null;
         preVariableHolder = null;
@@ -409,12 +409,12 @@ public class PlayerController : MonoBehaviour
 
             if(prevCard != null)
             {
-                prevCard.doPopUp = false;
+                prevCard.placingCurrently = false;
             }
             if (variableHolder.GetComponent<Tile>().currentCard != null)
             {  
                 prevCard = variableHolder.GetComponent<Tile>().currentCard;
-                prevCard.doPopUp = true;
+                prevCard.placingCurrently = true;
             }
             //m_tileInfoObject.UpdateTileCard(variableHolder.GetComponent<Tile>().currentCard);
         }
