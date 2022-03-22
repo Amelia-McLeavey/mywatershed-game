@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
         targetCamPos = new Vector3(rows / 2, 20f, (columns * mapHeightMultiplyer / 2) - cameraZOffset);
         mapRows = rows;
         mapColumns = columns;
-        Debug.Log("Camera: " + m_camera + "   Container: " + m_cameraContainer + "   Target pos: " + targetCamPos);
+        //Debug.Log("Camera: " + m_camera + "   Container: " + m_cameraContainer + "   Target pos: " + targetCamPos);
 
         if (m_camera == null)
         {
@@ -107,7 +107,7 @@ public class PlayerController : MonoBehaviour
             m_cameraContainer = GameObject.Find("CameraContainer");
         }
 
-        Debug.Log("Camera: " + m_camera + "   Container: " + m_cameraContainer + "   Target pos: " + targetCamPos);
+        //Debug.Log("Camera: " + m_camera + "   Container: " + m_cameraContainer + "   Target pos: " + targetCamPos);
 
         m_cameraContainer.transform.position = targetCamPos;
         //calculate camera restraints

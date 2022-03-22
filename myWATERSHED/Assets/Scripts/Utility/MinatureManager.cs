@@ -47,7 +47,7 @@ public class MinatureManager : MonoBehaviour
 
                 if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
                 {
-                    Debug.Log("TileDictionary exists");
+                    //Debug.Log("TileDictionary exists");
                     position = value.transform.position;
                     yPosition = ((value.transform.localScale.z * 0.3574679f) / 2f) - (value.transform.localScale.z * 0.006f);
 
@@ -62,14 +62,14 @@ public class MinatureManager : MonoBehaviour
 
                     if (minatureToSpawn != null)
                     {
-                        Debug.Log("hey i exist and have spawned");
+                        //Debug.Log("hey i exist and have spawned");
                         float randomRotation = Random.Range(0f, 360f);
                         // Instantiate the tile
                         myMinature = Instantiate(minatureToSpawn, position, Quaternion.Euler(0f, randomRotation, 0f));
 
                         //Raycast to find exact position
-                        int layerMask = 1 << 8; //Only check layer 8, which is tiles
-                        RaycastHit hit;
+                        //int layerMask = 1 << 8; //Only check layer 8, which is tiles
+                        //RaycastHit hit;
 
                         //if (Physics.Raycast(myMinature.transform.position, new Vector3(0, -1, 0), out hit, Mathf.Infinity, layerMask))
                         //{
