@@ -98,25 +98,37 @@ public class FlowSimulator : MonoBehaviour
     private static Unity.Profiling.ProfilerMarker s_landFlowMarker = new Unity.Profiling.ProfilerMarker("FlowSimulator.LandFlowStyle");
     private static Unity.Profiling.ProfilerMarker s_waterFlowMarker = new Unity.Profiling.ProfilerMarker("FlowSimulator.WaterFlowStyle");
 
-    public void UpdateFlow()
+    public void UpdateFlow(int frameIndex)
     {
         s_updateFlowMarker.Begin();
 
-        s_landVariableMarker.Begin();
-        SendTwoStageFlow(m_landVariableProcessor);
-        s_landVariableMarker.End();
+        // Split processing into seperate frames
+        switch(frameIndex)
+        {
+            case 0:
+                s_landVariableMarker.Begin();
+                SendTwoStageFlow(m_landVariableProcessor);
+                s_landVariableMarker.End();
+                break;
 
-        s_waterVariableMarker.Begin();
-        SendTwoStageFlow(m_waterVariableProcessor);
-        s_waterVariableMarker.End();
+            case 1:
+                s_waterVariableMarker.Begin();
+                SendTwoStageFlow(m_waterVariableProcessor);
+                s_waterVariableMarker.End();
+                break;
 
-        s_landFlowMarker.Begin();
-        SendTwoStageFlow(m_landFlowStyle);
-        s_landFlowMarker.End();
+            case 2:
+                s_landFlowMarker.Begin();
+                SendTwoStageFlow(m_landFlowStyle);
+                s_landFlowMarker.End();
+                break;
 
-        s_waterFlowMarker.Begin();
-        SendTwoStageFlow(m_waterFlowStyle);
-        s_waterFlowMarker.End();
+            case 3:
+                s_waterFlowMarker.Begin();
+                SendTwoStageFlow(m_waterFlowStyle);
+                s_waterFlowMarker.End();
+                break;
+        }
 
         s_updateFlowMarker.End();
     }

@@ -21,7 +21,7 @@ MonoBehaviour:
   m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: NaturalStream
-  m_amountOfTilesTargeted: 20
+  m_amountOfTilesTargeted: 19
   m_tileModificationScreen: 1
   m_activity: N
   m_unlockableCArdID: 0

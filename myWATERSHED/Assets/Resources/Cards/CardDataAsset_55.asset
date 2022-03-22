@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardDataAsset_55
   m_EditorClassIdentifier: 
   m_id: 55
-  m_name: card 55
+  m_name: In depth thinking
   m_description: decrease pollution and turbidity, increase depth in wetlands
   m_quantity: 5
   m_effectDuration: 8
@@ -21,7 +21,7 @@ MonoBehaviour:
   m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: Wetland
-  m_amountOfTilesTargeted: 12
+  m_amountOfTilesTargeted: 19
   m_tileModificationScreen: 1
   m_activity: N
   m_unlockableCArdID: 0

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_id: 7
   m_name: riverbed Campaign
-  m_description: 'Add 5 riverbed health per turn, for 10 turns on streams '
+  m_description: 'Add 5 riverbed health per turn, for 10 years on streams '
   m_quantity: 2
   m_effectDuration: 10
   m_timeBeforeEffect: 0

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_id: 13
   m_name: Maintaining Clarity
-  m_description: Reduce turbidity by 50% after 2 turns
+  m_description: Reduce turbidity by 50% after 2 years
   m_quantity: 2
   m_effectDuration: 1
   m_timeBeforeEffect: 2

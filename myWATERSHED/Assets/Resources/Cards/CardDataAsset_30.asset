@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardDataAsset_30
   m_EditorClassIdentifier: 
   m_id: 30
-  m_name: card 30
+  m_name: Clean it by mixing
   m_description: Decrease sewage and sinuosity on steams
   m_quantity: 3
   m_effectDuration: 3
@@ -21,7 +21,7 @@ MonoBehaviour:
   m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: NaturalStream
-  m_amountOfTilesTargeted: 5
+  m_amountOfTilesTargeted: 7
   m_tileModificationScreen: 1
   m_activity: N
   m_unlockableCArdID: 0

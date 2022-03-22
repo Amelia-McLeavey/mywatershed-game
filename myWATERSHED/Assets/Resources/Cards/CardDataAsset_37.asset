@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardDataAsset_37
   m_EditorClassIdentifier: 
   m_id: 37
-  m_name: card 37
+  m_name: Bigger, warmer
   m_description: increase water temp and water depth on steams
   m_quantity: 2
   m_effectDuration: 8
@@ -21,7 +21,7 @@ MonoBehaviour:
   m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: NaturalStream
-  m_amountOfTilesTargeted: 5
+  m_amountOfTilesTargeted: 7
   m_tileModificationScreen: 1
   m_activity: N
   m_unlockableCArdID: 0

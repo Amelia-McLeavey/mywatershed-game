@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardDataAsset_38
   m_EditorClassIdentifier: 
   m_id: 38
-  m_name: card 38
+  m_name: Lower, cooler
   m_description: Reduce pollution and increase water depth on steams
   m_quantity: 4
   m_effectDuration: 9

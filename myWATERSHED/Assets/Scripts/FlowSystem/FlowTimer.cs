@@ -9,7 +9,7 @@ using System;
 public class FlowTimer : MonoBehaviour
 {
     // The timer event
-    public event Action OnFlowControlTimerTick;
+    public event Action<int> OnFlowControlTimerTick;
 
     [SerializeField]
     public float m_flowTime;
@@ -80,7 +80,13 @@ public class FlowTimer : MonoBehaviour
             yield return new WaitForSeconds(m_flowTime);
             if (m_gameManager.m_gameState == GameState.Game)
             {
-                OnFlowControlTimerTick?.Invoke();
+                for(int i = 0; i < 4; i++)
+                {
+                    OnFlowControlTimerTick?.Invoke(i);
+                    // Returning null causes the program to finish for this frame, this for loop will continue next frame
+                    yield return null;
+                }
+                
                 volunteerManager.CallVolunteers();
             }
             //Debug.Log("TICK");

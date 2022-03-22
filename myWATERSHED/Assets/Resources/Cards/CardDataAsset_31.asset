@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardDataAsset_31
   m_EditorClassIdentifier: 
   m_id: 31
-  m_name: card 31
+  m_name: Curvy shores
   m_description: Increase sinuosity on steams
   m_quantity: 3
   m_effectDuration: 2
@@ -21,7 +21,7 @@ MonoBehaviour:
   m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: NaturalStream
-  m_amountOfTilesTargeted: 5
+  m_amountOfTilesTargeted: 7
   m_tileModificationScreen: 1
   m_activity: N
   m_unlockableCArdID: 0
