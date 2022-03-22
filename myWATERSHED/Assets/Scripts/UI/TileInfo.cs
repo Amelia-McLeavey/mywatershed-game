@@ -37,7 +37,7 @@ public class TileInfo : MonoBehaviour
     private IEnumerator LateStart()
     {
         yield return new WaitForEndOfFrame();
-        offscreenYPos = rect.rect.height;
+        offscreenYPos = rect.rect.height *1.25f ;
         targetYPos = offscreenYPos;
         m_showTileInfo = false;
     }

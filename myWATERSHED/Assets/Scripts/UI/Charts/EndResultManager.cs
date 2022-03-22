@@ -190,9 +190,9 @@ public class EndResultManager : MonoBehaviour
             xAxisNumbers[i].text = (i * (graphSize / 10)).ToString();
         }
 
-        selectedYear++;
+        
         ShowSelectedYearData();
-
+        selectedYear++;
         LayoutPoints();
     }
 

@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float m_cameraDragSpeed;
     public Camera m_camera;
     [SerializeField] private GameObject m_cameraContainer;
-    [SerializeField] private float m_cameraPadding;
+    [SerializeField] private Vector2 m_cameraPaddingY;
+    [SerializeField] private Vector2 m_cameraPaddingX;
 
     [SerializeField] private Vector2 m_minMaxCameraZoom;
     [SerializeField] private float m_cameraZoomSpeed;
@@ -245,8 +246,8 @@ public class PlayerController : MonoBehaviour
 
     private void CalculateCameraPadding()
     {
-        minMaxXPosition = new Vector2(m_cameraPadding + (m_camera.orthographicSize * 1.75f), mapRows - m_cameraPadding - (m_camera.orthographicSize * 1.75f));
-        minMaxZPosition = new Vector2(-cameraZOffset + m_cameraPadding + (m_camera.orthographicSize * 1.4f),(-cameraZOffset + mapColumns - m_cameraPadding) * mapHeightMultiplyer - (m_camera.orthographicSize * 1.4f));
+        minMaxXPosition = new Vector2(m_cameraPaddingX.x + (m_camera.orthographicSize * 1.75f), mapRows - m_cameraPaddingX.y - (m_camera.orthographicSize * 1.75f));
+        minMaxZPosition = new Vector2(-cameraZOffset + m_cameraPaddingY.x + (m_camera.orthographicSize * 1.4f),(-cameraZOffset + mapColumns - m_cameraPaddingY.y) * mapHeightMultiplyer - (m_camera.orthographicSize * 1.4f));
     }
 
     public void SelectTile(GameObject tileObject)
@@ -411,10 +412,13 @@ public class PlayerController : MonoBehaviour
             {
                 prevCard.placingCurrently = false;
             }
-            if (variableHolder.GetComponent<Tile>().currentCard != null)
-            {  
-                prevCard = variableHolder.GetComponent<Tile>().currentCard;
-                prevCard.placingCurrently = true;
+            if (variableHolder.GetComponent<Tile>() != null)
+            {
+                if (variableHolder.GetComponent<Tile>().currentCard != null)
+                {
+                    prevCard = variableHolder.GetComponent<Tile>().currentCard;
+                    prevCard.placingCurrently = true;
+                }
             }
             //m_tileInfoObject.UpdateTileCard(variableHolder.GetComponent<Tile>().currentCard);
         }

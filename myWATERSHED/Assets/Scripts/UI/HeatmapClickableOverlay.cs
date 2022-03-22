@@ -17,6 +17,8 @@ public class HeatmapClickableOverlay : MonoBehaviour
     private World m_world;
     private GameManager m_gameManager;
 
+    public Vector2 overlayOffset;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,11 +51,11 @@ public class HeatmapClickableOverlay : MonoBehaviour
             }
         }
 
-        cameraOverlay.anchoredPosition = playerController.GetCamPos() - new Vector2(rect.rect.width/2, rect.rect.height/2);
+        cameraOverlay.anchoredPosition = playerController.GetCamPos() - new Vector2(rect.rect.width/2, rect.rect.height/2) + overlayOffset;
     }
 
     public void ChangeSize(float size)
     {
-        cameraOverlay.sizeDelta = new Vector2(size * 3.55f, size*2.8f);
+        cameraOverlay.sizeDelta = new Vector2(size * 4f, size* 3.5f);
     }
 }
