@@ -32,7 +32,7 @@ class GoogleSheetReader : MonoBehaviour
         });
     }
 
-    public static IList<IList<object>> getSheetRange(string sheetRange)
+    public static IList<IList<object>> GetSheetRange(string sheetRange)
     {
         //access the google spreadsheet with the authentication key, using the sheet's id
         SpreadsheetsResource.ValuesResource.GetRequest request = service.Spreadsheets.Values.Get(spreadsheetId, sheetRange);

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_id: 12
   m_name: I can Sea clearly (for now)
-  m_description: Reduce turbidity by 5% every turn, for 7 turns
+  m_description: 'Reduce turbidity by 5% every turn, for 7 years '
   m_quantity: 2
   m_effectDuration: 7
   m_timeBeforeEffect: 0

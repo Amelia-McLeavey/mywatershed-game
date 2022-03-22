@@ -9,13 +9,13 @@ public class WaterGenerator : MonoBehaviour
     [Header("RIVER SETTINGS")]
     [Range(3, 50)]
     [SerializeField]
-    private int m_startingYPosition = 30;
+    private int m_startingYPosition = 10;
     [Range(1, 5)]
     [SerializeField]
-    private int m_rMinWidth = 4;
+    private int m_rMinWidth = 2;
     [Range(1, 5)] 
     [SerializeField]
-    private int m_rMaxWidth = 4;
+    private int m_rMaxWidth = 3;
     [Range(1, 10)]
     [SerializeField]
     private int m_rTexture = 9;
@@ -23,10 +23,10 @@ public class WaterGenerator : MonoBehaviour
     [Header("BRANCH SETTINGS")]
     [Range(0, 6)]
     [SerializeField]
-    private int m_branchCount = 3;
+    private int m_branchCount = 2;
     [Range(1, 10)]
     [SerializeField]
-    private int m_bMinWidth = 2;
+    private int m_bMinWidth = 1;
     [Range(1, 10)]
     [SerializeField]
     private int m_bMaxWidth = 2;
@@ -81,7 +81,7 @@ public class WaterGenerator : MonoBehaviour
         // Width Variables
         int minWidth = m_rMinWidth;
         int maxWidth = m_rMaxWidth;
-        int lastStreamWidth = 4;
+        int lastStreamWidth = 1;
         int streamWidth = lastStreamWidth;
 
         // DRAW X DIMENSION
@@ -89,6 +89,10 @@ public class WaterGenerator : MonoBehaviour
         {
             // DEFINE LINE
             streamWidth = DefineWidth(streamWidth, minWidth, maxWidth, m_rTexture);
+            if (streamWidth % 2 == 0)
+            { minModifier = 2; }
+            else
+            { minModifier = 3; }
             yStart = DefineCurvature(lastYStart, streamWidth, lastStreamWidth, minModifier, maxModifier, -1, 0);
 
             // CACHE VALUES
@@ -176,6 +180,7 @@ public class WaterGenerator : MonoBehaviour
         int textureChangeValue = m_widthChangeValues.Dequeue();
         if (textureChangeValue < texture)
         { 
+            // Random.Range max is exlusive so we add +1
             return Random.Range(minWidth, maxWidth + 1); 
         }
         else 
@@ -263,14 +268,14 @@ public class WaterGenerator : MonoBehaviour
         }
     }
 
-    private static List<T> Shuffle<T>(List<T> list)
+    private static List<int> Shuffle(List<int> list)
     {
         for (int i = 0; i < list.Count; i++)
         {
-            int k = Random.Range(0, i);
-            T value = list[k];
-            list[k] = list[i];
-            list[i] = value;
+            int randomIndex = Random.Range(0, list.Count);
+            int temp = list[i];
+            list[i] = list[randomIndex];
+            list[randomIndex] = temp;
         }
         return list;
     }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardDataAsset_58
   m_EditorClassIdentifier: 
   m_id: 58
-  m_name: card 58
+  m_name: Moist shade
   m_description: Increases shade coverage, decrease turbidity and temperature in
     wetlands
   m_quantity: 3
@@ -21,8 +21,8 @@ MonoBehaviour:
   m_timeBeforeEffect: 0
   m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
-  m_tileTypesAffected: wetland
-  m_amountOfTilesTargeted: 20
+  m_tileTypesAffected: Wetland
+  m_amountOfTilesTargeted: 19
   m_tileModificationScreen: 1
   m_activity: N
   m_unlockableCArdID: 0

@@ -10,7 +10,7 @@ using UnityEditor;
 /// </summary>
 /// 
 
-//// In this script, comments are denoted with 2 slashes "////"
+//// In this script, comments are denoted with 4 slashes "////"
 //// DO NOT DELETE CODE THAT HAS BEEN COMMENTED OUT WITH 2 SLASHES "//" AND IS BOOKENDED WITH --------
 //// We use this "//" code to regen cards during development if there are changes to the google sheet.
 //// If changes are made externally in the google sheet and you need to update in game:
@@ -42,15 +42,15 @@ public class GoogleSheetParser : MonoBehaviour
             //if (AssetDatabase.IsValidFolder("Assets/Resources/Cards"))
             //{
             //    List<string> failures = new List<string>();
-            //    //AssetDatabase.DeleteAssets(new string[] { "Assets/Resources/Cards" }, failures);
-            //    Debug.Assert(failures.Count == 0, "Your assets did not delete");          
+            //    AssetDatabase.DeleteAssets(new string[] { "Assets/Resources/Cards" }, failures);
+            //    Debug.Assert(failures.Count == 0, "Your assets did not delete");
             //}
 
             //AssetDatabase.CreateFolder("Assets/Resources", "Cards");
             //// ------------------------------------------------------------------------------------
 
-            //// SHEET RANGE STRING VALUE MUST BE UPDATED MANUALLY IF RANGE CHANGES  VV:VVVV
-            IList<IList<object>> cardSheetRows = GoogleSheetReader.getSheetRange("A2:AD61");
+            //// SHEET RANGE STRING VALUE MUST BE UPDATED MANUALLY IF RANGE CHANGES
+            IList<IList<object>> cardSheetRows = GoogleSheetReader.GetSheetRange("A2:AD66");
             foreach (IList<object> currentRow in cardSheetRows)
             {
                 List<string> itemData = new List<string>();

@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_id: 20
   m_name: Pollution Prevention
-  m_description: Prevent pollution runoff from industrial spaces for 3 turns
+  m_description: Prevent pollution runoff from industrial spaces for 3 years
   m_quantity: 3
   m_effectDuration: 3
   m_timeBeforeEffect: 0
   m_initialVolunteerCost: 0
   m_volunteersGainedPerYear: 0
   m_tileTypesAffected: Industrial
-  m_amountOfTilesTargeted: 10
+  m_amountOfTilesTargeted: 7
   m_tileModificationScreen: 1
   m_activity: N
   m_unlockableCArdID: 0
