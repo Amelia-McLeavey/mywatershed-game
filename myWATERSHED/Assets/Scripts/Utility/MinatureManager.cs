@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class MinatureManager : MonoBehaviour
 {
-    [SerializeField]
-    public int m_rows = 0;
-    [SerializeField]
-    public int m_columns = 0;
-
     public TileManager m_TileManager;
     GameObject minatureToSpawn;
 
@@ -27,12 +22,11 @@ public class MinatureManager : MonoBehaviour
 
     public void PlaceMinatures(int rows, int columns)
     {
-        m_rows = rows;
-        m_columns = columns;
-        for (int x = 0; x < m_rows; x++)
+        for (int x = 0; x < rows; x++)
         {
-            for (int y = 0; y < m_columns; y++)
+            for (int y = 0; y < columns; y++)
             {
+                Debug.Log(x + " , " + y);
                 GameObject myMinature;
                 Vector2 tileIndex = new Vector2(x, y);
                 Vector3 position;
@@ -66,7 +60,7 @@ public class MinatureManager : MonoBehaviour
                         float randomRotation = Random.Range(0f, 360f);
                         // Instantiate the tile
                         myMinature = Instantiate(minatureToSpawn, position, Quaternion.Euler(0f, randomRotation, 0f));
-
+                        
                         //Raycast to find exact position
                         //int layerMask = 1 << 8; //Only check layer 8, which is tiles
                         //RaycastHit hit;
@@ -83,6 +77,7 @@ public class MinatureManager : MonoBehaviour
 
 
                         // Set the objects scale
+                        
                         myMinature.transform.localScale = new Vector3(11f, 11f, 11f);
                     }
                 }

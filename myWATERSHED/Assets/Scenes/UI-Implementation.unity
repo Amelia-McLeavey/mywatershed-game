@@ -1683,6 +1683,7 @@ MonoBehaviour:
   - {r: 1, g: 1, b: 1, a: 0}
   - {r: 0, g: 1, b: 0.6313726, a: 0}
   m_baseColors: []
+  m_minatures: []
 --- !u!4 &67215677
 Transform:
   m_ObjectHideFlags: 0
@@ -29693,6 +29694,7 @@ GameObject:
   - component: {fileID: 1115008487}
   - component: {fileID: 1115008486}
   - component: {fileID: 1115008485}
+  - component: {fileID: 1115008491}
   m_Layer: 0
   m_Name: World Generator
   m_TagString: Untagged
@@ -29789,8 +29791,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Seed: 231
-  m_rows: 120
-  m_columns: 70
+  m_rows: 55
+  m_columns: 45
+  m_heightsOn: 0
   m_tile: {fileID: 8496806235136799508, guid: 1264be803a532da429cdae63bff909d4, type: 3}
 --- !u!4 &1115008490
 Transform:
@@ -29806,6 +29809,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1115008491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115008484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d6ce6c29d50e5441a3782e8a3d7d1be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TileManager: {fileID: 67215676}
 --- !u!1 &1115934427
 GameObject:
   m_ObjectHideFlags: 0
