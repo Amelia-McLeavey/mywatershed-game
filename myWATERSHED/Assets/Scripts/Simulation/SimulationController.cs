@@ -19,10 +19,13 @@ public class SimulationController : MonoBehaviour
         
     }
 
-    private void SimulationTimer()
+    private void SimulationTimer(int frameIndex)
     {
+        GetComponent<FlowSimulator>().UpdateFlow(frameIndex);
 
-        GetComponent<FlowSimulator>().UpdateFlow();
-        GetComponent<FishSimulator>().UpdateFishPopulations();
+        if (frameIndex == 3)
+        {
+            GetComponent<FishSimulator>().UpdateFishPopulations();
+        }
     }
 }
