@@ -34,7 +34,8 @@ public class Tile : MonoBehaviour
     public void SetTypeColor(Color colour)
     {
         m_meshRenderer.materials[0].color = colour;
-        m_meshRenderer.materials[1].color = new Color(colour.r - 0.07f, colour.g - 0.07f, colour.b - 0.07f);
+        m_meshRenderer.materials[1].color = colour; //new Color(colour.r - 0.07f, colour.g - 0.07f, colour.b - 0.07f);
+        //m_meshRenderer.materials[1].color = new Color(colour.r - 0.07f, colour.g - 0.07f, colour.b - 0.07f);
     }
 
 

@@ -59,7 +59,25 @@ public class MinatureManager : MonoBehaviour
                     
                     //Reference and store physical type from game object
                     PhysicalType physicalType = value.GetComponent<Tile>().m_PhysicalType;
-                    minatureToSpawn = m_TileManager.m_minatures[(int)physicalType];
+
+                    //Randomize which minature variant to use 1 - 3
+                    List<GameObject> m_minatureListUsed = m_TileManager.m_minatures_1;
+                    int m_ListRandomizer = Random.Range(1, 4);
+
+                    //Assign the chosen list to be applied
+                    if (m_ListRandomizer == 1)
+                    {
+                        m_minatureListUsed = m_TileManager.m_minatures_1;
+                    } else if(m_ListRandomizer == 2)
+                    {
+                        m_minatureListUsed = m_TileManager.m_minatures_2;
+                    } else if(m_ListRandomizer == 3)
+                    {
+                        m_minatureListUsed = m_TileManager.m_minatures_3;
+                    }
+                    
+                    //Assign the correct index of the list 
+                    minatureToSpawn = m_minatureListUsed[(int)physicalType];
 
                     //Set height based on world type (Flat or height)
                     if (heightsOn)
@@ -92,9 +110,11 @@ public class MinatureManager : MonoBehaviour
                         // Instantiate the tile
                         myMinature = Instantiate(minatureToSpawn, position, Quaternion.Euler(0f, randomRotation, 0f));
 
+
+                        //////////////////This code only needs to be fixed if we use the visual heights on the tiles, otherwise exact positions works fine//////////////////////////
                         //Raycast to find exact position
-                        int layerMask = 1 << 8; //Only check layer 8, which is tiles
-                        RaycastHit hit;
+                        //int layerMask = 1 << 8; //Only check layer 8, which is tiles
+                        //RaycastHit hit;
 
                         //if (Physics.Raycast(myMinature.transform.position, new Vector3(0, -1, 0), out hit, Mathf.Infinity, layerMask))
                         //{
@@ -108,7 +128,7 @@ public class MinatureManager : MonoBehaviour
 
 
                         // Set the objects scale
-                        myMinature.transform.localScale = new Vector3(11f, 11f, 11f);
+                        myMinature.transform.localScale = new Vector3(12f, 12f, 12f);
                     }
                 }
             }
