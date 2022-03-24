@@ -102,6 +102,12 @@ public class World : MonoBehaviour
         pauseScreen.SetActive(true);
     }
 
+    public void UnpauseGame()
+    {
+        m_gameManager.SetGameState(GameState.Game, null);
+        pauseScreen.SetActive(false);
+    }
+
     public void OnClickReturnToMenu()
     {
         m_gameManager.SetGameState(GameState.MainMenu, "PrototypeMenuScene");

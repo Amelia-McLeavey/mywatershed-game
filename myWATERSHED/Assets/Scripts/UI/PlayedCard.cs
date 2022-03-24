@@ -117,19 +117,7 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
         else
         {
-            for (int y = 0; y < m_worldGenerator.m_rows; y++)
-            {
-                for (int x = 0; x < m_worldGenerator.m_columns; x++)
-                {
-                    if (TileManager.s_TilesDictonary.TryGetValue(new Vector2(x,y), out GameObject value))
-                    {
-                        if(value.GetComponent<Tile>().m_Basetype == BaseType.Water)
-                        {
-                            tilesAffected.Add(value);
-                        }
-                    }
-                }
-            }
+            StartCoroutine(GlobalCardPlaced());
         }
 
 
@@ -203,6 +191,33 @@ public class PlayedCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         m_overlay.placing=false;
 
         m_tileButton.SetActive(!cardInstance.global);
+    }
+
+    private IEnumerator GlobalCardPlaced()
+    {
+        m_gameManager.SetGameState(GameState.Placing, null);
+
+        yield return new WaitForSeconds(0.5f);
+        
+        for (int y = 0; y < m_worldGenerator.m_rows; y++)
+        {
+            for (int x = 0; x < m_worldGenerator.m_columns; x++)
+            {
+                if (TileManager.s_TilesDictonary.TryGetValue(new Vector2(x, y), out GameObject value))
+                {
+                    if (value.GetComponent<Tile>().m_Basetype == BaseType.Water && value.GetComponent<Tile>().currentCard==null)
+                    {
+                        tilesAffected.Add(value);
+                    }
+                }
+            }
+        }
+
+        m_world.m_endResultManager.cardInstances.Add(cardInstance);
+        m_world.ChangeSeason(SeasonState.Summer);
+        m_tileButton.SetActive(false);
+
+        m_gameManager.SetGameState(GameState.Game, null);
     }
 
     public IEnumerator NewYear()

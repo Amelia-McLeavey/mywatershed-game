@@ -8,11 +8,12 @@ public class ScreenShotButton : MonoBehaviour
     public void Clicked()
     {
         if (Application.platform == RuntimePlatform.WebGLPlayer) {
+            fishPopUp.ResetTrigger("Exit");
+
             fishPopUp.SetTrigger("Enter");
         }
         else
         {
-            Debug.Log(System.DateTime.Now);
             ScreenCapture.CaptureScreenshot("Screenshot.png");
         }
     }
