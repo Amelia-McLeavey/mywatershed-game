@@ -179,6 +179,7 @@ public class CardDeckHandler : MonoBehaviour
                 }
                 m_cardUIObjects[i].transform.Find("Card Tile Name").GetComponent<TMP_Text>().text = tileType;
 
+                Debug.Assert(cardDealt.iconNumber < icons.Length);
                 m_cardUIObjects[i].transform.Find("TopTab").transform.Find("Icon").GetComponent<Image>().sprite = icons[cardDealt.iconNumber];
 
                 if (cardDealt.delayBeforeEffect > 0) 

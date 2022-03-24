@@ -1,133 +1,94 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: Rename this to 'FaunaSimulator'
 public class FishSimulator : MonoBehaviour
 {
     public World m_worldScript;
 
     [SerializeField]
-    private int m_dailyRequiredInsectConsumptionPerFish;
+    private RedDaceUpdateFlow m_redDaceUpdateFlow = new RedDaceUpdateFlow();
     [SerializeField]
-    private int m_maximumRedDacePopulation;
+    private BrownTroutUpdateFlow m_brownTroutUpdateFlow = new BrownTroutUpdateFlow();
     [SerializeField]
-    private int m_maximumRedDaceGrowthPerUpdate;
-    [SerializeField]
-    private float m_ctMin;
-    [SerializeField]
-    private float m_ctMax;
+    private CreekChubUpdateFlow m_creekChubUpdateFlow = new CreekChubUpdateFlow();
+
+    private FaunaPopulationDebugDrawFlow m_populationDebugDraw = new FaunaPopulationDebugDrawFlow();
+
+    private UpdateTotalFaunaPopulationFlow m_updateTotalFaunaPopulationFlow = new UpdateTotalFaunaPopulationFlow();
 
     [SerializeField]
-    private bool m_insectFactor;
-    [SerializeField]
-    private bool m_turbidityFactor;
-    [SerializeField]
-    private bool m_waterTemperatureFactor;
+    private int m_startingRedDacePopulation = 1000;
 
-    private int m_rows;
-    private int m_columns;
-
-    private List<Tile> m_waterTiles = new List<Tile>();
-
-    private void Awake()
+    public void OnSystemGenerationComplete(int rows, int columns)
     {
-        Debug.Assert(m_dailyRequiredInsectConsumptionPerFish > 0, "DailyRequiredInsectConsumptionPerFish value must be positive");
-        Debug.Assert(m_maximumRedDacePopulation > 0, "MaximumRedDacePopulation value must be positive");
-        Debug.Assert(m_maximumRedDaceGrowthPerUpdate > 0, "m_maximumRedDaceGrowthPerUpdate value must be positive");
+        CreateFaunaFlows(rows, columns);
+        InitializeFaunaDistribution(rows, columns);
+        UpdateTotalFaunaPopulation();
     }
 
-    private void OnEnable()
+    private void CreateFaunaFlows(int rows, int columns)
     {
-        SystemGenerator.OnSystemGenerationComplete += CacheWaterTiles;
+        m_redDaceUpdateFlow.CacheTiles(rows, columns, BaseType.Water, FlowStyle.FlowDirection.TopDown);
+        m_brownTroutUpdateFlow.CopyCachedTiles(m_redDaceUpdateFlow);
+        m_creekChubUpdateFlow.CopyCachedTiles(m_redDaceUpdateFlow);
+
+        m_updateTotalFaunaPopulationFlow.CopyCachedTiles(m_redDaceUpdateFlow);
+
+        m_populationDebugDraw.CopyCachedTiles(m_redDaceUpdateFlow);
     }
 
-    private void OnDisable()
+    private void InitializeFaunaDistribution(int rows, int columns)
     {
-        SystemGenerator.OnSystemGenerationComplete -= CacheWaterTiles;
+        RedDaceInitializationFlow redDaceInitializationFlow = new RedDaceInitializationFlow(m_startingRedDacePopulation);
+        redDaceInitializationFlow.CopyCachedTiles(m_redDaceUpdateFlow);
+        FlowUtils.SendOneStageFlow(redDaceInitializationFlow);
+        
+        int totalRedDaceSpawned = redDaceInitializationFlow.GetTotalNumberSpawned();
+
+        CreekChubInitializationFlow creekChubFlow = new CreekChubInitializationFlow(totalRedDaceSpawned);
+        creekChubFlow.CopyCachedTiles(m_redDaceUpdateFlow);
+        FlowUtils.SendOneStageFlow(creekChubFlow);
+
+        BrownTroutInitializationFlow brownTrouInitializationFlow = new BrownTroutInitializationFlow(totalRedDaceSpawned);
+        brownTrouInitializationFlow.CopyCachedTiles(m_redDaceUpdateFlow);
+        FlowUtils.SendOneStageFlow(brownTrouInitializationFlow);
     }
 
-    private void CacheWaterTiles(int rows, int columns)
+    public void UpdateFauna()
     {
-        m_rows = rows;
-        m_columns = columns;
-
-        for (int x = 0; x < m_rows; x++)
-        {
-            for (int y = 0; y < m_columns; y++)
-            {
-                Vector2 index = new Vector2(x, y);
-
-                if (TileManager.s_TilesDictonary.TryGetValue(index, out GameObject value))
-                {
-                    if (value.GetComponent<Tile>().m_Basetype == BaseType.Water)
-                    {
-                        m_waterTiles.Add(value.GetComponent<Tile>());
-                    }
-                }
-            }
-        }
+        UpdateTileFaunaPopulation();
+        UpdateTotalFaunaPopulation();
     }
 
-    private static Unity.Profiling.ProfilerMarker s_updateFishPopMarker = new Unity.Profiling.ProfilerMarker("FishSimulator.UpdateFishPopulations");
-
-    public void UpdateFishPopulations()
+    private static Unity.Profiling.ProfilerMarker s_updateFaunaCountPopMarker = new Unity.Profiling.ProfilerMarker("FishSimulator.UpdateTotalFaunaPopulation");
+    private void UpdateTotalFaunaPopulation()
     {
-        s_updateFishPopMarker.Begin();
+        s_updateFaunaCountPopMarker.Begin();
 
-        UpdateRedDace();
+        m_updateTotalFaunaPopulationFlow.PrepareForProcessing();
 
-        s_updateFishPopMarker.End();
+        FlowUtils.SendOneStageFlow(m_updateTotalFaunaPopulationFlow);
+
+        m_updateTotalFaunaPopulationFlow.FinalizeProcessing(m_worldScript);
+
+        s_updateFaunaCountPopMarker.End();
     }
 
-
-    // TODO: Sync this up with on complete of world generate 
-    private void UpdateRedDace()
+    private static Unity.Profiling.ProfilerMarker s_updateFaunaPopMarker = new Unity.Profiling.ProfilerMarker("FishSimulator.UpdateTileFaunaPopulation");
+    private void UpdateTileFaunaPopulation()
     {
-        // If there are fish in the tile
-        foreach (Tile waterTile in m_waterTiles)
-        {
-            RedDacePopulation redDaceComponent = waterTile.gameObject.GetComponent<RedDacePopulation>();
-            InsectPopulation insectComponent = waterTile.gameObject.GetComponent<InsectPopulation>();
-            Turbidity turbidityComponent = waterTile.gameObject.GetComponent<Turbidity>();
-            WaterTemperature waterTemperatureComponent = waterTile.gameObject.GetComponent<WaterTemperature>();
+        s_updateFaunaPopMarker.Begin();
 
-            if (redDaceComponent.value > 0)
-            {
-                if (m_insectFactor)
-                {
-                    int prevRedDacePopulation = (int)redDaceComponent.value;
+        FlowUtils.SendOneStageFlow(m_redDaceUpdateFlow);
+        FlowUtils.SendOneStageFlow(m_brownTroutUpdateFlow);
+        FlowUtils.SendOneStageFlow(m_creekChubUpdateFlow);
 
-                    int insectPopulationRequiredToSustain = prevRedDacePopulation * m_dailyRequiredInsectConsumptionPerFish;
-
-                    if (insectComponent.value >= insectPopulationRequiredToSustain)
-                    {
-                        int populationDifference = (int)insectComponent.value - insectPopulationRequiredToSustain;
-                        int newFishies = Mathf.Clamp(populationDifference / m_dailyRequiredInsectConsumptionPerFish, 0, m_maximumRedDaceGrowthPerUpdate);
-                        redDaceComponent.value += newFishies;
-                    }
-                    else
-                    {
-                        redDaceComponent.value = (int)insectComponent.value / m_dailyRequiredInsectConsumptionPerFish;
-                    }
-
-                    redDaceComponent.value = Mathf.Clamp(redDaceComponent.value, 0, m_maximumRedDacePopulation);
-                }
-
-                if (m_turbidityFactor)
-                {
-                    redDaceComponent.value = Mathf.RoundToInt(redDaceComponent.value * (1 - turbidityComponent.value));
-                }
-                
-                if (m_waterTemperatureFactor)
-                {
-                    if (waterTemperatureComponent.value < m_ctMin || waterTemperatureComponent.value > m_ctMax)
-                    {
-                        redDaceComponent.value = 0;
-                    }
-                }
-
-            }
-        }
-        m_worldScript.UpdateTotalDacePopulation();
+        s_updateFaunaPopMarker.End();
     }
 
+    public void OnDrawGizmos()
+    {
+        FlowUtils.SendOneStageFlow(m_populationDebugDraw);
+    }
 }

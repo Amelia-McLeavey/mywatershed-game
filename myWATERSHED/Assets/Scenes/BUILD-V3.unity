@@ -1531,6 +1531,28 @@ MonoBehaviour:
   - {r: 1, g: 1, b: 1, a: 0}
   - {r: 0, g: 1, b: 0.6313726, a: 0}
   m_baseColors: []
+  m_minatures:
+  - {fileID: 0}
+  - {fileID: 919132149155446097, guid: fe5d291c17146b348be9214c08aecf11, type: 3}
+  - {fileID: 919132149155446097, guid: 0987f4b3f84855443a35f1b24659c56f, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 919132149155446097, guid: 5fa5db98f1358894a82f3cebb8f5c02f, type: 3}
+  - {fileID: 919132149155446097, guid: b2680e8b6aaf16f41961a4f4c8f6a0e8, type: 3}
+  - {fileID: 919132149155446097, guid: c028e7c0c87f7464e8b8407224fafe3a, type: 3}
+  - {fileID: 919132149155446097, guid: 2bf38c11e5a25414bb9ca0979a37a1c9, type: 3}
+  - {fileID: 0}
+  - {fileID: 919132149155446097, guid: 4b46917581e5fd8499928dba18d66b3c, type: 3}
+  - {fileID: 919132149155446097, guid: a7e9750c938266e45b1c413e40668161, type: 3}
+  - {fileID: 919132149155446097, guid: 8d439a9cde1f94d4a90b57ddf2202f13, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 919132149155446097, guid: 2f403d215d74b904189c3d5798fbead0, type: 3}
+  - {fileID: 919132149155446097, guid: 87766163cd5cc3b4784a72cb1c42f26b, type: 3}
+  - {fileID: 0}
+  - {fileID: 919132149155446097, guid: a4aeb0e4bfc36d04b8414d5a6dfb41e9, type: 3}
+  - {fileID: 919132149155446097, guid: 75c59b6b7e64dbf4e924e2de2169ce58, type: 3}
 --- !u!4 &67215677
 Transform:
   m_ObjectHideFlags: 0
@@ -4835,6 +4857,7 @@ MonoBehaviour:
   m_temperatureText: {fileID: 1015591781}
   m_daceHealthScript: {fileID: 0}
   m_failStateObject: {fileID: 1745956295}
+  m_redDaceTotalPopulation: 0
   m_chubTotalPopulation: 0
   m_troutTotalPopulation: 0
   m_insectTotalPopulation: 0
@@ -11931,6 +11954,7 @@ MonoBehaviour:
   m_placeableCard: {fileID: 0}
   durationGreen: {r: 0.10588236, g: 0.7803922, b: 0.2901961, a: 1}
   durationRed: {r: 0.75294125, g: 0.15686275, b: 0.23529413, a: 1}
+  icons: []
 --- !u!4 &476372099
 Transform:
   m_ObjectHideFlags: 0
@@ -22012,6 +22036,8 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   sliderFill: {fileID: 748825952}
   variableClassToRead: {fileID: 0}
+  goodColor: {r: 0, g: 0, b: 0, a: 0}
+  badColor: {r: 0, g: 0, b: 0, a: 0}
   abiotic: 1
 --- !u!1 &773013507
 GameObject:
@@ -27225,6 +27251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef373c48b1040f34b9a5b3896c9cf9c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fishPopUp: {fileID: 0}
 --- !u!1001 &1067823439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28327,6 +28354,7 @@ GameObject:
   - component: {fileID: 1115008487}
   - component: {fileID: 1115008486}
   - component: {fileID: 1115008485}
+  - component: {fileID: 1115008491}
   m_Layer: 0
   m_Name: World Generator
   m_TagString: Untagged
@@ -28441,6 +28469,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1115008491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115008484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d6ce6c29d50e5441a3782e8a3d7d1be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TileManager: {fileID: 67215676}
 --- !u!1 &1120072482
 GameObject:
   m_ObjectHideFlags: 0
@@ -28913,6 +28954,7 @@ MonoBehaviour:
   playerController: {fileID: 1373269578}
   volunteerPrefab: {fileID: 5925099804060542634, guid: 11cc1e17f8705be48bb8f3b0b8610937, type: 3}
   volunteerOverlay: {fileID: 6289132917199394244, guid: 11d397e2dfb36b942a8dbb537f5fd201, type: 3}
+  m_maximumVolunteersAllowed: 0
   allVolunteers: []
 --- !u!4 &1165176298
 Transform:
@@ -34095,14 +34137,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_worldScript: {fileID: 279288158}
-  m_dailyRequiredInsectConsumptionPerFish: 5
-  m_maximumRedDacePopulation: 100
-  m_maximumRedDaceGrowthPerUpdate: 10
-  m_ctMin: 5
-  m_ctMax: 30
-  m_insectFactor: 1
-  m_turbidityFactor: 1
-  m_waterTemperatureFactor: 1
+  m_redDaceUpdateFlow:
+    m_dailyRequiredInsectConsumptionPerFish: 5
+    m_maximumRedDacePopulationPerTile: 100
+    m_maximumRedDaceGrowthPerUpdate: 10
+    m_ctMin: 5
+    m_ctMax: 30
+    m_brownTroutChanceToEat: 0.025
+    m_creekChubChanceToSpawn: 0.025
+    m_brownTroutFactor: 1
+    m_creekChubFactor: 1
+    m_insectFactor: 0
+    m_turbidityFactor: 0
+    m_waterTemperatureFactor: 0
+  m_startingRedDacePopulation: 1000
 --- !u!114 &1445818907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34127,7 +34175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59dca2fdc1968f4449bed15b8b3c9596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_flowTime: 1
+  m_flowTime: 0.5
 --- !u!114 &1445818909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38586,6 +38634,7 @@ MonoBehaviour:
   cardDesc: {fileID: 1811551921}
   cardStats: {fileID: 1598028322}
   cardDuration: {fileID: 139649631}
+  barGraphManager: {fileID: 0}
   showChub: 1
   showTrout: 1
   showTemp: 1
@@ -39597,6 +39646,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14e7fccbc1de8f64ab9bd56cfacf79f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  letterScale: 0
   offset: {x: 0, y: -20}
 --- !u!1 &1778608981
 GameObject:
@@ -44052,6 +44102,8 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   sliderFill: {fileID: 1271120512}
   variableClassToRead: {fileID: 0}
+  goodColor: {r: 0, g: 0, b: 0, a: 0}
+  badColor: {r: 0, g: 0, b: 0, a: 0}
   abiotic: 1
 --- !u!1 &2042799882
 GameObject:
@@ -47043,6 +47095,8 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   sliderFill: {fileID: 5324881173460726784}
   variableClassToRead: {fileID: 0}
+  goodColor: {r: 0, g: 0, b: 0, a: 0}
+  badColor: {r: 0, g: 0, b: 0, a: 0}
   abiotic: 1
 --- !u!1 &6722667355202459039
 GameObject:

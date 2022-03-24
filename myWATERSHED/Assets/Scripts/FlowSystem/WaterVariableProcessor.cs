@@ -7,15 +7,17 @@ public class WaterVariableProcessor : FlowStyle
 {
     public override bool CanFlow(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
     {
-        return false;
+        throw new System.NotImplementedException();
     }
 
     public override void DistrubuteData(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
     {
+        throw new System.NotImplementedException();
     }
 
     public override void VerifyTiles(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
     {
+        throw new System.NotImplementedException();
     }
 
     public override void ProcessData(GameObject senderTile, Vector2 tileIndexForDebugging)
@@ -32,17 +34,6 @@ public class WaterVariableProcessor : FlowStyle
         Turbidity turbidity = senderTile.GetComponent<Turbidity>();
         WaterTemperature waterTemperature = senderTile.GetComponent<WaterTemperature>();
         WaterDepth waterDepth = senderTile.GetComponent<WaterDepth>();
-        
-        // TODO: Check why this is like this
-        // EROSION RATE
-        if (insectPopulation == null)
-        {
-            Debug.LogError("insectpopulation missing");
-        }
-        if (riparianLevel == null)
-        {
-            Debug.LogError("riparianlevel missing");
-        }
 
         // INSECT POPULATION
         insectPopulation.value = Mathf.RoundToInt(riparianLevel.value * 1000);

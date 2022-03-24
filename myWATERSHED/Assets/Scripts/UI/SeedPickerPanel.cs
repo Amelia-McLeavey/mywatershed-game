@@ -5,7 +5,7 @@ using TMPro;
 
 public class SeedPickerPanel : MonoBehaviour
 {
-    public static int seed=231;
+    public static int seed = 231;
 
     [SerializeField] private TMP_InputField input;
     void Start()

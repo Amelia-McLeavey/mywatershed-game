@@ -39,13 +39,17 @@ public class World : MonoBehaviour
     [SerializeField]
     private GameObject m_failStateObject;
 
-    private int m_redDaceTotalPopulation;
     private int m_averageTemperature;
     private float m_averageTurbidity;
 
-    [SerializeField] private int m_chubTotalPopulation;
-    [SerializeField] private int m_troutTotalPopulation;
-    [SerializeField] private int m_insectTotalPopulation;
+    [SerializeField]
+    private int m_redDaceTotalPopulation;
+    [SerializeField]
+    private int m_chubTotalPopulation;
+    [SerializeField]
+    private int m_troutTotalPopulation;
+    [SerializeField]
+    private int m_insectTotalPopulation;
 
     private GameManager m_gameManager;
     private WorldGenerator m_worldGenerator;
@@ -139,12 +143,16 @@ public class World : MonoBehaviour
         }    
     }
 
+    public void UpdateTotalFaunaPopulations(int totalDacePop, int totalChubPop, int totalTroutPop, int totalInsectPop)
+    {
+        m_redDaceTotalPopulation = totalDacePop;
+        m_chubTotalPopulation = totalChubPop;
+        m_troutTotalPopulation = totalTroutPop;
+        m_insectTotalPopulation = totalInsectPop;
+    }
+
     private void UpdateAllData()
     {
-        int totalDacePop = 0; 
-        int totalChubPop = 0; 
-        int totalTroutPop = 0;
-        int totalInsect = 0;
         float totalTemp = 0;
         float totalTurbidity = 0;
 
@@ -158,14 +166,6 @@ public class World : MonoBehaviour
 
                 if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
                 {
-                    if (value.GetComponent<Tile>().m_Basetype == BaseType.Water)
-                    {
-                        totalDacePop += (int)value.GetComponent<RedDacePopulation>().value;
-                        totalChubPop += (int)value.GetComponent<CreekChubPopulation>().value;
-                        totalTroutPop += (int)value.GetComponent<BrownTroutPopulation>().value;
-                        totalInsect += (int)value.GetComponent<InsectPopulation>().value;
-                    }
-
                     if (value.GetComponent<WaterTemperature>() != null)
                     {
                         totalTemp += value.GetComponent<WaterTemperature>().value;
@@ -180,11 +180,6 @@ public class World : MonoBehaviour
             }
         }
 
-        m_redDaceTotalPopulation = totalDacePop;
-        m_chubTotalPopulation = totalChubPop;
-        m_troutTotalPopulation = totalTroutPop;
-        m_insectTotalPopulation = totalInsect;
-
         DisplayTotalDacePopulationInUI();
         m_averageTemperature = Mathf.RoundToInt(totalTemp / (m_worldGenerator.m_rows * m_worldGenerator.m_columns));
         DisplayAverageTemperature();
@@ -192,38 +187,6 @@ public class World : MonoBehaviour
         m_averageTurbidity = totalTurbidity / numberOfTurbidTiles;
         Debug.Log(m_averageTurbidity);
         DisplayAverageTurbidity();
-    }
-
-
-
-    // TODO: Bug, RSD Population not displaying correct data, not updating
-    public void UpdateTotalDacePopulation()
-    {
-        List<int> dace = new List<int>();
-
-        int totalDacePop = 0;
-
-        for (int x = 0; x < m_worldGenerator.m_rows; x++)
-        {
-            for (int y = 0; y < m_worldGenerator.m_columns; y++)
-            {
-                Vector2 tileIndex = new Vector2(x, y);
-
-                if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
-                {
-                    if (value.GetComponent<Tile>().m_Basetype == BaseType.Water)
-                    {
-                        totalDacePop += (int)value.GetComponent<RedDacePopulation>().value;
-                        //dace.Add((int)value.GetComponent<RedDacePopulation>().value);
-                    }
-
-                }
-            }
-        }
-
-        m_redDaceTotalPopulation = totalDacePop;
-        //m_redDaceTotalPopulation = dace.Sum();
-        //Debug.Log($"RSD Population: {m_redDaceTotalPopulation}");
     }
 
     public void UpdateAverageTemperature()

@@ -14,14 +14,9 @@ public class FlowSimulator : MonoBehaviour
     LandFlowStyle m_landFlowStyle = new LandFlowStyle();
     WaterFlowStyle m_waterFlowStyle = new WaterFlowStyle();
 
-    private void OnEnable()
+    public void OnSystemGenerationComplete(int rows, int columns)
     {
-        SystemGenerator.OnSystemGenerationComplete += InitializeFlow;
-    }
-
-    private void OnDisable()
-    {
-        SystemGenerator.OnSystemGenerationComplete -= InitializeFlow;
+        InitializeFlow(rows, columns);
     }
 
     // Initializes tiles by finding the nieghbours of each tile that will receive information
@@ -32,6 +27,8 @@ public class FlowSimulator : MonoBehaviour
         WaterFlowStyle waterFlowStyle = new WaterFlowStyle();
         LandFlowStyle landFlowStyle = new LandFlowStyle();
 
+        VariableInitialization initFlow = new VariableInitialization();
+
         for (int x = 0; x < rows; x++)
         {
             for (int y = 0; y < columns; y++)
@@ -41,9 +38,11 @@ public class FlowSimulator : MonoBehaviour
                 if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
                 {
                     SetNeighbours(value, tileIndex);
-                    SetStartingVariableValues(value, tileIndex);
 
-                    List<GameObject> receiverTiles = GetNeighbours(value);
+                    // Variable Initialization Flow
+                    FlowUtils.SendProcessingPulse(value, initFlow, tileIndex);
+
+                    List<GameObject> receiverTiles = FlowUtils.GetNeighbours(value);
 
                     foreach (GameObject receiverTile in receiverTiles)
                     {
@@ -62,11 +61,11 @@ public class FlowSimulator : MonoBehaviour
         }
 
         // Cache tiles on each flow style
-        m_landVariableProcessor.CacheTiles(rows, columns, BaseType.Land);
-        m_waterVariableProcessor.CacheTiles(rows, columns, BaseType.Water);
-        m_landFlowStyle.CacheTiles(rows, columns, BaseType.Land);
-        m_waterFlowStyle.CacheTiles(rows, columns, BaseType.Water);
+        m_landVariableProcessor.CacheTiles(rows, columns, BaseType.Land, FlowStyle.FlowDirection.BottomUp);
+        m_landFlowStyle.CopyCachedTiles(m_landVariableProcessor);
 
+        m_waterVariableProcessor.CacheTiles(rows, columns, BaseType.Water, FlowStyle.FlowDirection.BottomUp);
+        m_waterFlowStyle.CopyCachedTiles(m_waterVariableProcessor);
     }
 
     private void SetNeighbours(GameObject tile, Vector2 tileIndex)
@@ -85,12 +84,6 @@ public class FlowSimulator : MonoBehaviour
         }
     }
 
-    private void SetStartingVariableValues(GameObject tile, Vector2 tileIndex)
-    {
-        SendProcessingPulse(tile, new VariableInitialization(), tileIndex);
-
-    }
-
     private static Unity.Profiling.ProfilerMarker s_updateFlowMarker = new Unity.Profiling.ProfilerMarker("FlowSimulator.UpdateFlow");
 
     private static Unity.Profiling.ProfilerMarker s_landVariableMarker = new Unity.Profiling.ProfilerMarker("FlowSimulator.LandVariableProcessor");
@@ -107,79 +100,29 @@ public class FlowSimulator : MonoBehaviour
         {
             case 0:
                 s_landVariableMarker.Begin();
-                SendTwoStageFlow(m_landVariableProcessor);
+                FlowUtils.SendOneStageFlow(m_landVariableProcessor);
                 s_landVariableMarker.End();
                 break;
 
             case 1:
                 s_waterVariableMarker.Begin();
-                SendTwoStageFlow(m_waterVariableProcessor);
+                FlowUtils.SendOneStageFlow(m_waterVariableProcessor);
                 s_waterVariableMarker.End();
                 break;
 
             case 2:
                 s_landFlowMarker.Begin();
-                SendTwoStageFlow(m_landFlowStyle);
+                FlowUtils.SendTwoStageFlow(m_landFlowStyle);
                 s_landFlowMarker.End();
                 break;
 
             case 3:
                 s_waterFlowMarker.Begin();
-                SendTwoStageFlow(m_waterFlowStyle);
+                FlowUtils.SendTwoStageFlow(m_waterFlowStyle);
                 s_waterFlowMarker.End();
                 break;
         }
 
         s_updateFlowMarker.End();
-    }
-
-    private static Unity.Profiling.ProfilerMarker s_distributeDataMarker = new Unity.Profiling.ProfilerMarker("FlowSimulator.SendDistributionPulse");
-    private static Unity.Profiling.ProfilerMarker s_processDataMarker = new Unity.Profiling.ProfilerMarker("FlowSimulator.SendProcessingPulse");
-
-    private void SendTwoStageFlow(FlowStyle flowStyle)
-    {
-
-        s_distributeDataMarker.Begin();
-
-        // Reset the list then scatter by adding sender tile current value to the recievers' list
-        foreach (KeyValuePair<Vector2, GameObject> kvp in flowStyle.m_cachedUsableTiles)
-        {
-            SendDistributionPulse(kvp.Value, flowStyle, kvp.Key); // scatter
-        }
-
-        s_distributeDataMarker.End();
-        s_processDataMarker.Begin();
-
-        // Take the average of the gathered values and update own value
-        foreach (KeyValuePair<Vector2, GameObject> kvp in flowStyle.m_cachedUsableTiles)
-        {
-            SendProcessingPulse(kvp.Value, flowStyle, kvp.Key);
-        }
-
-        s_processDataMarker.End();
-    }
-
-    private void SendDistributionPulse(GameObject senderTile, FlowStyle flowStyle, Vector2 indexForDebugging)
-    {
-        List<GameObject> receiverTiles = GetNeighbours(senderTile);
-
-        foreach (GameObject receiverTile in receiverTiles)
-        {
-            if (flowStyle.CanFlow(senderTile, receiverTile, indexForDebugging))
-            {
-                flowStyle.DistrubuteData(senderTile, receiverTile, indexForDebugging);
-            }
-        }
-    }
-
-    private void SendProcessingPulse(GameObject senderTile, FlowStyle flowStyle, Vector2 indexForDebugging)
-    {
-        flowStyle.ProcessData(senderTile, indexForDebugging);
-     
-    }
-
-    private List<GameObject> GetNeighbours(GameObject senderTile)
-    {
-        return senderTile.GetComponent<Tile>().m_receiverNeighbours;
     }
 }

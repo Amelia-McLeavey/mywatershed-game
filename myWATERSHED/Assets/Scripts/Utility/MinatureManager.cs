@@ -15,7 +15,7 @@ public class MinatureManager : MonoBehaviour
         {
             for (int y = 0; y < columns; y++)
             {
-                Debug.Log(x + " , " + y);
+                //Debug.Log(x + " , " + y);
                 GameObject myMinature;
                 Vector2 tileIndex = new Vector2(x, y);
                 Vector3 position;

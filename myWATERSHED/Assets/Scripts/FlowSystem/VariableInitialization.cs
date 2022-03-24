@@ -6,14 +6,17 @@ public class VariableInitialization : FlowStyle
 {
     public override bool CanFlow(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
     {
-        return false;
+        throw new System.NotImplementedException();
     }
 
     public override void DistrubuteData(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
     {
+        throw new System.NotImplementedException();
     }
+
     public override void VerifyTiles(GameObject senderTile, GameObject receiverTile, Vector2 tileIndexForDebugging)
     {
+        throw new System.NotImplementedException();
     }
 
     public override void ProcessData(GameObject senderTile, Vector2 tileIndexForDebugging)
@@ -44,10 +47,7 @@ public class VariableInitialization : FlowStyle
                 break;
             case PhysicalType.EngineeredReservoir:
                 Debug.Assert(senderTile.GetComponent<Tile>().m_Basetype == BaseType.Water, "EngineeredReservoir basetype must be water");
-                senderTile.GetComponent<BrownTroutPopulation>().value = Random.Range(0, 10);
-                senderTile.GetComponent<CreekChubPopulation>().value = Random.Range(0, 10);
                 senderTile.GetComponent<PollutionLevel>().value = Random.Range(0.6f, 1f);
-                senderTile.GetComponent<RedDacePopulation>().value = Random.Range(0, 10);
                 senderTile.GetComponent<RiparianLevel>().value = Random.Range(0f, 0.4f);
                 senderTile.GetComponent<SewageLevel>().value = Random.Range(0.8f, 1f);
                 senderTile.GetComponent<Sinuosity>().value = Random.Range(0f, 0.2f);
@@ -55,10 +55,7 @@ public class VariableInitialization : FlowStyle
                 break;
             case PhysicalType.EngineeredStream:
                 Debug.Assert(senderTile.GetComponent<Tile>().m_Basetype == BaseType.Water, "EngineeredStream basetype must be water");
-                senderTile.GetComponent<BrownTroutPopulation>().value = Random.Range(0, 10);
-                senderTile.GetComponent<CreekChubPopulation>().value = Random.Range(0, 10);
                 senderTile.GetComponent<PollutionLevel>().value = Random.Range(0.6f, 1f);
-                senderTile.GetComponent<RedDacePopulation>().value = Random.Range(0, 10);
                 senderTile.GetComponent<RiparianLevel>().value = Random.Range(0f, 0.4f);
                 senderTile.GetComponent<SewageLevel>().value = Random.Range(0.8f, 1f);
                 senderTile.GetComponent<Sinuosity>().value = Random.Range(0f, 0.2f);
@@ -129,10 +126,7 @@ public class VariableInitialization : FlowStyle
                 break;
             case PhysicalType.NaturalReservoir:
                 Debug.Assert(senderTile.GetComponent<Tile>().m_Basetype == BaseType.Water, "NaturalReservoir basetype must be water");
-                senderTile.GetComponent<BrownTroutPopulation>().value = Random.Range(0, 50);
-                senderTile.GetComponent<CreekChubPopulation>().value = Random.Range(0, 50);
                 senderTile.GetComponent<PollutionLevel>().value = Random.Range(0f, 0.2f);
-                senderTile.GetComponent<RedDacePopulation>().value = Random.Range(0, 50);
                 senderTile.GetComponent<RiparianLevel>().value = Random.Range(0.4f, 1f);
                 senderTile.GetComponent<SewageLevel>().value = Random.Range(0f, 0.2f);
                 senderTile.GetComponent<Sinuosity>().value = Random.Range(0.2f, 0.5f);
@@ -140,10 +134,7 @@ public class VariableInitialization : FlowStyle
                 break;
             case PhysicalType.NaturalStream:
                 Debug.Assert(senderTile.GetComponent<Tile>().m_Basetype == BaseType.Water, "NaturalStream basetype must be water");
-                senderTile.GetComponent<BrownTroutPopulation>().value = Random.Range(0, 50);
-                senderTile.GetComponent<CreekChubPopulation>().value = Random.Range(0, 50);
                 senderTile.GetComponent<PollutionLevel>().value = Random.Range(0f, 0.2f);
-                senderTile.GetComponent<RedDacePopulation>().value = Random.Range(0, 50);
                 senderTile.GetComponent<RiparianLevel>().value = Random.Range(0.4f, 1f);
                 senderTile.GetComponent<SewageLevel>().value = Random.Range(0f, 0.2f);
                 senderTile.GetComponent<Sinuosity>().value = Random.Range(0.2f, 1f);
@@ -179,10 +170,7 @@ public class VariableInitialization : FlowStyle
                 break;
             case PhysicalType.Wetland:
                 Debug.Assert(senderTile.GetComponent<Tile>().m_Basetype == BaseType.Water, "Wetland basetype must be water" );
-                senderTile.GetComponent<BrownTroutPopulation>().value = Random.Range(0, 25);
-                senderTile.GetComponent<CreekChubPopulation>().value = Random.Range(0, 25);
                 senderTile.GetComponent<PollutionLevel>().value = Random.Range(0f, 0.2f);
-                senderTile.GetComponent<RedDacePopulation>().value = Random.Range(0, 25);
                 senderTile.GetComponent<SewageLevel>().value = Random.Range(0f, 0.2f);
                 senderTile.GetComponent<Sinuosity>().value = Random.Range(0.5f, 0.9f);
                 senderTile.GetComponent<WaterDepth>().value = Random.Range(1, 6);
@@ -190,8 +178,6 @@ public class VariableInitialization : FlowStyle
             default: 
                 Debug.LogError($"There is no PhysicalType associated with tile at index {tileIndexForDebugging}");
                 break;
-
-
         }
     }
 }
