@@ -72,10 +72,14 @@ public class GameManager : MonoBehaviour
         if(state == GameState.Game && world.m_seasonState == SeasonState.Summer)
         {
             fishCam.SetActive(true);
+            world.seasonAnim.speed = 1;
+            world.snow.Play();
         }
         else
         {
             fishCam.SetActive(false);
+            world.seasonAnim.speed = 0;
+            world.snow.Pause();
         }
 
         if(m_gameState == GameState.Placing && state == GameState.Game)

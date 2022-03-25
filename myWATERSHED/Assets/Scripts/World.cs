@@ -60,6 +60,12 @@ public class World : MonoBehaviour
 
     private VolunteerManager volunteerManager;
 
+
+    public Animator seasonAnim;
+    public ParticleSystem snow;
+
+    private GameObject fishCam;
+
     private void Start()
     {
         m_gameManager = GameManager.Instance;
@@ -67,6 +73,8 @@ public class World : MonoBehaviour
         heatmap = GameObject.FindObjectOfType<Heatmap>();
         volunteerManager = GameObject.FindObjectOfType<VolunteerManager>();
         m_endResultManager.CallStart();
+
+        fishCam = GameObject.Find("Fishcam-Camera");
 
         if (m_temperatureSlider == null)
         {
@@ -118,6 +126,9 @@ public class World : MonoBehaviour
         // Change to Summer
         if (m_seasonState == SeasonState.Winter && season == SeasonState.Summer)
         {
+            seasonAnim.speed = 1;
+            fishCam.SetActive(true);
+            snow.Play();
             m_currentYear++;
             SetYear();
             volunteerManager.AddVolunteers();
@@ -126,6 +137,9 @@ public class World : MonoBehaviour
         // Change to winter
         else if (m_seasonState == SeasonState.Summer && season == SeasonState.Winter)
         {
+            seasonAnim.speed = 0;
+            fishCam.SetActive(false);
+            snow.Pause();
             UpdateAllData();
             if (m_currentYear >= 50)
             {

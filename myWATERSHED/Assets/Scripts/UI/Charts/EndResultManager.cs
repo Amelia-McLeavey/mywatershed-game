@@ -76,6 +76,7 @@ public class EndResultManager : MonoBehaviour
     [SerializeField] private TMP_Text cardDesc;
     [SerializeField] private TMP_Text cardStats;
     [SerializeField] private TMP_Text cardDuration;
+    [SerializeField] private TMP_Text cardTileType;
 
     [SerializeField] private EndBarGraphManager barGraphManager;
 
@@ -145,7 +146,14 @@ public class EndResultManager : MonoBehaviour
             }
         }
 
-        graphSize = (Mathf.FloorToInt(year / 10) + 1) * 10;
+        if (year % 10 == 0)
+        {
+            graphSize = year;
+        }
+        else
+        {
+            graphSize = (Mathf.FloorToInt(year / 10) + 1) * 10;
+        }
         grid.gridSize = new Vector2Int(graphSize, graphHeight);
         redDaceLine.gridSize = new Vector2Int(graphSize, graphHeight);
         chubLine.gridSize = new Vector2Int(graphSize, graphHeight);
@@ -360,21 +368,45 @@ public class EndResultManager : MonoBehaviour
         barGraphManager.UpdateBarGraph();
     }
 
+    private string Capitals = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
     private void ShowCardInfo(int cardIndex)
     {
         cardTitle.text = cardInstances[cardIndex].cardName;
         cardDesc.text = cardInstances[cardIndex].cardDescription;
         cardDuration.text = cardInstances[cardIndex].durationRemaining.ToString();
 
-        string stats = cardInstances[cardIndex].tileType;
+        string tileType = "";
+        foreach (char letter in cardInstances[cardIndex].tileType)
+        {
+            if (Capitals.Contains(letter.ToString()) && tileType != "")
+            {
+                tileType += " ";
+            }
+            tileType += letter;
+        }
 
-        stats += "\n\nTiles affected: " + cardInstances[cardIndex].numberOfTiles;
+        cardTileType.text = tileType;
 
-        stats += "\nDuration of Effect: " + cardInstances[cardIndex].durationRemaining;
+        string stats = "<b>TILES AFFECTED:</b>\n";
+        if (cardInstances[cardIndex].numberOfTiles == 0)
+        {
+            stats += " All water tiles";
+        }
+        else
+        {
+            stats += cardInstances[cardIndex].numberOfTiles + " tiles";
+        }
+
+        stats += "\n\n<b>DURATION OF EFFECT: </b>\n" + cardInstances[cardIndex].durationRemaining + " years";
 
         if (cardInstances[cardIndex].delayBeforeEffect != 0)
         {
-            stats += "\nDelay before Effect: " + cardInstances[cardIndex].delayBeforeEffect;
+            stats += "\n\n<b>DELAY BEFORE EFFECT: </b>\n " + cardInstances[cardIndex].delayBeforeEffect + " years";
+        }
+        else
+        {
+            stats += "\n\n<b>NO DELAY</b>";
         }
 
         cardStats.text = stats;
