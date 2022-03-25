@@ -33,10 +33,6 @@ public class MinatureManager : MonoBehaviour
         {
             for (int y = 0; y < m_columns; y++)
             {
-                if (heightsOn)
-                {
-
-                }
                 GameObject myMinature;
                 Vector2 tileIndex = new Vector2(x, y);
                 Vector3 position;
@@ -52,7 +48,11 @@ public class MinatureManager : MonoBehaviour
                 if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
                 {
                     Debug.Log("TileDictionary exists");
+
+                    //Set the Position
                     position = value.transform.position;
+
+                    //Calculate height for tile to spawn at (Only used if HeightsOn)
                     yPosition = ((value.transform.localScale.z * 0.3574679f) / 2f) - (value.transform.localScale.z * 0.006f);
 
                     
@@ -60,7 +60,7 @@ public class MinatureManager : MonoBehaviour
                     //Reference and store physical type from game object
                     PhysicalType physicalType = value.GetComponent<Tile>().m_PhysicalType;
 
-                    //Randomize which minature variant to use 1 - 3
+                    //Randomize which minature variant to use 1 - 3, with a default to 1 incase of errors
                     List<GameObject> m_minatureListUsed = m_TileManager.m_minatures_1;
                     int m_ListRandomizer = Random.Range(1, 4);
 
@@ -101,11 +101,11 @@ public class MinatureManager : MonoBehaviour
 
                     //assign correct minature from referenced list to the gameobject using the index
                     //minatureToSpawn = GetComponent<TileManager>().m_minature[physicalType];
-                    //Check if there is something to spawn
 
+                    //Check if there is something to spawn
                     if (minatureToSpawn != null)
                     {
-                        Debug.Log("hey i exist and have spawned");
+                        //Debug.Log("hey i exist and have spawned");
                         float randomRotation = Random.Range(0f, 360f);
                         // Instantiate the tile
                         myMinature = Instantiate(minatureToSpawn, position, Quaternion.Euler(0f, randomRotation, 0f));
@@ -125,7 +125,7 @@ public class MinatureManager : MonoBehaviour
                         //}
                         //myMinature.transform.parent = value.transform;
                         //myMinature.transform.position = new Vector3(value.transform.position.x, value.transform.position.y, 0.185f);
-
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                         // Set the objects scale
                         myMinature.transform.localScale = new Vector3(12f, 12f, 12f);
