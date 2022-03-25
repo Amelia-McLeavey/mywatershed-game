@@ -79,6 +79,9 @@ public class EndResultManager : MonoBehaviour
 
     [SerializeField] private EndBarGraphManager barGraphManager;
 
+    [Header("END GAME UI")]
+    [SerializeField] private GameObject backButton;
+
 
     [Header("Togglable Bools")]
     public bool showChub = true;
@@ -375,6 +378,12 @@ public class EndResultManager : MonoBehaviour
         }
 
         cardStats.text = stats;
+    }
+
+    public void EndOfGame()
+    {
+        this.gameObject.SetActive(true);
+        backButton.SetActive(false);
     }
 
 

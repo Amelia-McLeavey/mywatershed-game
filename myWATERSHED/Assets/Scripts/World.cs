@@ -127,9 +127,17 @@ public class World : MonoBehaviour
         else if (m_seasonState == SeasonState.Summer && season == SeasonState.Winter)
         {
             UpdateAllData();
-            m_cardDeckHandler.DealCards();
+            if (m_currentYear >= 50)
+            {
+                m_endResultManager.AddDataPoint(m_currentYear, m_redDaceTotalPopulation, m_chubTotalPopulation, m_troutTotalPopulation, m_insectTotalPopulation, m_averageTemperature, m_averageTurbidity);
+                m_endResultManager.EndOfGame();
+            }
+            else
+            {
+                m_cardDeckHandler.DealCards();
 
-            m_endResultManager.AddDataPoint(m_currentYear, m_redDaceTotalPopulation, m_chubTotalPopulation, m_troutTotalPopulation, m_insectTotalPopulation, m_averageTemperature, m_averageTurbidity);
+                m_endResultManager.AddDataPoint(m_currentYear, m_redDaceTotalPopulation, m_chubTotalPopulation, m_troutTotalPopulation, m_insectTotalPopulation, m_averageTemperature, m_averageTurbidity);
+            }      
         }        
         // Change the season state and callback the event
         m_seasonState = season;
