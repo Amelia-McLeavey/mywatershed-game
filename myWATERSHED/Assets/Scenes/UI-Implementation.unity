@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43935364, g: 0.4876756, b: 0.56791675, a: 1}
+  m_IndirectSpecularColor: {r: 0.4393536, g: 0.4876756, b: 0.5679167, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1660,7 +1660,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a64baf5ec83415d4aa867b029805c8f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_useTestColors: 0
   m_testColors:
+  - {r: 1, g: 0, b: 0, a: 0}
+  - {r: 1, g: 0.83137256, b: 0, a: 0}
+  - {r: 0.69803923, g: 0.68235296, b: 0.6666667, a: 0}
+  - {r: 0.49019608, g: 0.5803922, b: 1, a: 0}
+  - {r: 0.52156866, g: 0.69411767, b: 0.7647059, a: 0}
+  - {r: 0.7921569, g: 0.61960787, b: 0, a: 0}
+  - {r: 0.5372549, g: 0.8156863, b: 0.5529412, a: 0}
+  - {r: 0.047058824, g: 0.654902, b: 0.105882354, a: 0}
+  - {r: 0.9490196, g: 0.2784314, b: 0.14901961, a: 0}
+  - {r: 0.39607844, g: 0.3882353, b: 0.3647059, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0.70095617, g: 0.28097185, b: 0.7735849, a: 0}
+  - {r: 0.6156863, g: 0.30980393, b: 0.16078432, a: 0}
+  - {r: 0.8, g: 1, b: 0.42352942, a: 0}
+  - {r: 0.1764706, g: 0.60784316, b: 0.9411765, a: 0}
+  - {r: 0.25490198, g: 0.83137256, b: 0.85490197, a: 0}
+  - {r: 1, g: 0.63529414, b: 0, a: 0}
+  - {r: 0.45490196, g: 1, b: 0.4, a: 0}
+  - {r: 0.7019608, g: 0.74509805, b: 0.54509807, a: 0}
+  - {r: 1, g: 1, b: 1, a: 0}
+  - {r: 0, g: 1, b: 0.6313726, a: 0}
+  m_baseColors:
   - {r: 1, g: 0, b: 0, a: 0}
   - {r: 0.9333334, g: 0.86274517, b: 0.6313726, a: 0}
   - {r: 0.6156863, g: 0.6, b: 0.56078434, a: 0}
@@ -1682,7 +1705,6 @@ MonoBehaviour:
   - {r: 0.8196079, g: 0.8235295, b: 0.5568628, a: 0}
   - {r: 0.6156863, g: 0.6, b: 0.56078434, a: 0}
   - {r: 0.5372549, g: 0.81568635, b: 0.54509807, a: 0}
-  m_baseColors: []
   m_minatures_1:
   - {fileID: 0}
   - {fileID: 919132149155446097, guid: cd28731f606a31245b3a690527e83b8c, type: 3}
@@ -5209,6 +5231,7 @@ MonoBehaviour:
   m_temperatureText: {fileID: 1015591781}
   m_daceHealthScript: {fileID: 0}
   m_failStateObject: {fileID: 1745956295}
+  m_redDaceTotalPopulation: 0
   m_chubTotalPopulation: 0
   m_troutTotalPopulation: 0
   m_insectTotalPopulation: 0
@@ -12070,7 +12093,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 21c435aca0d574b4e87a9799a931f40d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -25355,11 +25378,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f95e063a817945442b4e92183d2f92d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_startingYPosition: 29
-  m_rMinWidth: 4
-  m_rMaxWidth: 4
+  m_startingYPosition: 5
+  m_rMinWidth: 2
+  m_rMaxWidth: 3
   m_rTexture: 9
-  m_branchCount: 3
+  m_branchCount: 2
   m_bMinWidth: 2
   m_bMaxWidth: 2
   m_bTexture: 5
@@ -25419,8 +25442,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d6ce6c29d50e5441a3782e8a3d7d1be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_rows: 0
-  m_columns: 0
   m_TileManager: {fileID: 67215676}
 --- !u!1 &1115934427
 GameObject:
@@ -30804,13 +30825,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1396325631}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.32843605, y: -0.57035804, z: 0.26596227, w: 0.7043334}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 50, y: -78, z: 0}
 --- !u!1 &1397735120
 GameObject:
   m_ObjectHideFlags: 0
@@ -31658,14 +31679,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_worldScript: {fileID: 279288158}
-  m_dailyRequiredInsectConsumptionPerFish: 5
-  m_maximumRedDacePopulation: 100
-  m_maximumRedDaceGrowthPerUpdate: 10
-  m_ctMin: 5
-  m_ctMax: 30
-  m_insectFactor: 1
-  m_turbidityFactor: 1
-  m_waterTemperatureFactor: 1
+  m_redDaceUpdateFlow:
+    m_dailyRequiredInsectConsumptionPerFish: 5
+    m_maximumRedDacePopulationPerTile: 100
+    m_maximumRedDaceGrowthPerUpdate: 10
+    m_ctMin: 5
+    m_ctMax: 30
+    m_brownTroutChanceToEat: 0.025
+    m_creekChubChanceToSpawn: 0.025
+    m_brownTroutFactor: 1
+    m_creekChubFactor: 1
+    m_insectFactor: 0
+    m_turbidityFactor: 0
+    m_waterTemperatureFactor: 0
+  m_startingRedDacePopulation: 1000
 --- !u!114 &1445818907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31690,7 +31717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59dca2fdc1968f4449bed15b8b3c9596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_flowTime: 0.5
+  m_flowTime: 1
 --- !u!114 &1445818909
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -43,6 +43,8 @@ public class TileManager : MonoBehaviour
 {
     public static Dictionary<Vector2, GameObject> s_TilesDictonary = new Dictionary<Vector2, GameObject>();
 
+    public bool m_useTestColors = false;
+
     // References for tile base plane colors
     [SerializeField]
     private List<Color> m_testColors;
@@ -61,5 +63,15 @@ public class TileManager : MonoBehaviour
     /// </summary>
     /// <param name="physicalType"></param>
     /// <returns> Material </returns>
-    public Color ReturnTileType(PhysicalType physicalType) => m_testColors[(int)physicalType];
+    public Color ReturnTileType(PhysicalType physicalType)
+    {
+        if (m_useTestColors)
+        {
+            return m_testColors[(int)physicalType];
+        }
+        else
+        {
+            return m_baseColors[(int)physicalType];
+        }
+    }
 }

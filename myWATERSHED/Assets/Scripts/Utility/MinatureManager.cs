@@ -4,23 +4,26 @@ using UnityEngine;
 
 public class MinatureManager : MonoBehaviour
 {
-    [SerializeField]
-    public int m_rows = 0;
-    [SerializeField]
-    public int m_columns = 0;
-
     public TileManager m_TileManager;
     GameObject minatureToSpawn;
 
-    private Vector2 tileStep = new Vector2(0.5f, 0.87f);
+    private Transform miniatureHolder;
+
+    //private Vector2 tileStep = new Vector2(0.5f, 0.87f);
 
     public void PlaceMinatures(int rows, int columns, bool heightsOn)
     {
-        m_rows = rows;
-        m_columns = columns;
-        for (int x = 0; x < m_rows; x++)
+
+        // DESTROY GAMEOBJECTS
+        if (null != miniatureHolder)
+        { Destroy(miniatureHolder.gameObject); }
+
+        // Create an object to hold the miniatures
+        miniatureHolder = new GameObject("Miniatures").transform;
+
+        for (int x = 0; x < rows; x++)
         {
-            for (int y = 0; y < m_columns; y++)
+            for (int y = 0; y < columns; y++)
             {
                 //Debug.Log(x + " , " + y);
                 GameObject myMinature;
@@ -31,7 +34,7 @@ public class MinatureManager : MonoBehaviour
 
                 if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
                 {
-                    Debug.Log("TileDictionary exists");
+                    //Debug.Log("TileDictionary exists");
 
                     //Set the Position
                     position = value.transform.position;
@@ -111,6 +114,8 @@ public class MinatureManager : MonoBehaviour
 
                         // Set the objects scale
                         myMinature.transform.localScale = new Vector3(12f, 12f, 12f);
+
+                        myMinature.transform.SetParent(miniatureHolder);
                     }
                 }
             }

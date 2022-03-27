@@ -102,6 +102,7 @@ MonoBehaviour:
   m_TileIndex: {x: 0, y: 0}
   m_receiverNeighbours: []
   currentCard: {fileID: 0}
+  m_tileOutline: 0
 --- !u!64 &4832992639213770694
 MeshCollider:
   m_ObjectHideFlags: 0

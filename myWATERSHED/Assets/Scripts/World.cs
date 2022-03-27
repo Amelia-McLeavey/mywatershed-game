@@ -126,7 +126,7 @@ public class World : MonoBehaviour
 
     public void OnClickReturnToMenu()
     {
-        m_gameManager.SetGameState(GameState.MainMenu, "PrototypeMenuScene");
+        m_gameManager.SetGameState(GameState.MainMenu, "DesktopMenuScene");
     }
 
     public void ChangeSeason(SeasonState season)
@@ -220,7 +220,7 @@ public class World : MonoBehaviour
         DisplayAverageTemperature();
 
         m_averageTurbidity = totalTurbidity / numberOfTurbidTiles;
-        Debug.Log(m_averageTurbidity);
+        //Debug.Log($"Average turbidity {m_averageTurbidity}");
         DisplayAverageTurbidity();
 
 
