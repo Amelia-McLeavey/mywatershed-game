@@ -4,16 +4,23 @@ using UnityEngine;
 
 public class MinatureManager : MonoBehaviour
 {
+    [SerializeField]
+    public int m_rows = 0;
+    [SerializeField]
+    public int m_columns = 0;
+
     public TileManager m_TileManager;
     GameObject minatureToSpawn;
 
     private Vector2 tileStep = new Vector2(0.5f, 0.87f);
 
-    public void PlaceMinatures(int rows, int columns)
+    public void PlaceMinatures(int rows, int columns, bool heightsOn)
     {
-        for (int x = 0; x < rows; x++)
+        m_rows = rows;
+        m_columns = columns;
+        for (int x = 0; x < m_rows; x++)
         {
-            for (int y = 0; y < columns; y++)
+            for (int y = 0; y < m_columns; y++)
             {
                 //Debug.Log(x + " , " + y);
                 GameObject myMinature;
@@ -21,35 +28,72 @@ public class MinatureManager : MonoBehaviour
                 Vector3 position;
 
                 float yPosition;
-                // Adjust the position of the cloneTile to compliment the hex tiles
-                //if (y % 2 == 0)
-                //{ position = new Vector3(x, 0f, y * tileStep.y); }
-                //else
-                //{ position = new Vector3(x + tileStep.x, 0f, y * tileStep.y); }
-                //Debug.Log("Im going through the index:" + tileIndex);
 
                 if (TileManager.s_TilesDictonary.TryGetValue(tileIndex, out GameObject value))
                 {
-                    //Debug.Log("TileDictionary exists");
-                    position = value.transform.position;
-                    yPosition = ((value.transform.localScale.z * 0.3574679f) / 2f) - (value.transform.localScale.z * 0.006f);
+                    Debug.Log("TileDictionary exists");
 
-                    position.y = yPosition;
+                    //Set the Position
+                    position = value.transform.position;
+
+                    //Calculate height for tile to spawn at (Only used if HeightsOn)
+                    yPosition = ((value.transform.localScale.z * 0.3574679f) / 2f) - (value.transform.localScale.z * 0.006f);
+                    
                     //Reference and store physical type from game object
                     PhysicalType physicalType = value.GetComponent<Tile>().m_PhysicalType;
-                    minatureToSpawn = m_TileManager.m_minatures[(int)physicalType];
+
+                    //Randomize which minature variant to use 1 - 3, with a default to 1 incase of errors
+                    List<GameObject> m_minatureListUsed = m_TileManager.m_minatures_1;
+                    int m_ListRandomizer = Random.Range(1, 4);
+
+                    //Assign the chosen list to be applied
+                    if (m_ListRandomizer == 1)
+                    {
+                        m_minatureListUsed = m_TileManager.m_minatures_1;
+                    } else if(m_ListRandomizer == 2)
+                    {
+                        m_minatureListUsed = m_TileManager.m_minatures_2;
+                    } else if(m_ListRandomizer == 3)
+                    {
+                        m_minatureListUsed = m_TileManager.m_minatures_3;
+                    }
+                    
+                    //Assign the correct index of the list 
+                    minatureToSpawn = m_minatureListUsed[(int)physicalType];
+
+                    //Set height based on world type (Flat or height)
+                    if (heightsOn)
+                    {
+                        position.y = yPosition;
+                    }
+                    else
+                    {
+                        if ((int)physicalType == 17)
+                        {
+                            position.y = 0.75f;
+                        } else if ((int)physicalType == 8)
+                        {
+                            position.y = 0.8f;
+                        }
+                        else
+                        {
+                            position.y = 0.7f;
+                        }   
+                    }
 
                     //assign correct minature from referenced list to the gameobject using the index
                     //minatureToSpawn = GetComponent<TileManager>().m_minature[physicalType];
-                    //Check if there is something to spawn
 
+                    //Check if there is something to spawn
                     if (minatureToSpawn != null)
                     {
                         //Debug.Log("hey i exist and have spawned");
                         float randomRotation = Random.Range(0f, 360f);
                         // Instantiate the tile
                         myMinature = Instantiate(minatureToSpawn, position, Quaternion.Euler(0f, randomRotation, 0f));
-                        
+
+
+                        //////////////////This code only needs to be fixed if we use the visual heights on the tiles, otherwise exact positions works fine//////////////////////////
                         //Raycast to find exact position
                         //int layerMask = 1 << 8; //Only check layer 8, which is tiles
                         //RaycastHit hit;
@@ -63,15 +107,13 @@ public class MinatureManager : MonoBehaviour
                         //}
                         //myMinature.transform.parent = value.transform;
                         //myMinature.transform.position = new Vector3(value.transform.position.x, value.transform.position.y, 0.185f);
-
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                         // Set the objects scale
-                        
-                        myMinature.transform.localScale = new Vector3(11f, 11f, 11f);
+                        myMinature.transform.localScale = new Vector3(12f, 12f, 12f);
                     }
                 }
             }
-        }
-        
+        }      
     }
 }

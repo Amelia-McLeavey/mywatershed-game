@@ -56,13 +56,23 @@ public class World : MonoBehaviour
     private CardDeckHandler m_cardDeckHandler;
 
     [SerializeField] private GameObject pauseScreen;
+    [SerializeField] private GameObject endResultsButton;
 
     private Heatmap heatmap;
     public EndResultManager m_endResultManager;
 
+    [SerializeField] private GameObject[] daceModels;
+
+
     public SeasonState m_seasonState { get; private set; }
 
     private VolunteerManager volunteerManager;
+
+
+    public Animator seasonAnim;
+    public ParticleSystem snow;
+
+    private GameObject fishCam;
 
     private void Start()
     {
@@ -71,6 +81,8 @@ public class World : MonoBehaviour
         heatmap = GameObject.FindObjectOfType<Heatmap>();
         volunteerManager = GameObject.FindObjectOfType<VolunteerManager>();
         m_endResultManager.CallStart();
+
+        fishCam = GameObject.Find("Fishcam-Camera");
 
         if (m_temperatureSlider == null)
         {
@@ -106,6 +118,12 @@ public class World : MonoBehaviour
         pauseScreen.SetActive(true);
     }
 
+    public void UnpauseGame()
+    {
+        m_gameManager.SetGameState(GameState.Game, null);
+        pauseScreen.SetActive(false);
+    }
+
     public void OnClickReturnToMenu()
     {
         m_gameManager.SetGameState(GameState.MainMenu, "PrototypeMenuScene");
@@ -116,18 +134,36 @@ public class World : MonoBehaviour
         // Change to Summer
         if (m_seasonState == SeasonState.Winter && season == SeasonState.Summer)
         {
+            seasonAnim.speed = 1;
+            fishCam.SetActive(true);
+            snow.Play();
             m_currentYear++;
             SetYear();
             volunteerManager.AddVolunteers();
             heatmap.GenerateMaps();
+            if (!endResultsButton.activeSelf&&m_currentYear > 0)
+            {
+                endResultsButton.SetActive(true);
+            }
         }
         // Change to winter
         else if (m_seasonState == SeasonState.Summer && season == SeasonState.Winter)
         {
+            seasonAnim.speed = 0;
+            fishCam.SetActive(false);
+            snow.Pause();
             UpdateAllData();
-            m_cardDeckHandler.DealCards();
+            if (m_currentYear >= 50)
+            {
+                m_endResultManager.AddDataPoint(m_currentYear, m_redDaceTotalPopulation, m_chubTotalPopulation, m_troutTotalPopulation, m_insectTotalPopulation, m_averageTemperature, m_averageTurbidity);
+                m_endResultManager.EndOfGame();
+            }
+            else
+            {
+                m_cardDeckHandler.DealCards();
 
-            m_endResultManager.AddDataPoint(m_currentYear, m_redDaceTotalPopulation, m_chubTotalPopulation, m_troutTotalPopulation, m_insectTotalPopulation, m_averageTemperature, m_averageTurbidity);
+                m_endResultManager.AddDataPoint(m_currentYear, m_redDaceTotalPopulation, m_chubTotalPopulation, m_troutTotalPopulation, m_insectTotalPopulation, m_averageTemperature, m_averageTurbidity);
+            }      
         }        
         // Change the season state and callback the event
         m_seasonState = season;
@@ -179,14 +215,16 @@ public class World : MonoBehaviour
                 }
             }
         }
-
-        DisplayTotalDacePopulationInUI();
+        
         m_averageTemperature = Mathf.RoundToInt(totalTemp / (m_worldGenerator.m_rows * m_worldGenerator.m_columns));
         DisplayAverageTemperature();
 
         m_averageTurbidity = totalTurbidity / numberOfTurbidTiles;
         Debug.Log(m_averageTurbidity);
         DisplayAverageTurbidity();
+
+
+        DisplayDacePopulation();
     }
 
     public void UpdateAverageTemperature()
@@ -212,15 +250,20 @@ public class World : MonoBehaviour
         DisplayAverageTemperature();
     }
 
-    private void DisplayTotalDacePopulationInUI()
+    private void DisplayDacePopulation()
     {
-        //m_daceHealthScript.SetHealth(m_redDaceTotalPopulation);
-        // TODO: Share UI across scenes
-        if (m_redDacePopulationText != null)
-        {
-            m_redDacePopulationText.text = m_redDaceTotalPopulation.ToString();
-        }
 
+        for(int i =0; i<daceModels.Length; i++)
+        {
+            if (m_redDaceTotalPopulation > 200 * i)
+            {
+                daceModels[i].SetActive(true);
+            }
+            else
+            {
+                daceModels[i].SetActive(false);
+            }
+        }
         // TODO: Test that fail state is working accurately
         if (m_redDaceTotalPopulation <= 0)
         {

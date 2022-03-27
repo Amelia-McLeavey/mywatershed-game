@@ -16,7 +16,7 @@ public class FishMovement : MonoBehaviour
     private void Start()
     {
         // These values are hardcoded to the water-cube objects current position, it it changes this will break
-        nextPosition = new Vector3(Random.Range(-0.5f, 3.5f), Random.Range(0.5f, 2.5f), Random.Range(-7f, -4f));
+        nextPosition = new Vector3(Random.Range(-1.5f, 4f), Random.Range(-4f, 6f), Random.Range(-7.5f, -4f));
     }
 
     private void Update()
@@ -27,7 +27,9 @@ public class FishMovement : MonoBehaviour
         if (distance <= 0.5f)
         {
             // These values are hardcoded to the water-cube objects current position, it it changes this will break
-            nextPosition = new Vector3(Random.Range(-0.5f, 3.5f), Random.Range(0.5f, 2.5f), Random.Range(-7f, -4f));
+            nextPosition = new Vector3(Random.Range(-1.5f, 4f), Random.Range(-4f, 6f), Random.Range(-7.5f, -4f));
+
+            agility = Random.Range(0.1f, 0.6f);
         }
 
         transform.position = Vector3.Lerp(transform.position, nextPosition, agility * Time.deltaTime);

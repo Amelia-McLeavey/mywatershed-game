@@ -39,6 +39,9 @@ public class EndResultManager : MonoBehaviour
     [SerializeField] private TMP_Text chubNumText;
     [SerializeField] private TMP_Text troutNumText;
     [SerializeField] private TMP_Text insectNumText;
+    [SerializeField] private GameObject graphTempText;
+
+
 
     [SerializeField] private TMP_Text[] xAxisNumbers;
     [SerializeField] private TMP_Text[] yAxisNumbers;
@@ -58,8 +61,8 @@ public class EndResultManager : MonoBehaviour
     private List<float> insectValues = new List<float>();
 
     private List<float> globalTemps = new List<float>();
-    private float maxTempValue = 0f;
-    private float minTempValue = 999999f;
+    private float maxTempValue = 30f;
+    private float minTempValue = 0f;
 
     private List<float> globalTurbidity = new List<float>();
 
@@ -76,8 +79,12 @@ public class EndResultManager : MonoBehaviour
     [SerializeField] private TMP_Text cardDesc;
     [SerializeField] private TMP_Text cardStats;
     [SerializeField] private TMP_Text cardDuration;
+    [SerializeField] private TMP_Text cardTileType;
 
     [SerializeField] private EndBarGraphManager barGraphManager;
+
+    [Header("END GAME UI")]
+    [SerializeField] private GameObject backButton;
 
 
     [Header("Togglable Bools")]
@@ -135,14 +142,16 @@ public class EndResultManager : MonoBehaviour
         if (temp < minTempValue)
         {
             minTempValue = temp;
-            if (minTempValue == maxTempValue)
-            {
-                maxTempValue += 5f;
-                minTempValue -= 5f;
-            }
         }
 
-        graphSize = (Mathf.FloorToInt(year / 10) + 1) * 10;
+        if (year % 10 == 0)
+        {
+            graphSize = year;
+        }
+        else
+        {
+            graphSize = (Mathf.FloorToInt(year / 10) + 1) * 10;
+        }
         grid.gridSize = new Vector2Int(graphSize, graphHeight);
         redDaceLine.gridSize = new Vector2Int(graphSize, graphHeight);
         chubLine.gridSize = new Vector2Int(graphSize, graphHeight);
@@ -190,9 +199,9 @@ public class EndResultManager : MonoBehaviour
             xAxisNumbers[i].text = (i * (graphSize / 10)).ToString();
         }
 
-        selectedYear++;
+        
         ShowSelectedYearData();
-
+        selectedYear++;
         LayoutPoints();
     }
 
@@ -241,7 +250,7 @@ public class EndResultManager : MonoBehaviour
 
             if (showTemp)
             {
-                tempLine.points[i] = new Vector2(i, (globalTemps[i] - minTempValue) / (maxTempValue - minTempValue) * graphHeight);
+                tempLine.points[i] = new Vector2(i, globalTemps[i] / maxTempValue * graphHeight);
             }
 
         }
@@ -258,6 +267,11 @@ public class EndResultManager : MonoBehaviour
         if (showTemp)
         {
             tempLine.gameObject.SetActive(true);
+            graphTempText.SetActive(true);
+        }
+        else
+        {
+            graphTempText.SetActive(false);
         }
 
         redDaceArea.points = redDaceLine.points;
@@ -357,24 +371,54 @@ public class EndResultManager : MonoBehaviour
         barGraphManager.UpdateBarGraph();
     }
 
+    private string Capitals = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
     private void ShowCardInfo(int cardIndex)
     {
         cardTitle.text = cardInstances[cardIndex].cardName;
         cardDesc.text = cardInstances[cardIndex].cardDescription;
         cardDuration.text = cardInstances[cardIndex].durationRemaining.ToString();
 
-        string stats = cardInstances[cardIndex].tileType;
+        string tileType = "";
+        foreach (char letter in cardInstances[cardIndex].tileType)
+        {
+            if (Capitals.Contains(letter.ToString()) && tileType != "")
+            {
+                tileType += " ";
+            }
+            tileType += letter;
+        }
 
-        stats += "\n\nTiles affected: " + cardInstances[cardIndex].numberOfTiles;
+        cardTileType.text = tileType;
 
-        stats += "\nDuration of Effect: " + cardInstances[cardIndex].durationRemaining;
+        string stats = "<b>TILES AFFECTED:</b>\n";
+        if (cardInstances[cardIndex].numberOfTiles == 0)
+        {
+            stats += " All water tiles";
+        }
+        else
+        {
+            stats += cardInstances[cardIndex].numberOfTiles + " tiles";
+        }
+
+        stats += "\n\n<b>DURATION OF EFFECT: </b>\n" + cardInstances[cardIndex].durationRemaining + " years";
 
         if (cardInstances[cardIndex].delayBeforeEffect != 0)
         {
-            stats += "\nDelay before Effect: " + cardInstances[cardIndex].delayBeforeEffect;
+            stats += "\n\n<b>DELAY BEFORE EFFECT: </b>\n " + cardInstances[cardIndex].delayBeforeEffect + " years";
+        }
+        else
+        {
+            stats += "\n\n<b>NO DELAY</b>";
         }
 
         cardStats.text = stats;
+    }
+
+    public void EndOfGame()
+    {
+        this.gameObject.SetActive(true);
+        backButton.SetActive(false);
     }
 
 

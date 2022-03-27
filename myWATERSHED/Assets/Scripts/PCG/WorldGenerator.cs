@@ -39,10 +39,10 @@ public class WorldGenerator : MonoBehaviour
         GetComponent<LandGenerator>().CreateLand(m_rows, m_columns, m_Seed);
 
         WorldSetup();
+
        
         GetComponent<TileTypeAllocator>().AllocateTypes(m_Seed, m_rows, m_columns);
-
-        GetComponent<MinatureManager>().PlaceMinatures(m_rows, m_columns);
+        GetComponent<MinatureManager>().PlaceMinatures(m_rows, m_columns, m_heightsOn);
 
         OnWorldGenerationComplete?.Invoke(m_rows, m_columns);
     }
@@ -92,6 +92,16 @@ public class WorldGenerator : MonoBehaviour
 
                 // Instantiate the tile
                 TileManager.s_TilesDictonary.Add(new Vector2(x, y), cloneTile = Instantiate(m_tile, position, Quaternion.Euler(-90f, 0f, 0f)));
+
+                // Set the tile height.. Z because of the orientation of the asset
+                if (m_heightsOn)
+                {
+                    cloneTile.transform.localScale = new Vector3(1f, 1f, HeightmapGenerator.s_Heightmap[x, y]);
+                }
+                else
+                {
+                    cloneTile.transform.localScale = new Vector3(1f, 1f, 4f);
+                }
                 
                 // Set a reference for the tile's Index on Tile
                 Tile tileScript = cloneTile.GetComponent<Tile>();
@@ -111,23 +121,6 @@ public class WorldGenerator : MonoBehaviour
                     Debug.LogError("this is the case.");
                 }
                 tileScript.m_Basetype = type;
-
-                // Set the tile height.. Z because of the orientation of the asset
-                if (m_heightsOn)
-                {
-                    cloneTile.transform.localScale = new Vector3(1f, 1f, HeightmapGenerator.s_Heightmap[x, y]);
-                }
-                else
-                {
-                    if (type == BaseType.Water)
-                    {
-                        cloneTile.transform.localScale = new Vector3(1f, 1f, 2f);
-                    }
-                    else
-                    {
-                        cloneTile.transform.localScale = new Vector3(1f, 1f, 4f);
-                    }
-                }
 
                 // Parent
                 cloneTile.transform.SetParent(worldHolder);

@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
 
     public GameState m_gameState { get; private set; }
 
+    private World world;
+
     private void Awake()
     {
         if (s_instance == null)
@@ -35,7 +37,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning("There is already an instance of GameManager");
             Destroy(gameObject);
-        }
+        }      
     }
 
     /// <summary>
@@ -56,18 +58,28 @@ public class GameManager : MonoBehaviour
     public void SetGameState(GameState state, string sceneName)
     {
         // Initialize references so that they are not lost in state transition after going from Game to MainMenu to Game again
+
+        if (world == null)
+        {
+            world = GameObject.FindObjectOfType<World>();
+        }
+
         if(m_gameState == GameState.MainMenu && state == GameState.Game)
         {
             OnState_MainMenuToGame();
         }
 
-        if(state == GameState.Game)
+        if(state == GameState.Game && world.m_seasonState == SeasonState.Summer)
         {
             fishCam.SetActive(true);
+            world.seasonAnim.speed = 1;
+            world.snow.Play();
         }
         else
         {
             fishCam.SetActive(false);
+            world.seasonAnim.speed = 0;
+            world.snow.Pause();
         }
 
         if(m_gameState == GameState.Placing && state == GameState.Game)

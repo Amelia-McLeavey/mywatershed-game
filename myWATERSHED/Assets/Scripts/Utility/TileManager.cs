@@ -50,7 +50,11 @@ public class TileManager : MonoBehaviour
     private List<Color> m_baseColors;
 
     [SerializeField]
-    public List<GameObject> m_minatures;
+    public List<GameObject> m_minatures_1;
+    [SerializeField]
+    public List<GameObject> m_minatures_2;
+    [SerializeField]
+    public List<GameObject> m_minatures_3;
 
     /// <summary>
     /// Finds the corresponding colour given a type.

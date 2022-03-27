@@ -43,7 +43,7 @@ public class BarGraph : MonoBehaviour
         chubNum.text = chubPop.ToString();
 
         troutBar.maxValue = max;
-        troutBar.value = troutPop;
+        troutBar.value = Mathf.FloorToInt(troutPop);
         troutNum.text = troutPop.ToString();
     }
 }
