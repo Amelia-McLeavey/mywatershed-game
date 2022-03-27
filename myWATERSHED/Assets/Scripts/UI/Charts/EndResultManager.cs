@@ -39,6 +39,9 @@ public class EndResultManager : MonoBehaviour
     [SerializeField] private TMP_Text chubNumText;
     [SerializeField] private TMP_Text troutNumText;
     [SerializeField] private TMP_Text insectNumText;
+    [SerializeField] private GameObject graphTempText;
+
+
 
     [SerializeField] private TMP_Text[] xAxisNumbers;
     [SerializeField] private TMP_Text[] yAxisNumbers;
@@ -58,8 +61,8 @@ public class EndResultManager : MonoBehaviour
     private List<float> insectValues = new List<float>();
 
     private List<float> globalTemps = new List<float>();
-    private float maxTempValue = 0f;
-    private float minTempValue = 999999f;
+    private float maxTempValue = 30f;
+    private float minTempValue = 0f;
 
     private List<float> globalTurbidity = new List<float>();
 
@@ -139,11 +142,6 @@ public class EndResultManager : MonoBehaviour
         if (temp < minTempValue)
         {
             minTempValue = temp;
-            if (minTempValue == maxTempValue)
-            {
-                maxTempValue += 5f;
-                minTempValue -= 5f;
-            }
         }
 
         if (year % 10 == 0)
@@ -252,7 +250,7 @@ public class EndResultManager : MonoBehaviour
 
             if (showTemp)
             {
-                tempLine.points[i] = new Vector2(i, (globalTemps[i] - minTempValue) / (maxTempValue - minTempValue) * graphHeight);
+                tempLine.points[i] = new Vector2(i, globalTemps[i] / maxTempValue * graphHeight);
             }
 
         }
@@ -269,6 +267,11 @@ public class EndResultManager : MonoBehaviour
         if (showTemp)
         {
             tempLine.gameObject.SetActive(true);
+            graphTempText.SetActive(true);
+        }
+        else
+        {
+            graphTempText.SetActive(false);
         }
 
         redDaceArea.points = redDaceLine.points;

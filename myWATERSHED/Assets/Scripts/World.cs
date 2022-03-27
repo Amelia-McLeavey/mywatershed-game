@@ -52,9 +52,13 @@ public class World : MonoBehaviour
     private CardDeckHandler m_cardDeckHandler;
 
     [SerializeField] private GameObject pauseScreen;
+    [SerializeField] private GameObject endResultsButton;
 
     private Heatmap heatmap;
     public EndResultManager m_endResultManager;
+
+    [SerializeField] private GameObject[] daceModels;
+
 
     public SeasonState m_seasonState { get; private set; }
 
@@ -133,6 +137,10 @@ public class World : MonoBehaviour
             SetYear();
             volunteerManager.AddVolunteers();
             heatmap.GenerateMaps();
+            if (!endResultsButton.activeSelf&&m_currentYear > 0)
+            {
+                endResultsButton.SetActive(true);
+            }
         }
         // Change to winter
         else if (m_seasonState == SeasonState.Summer && season == SeasonState.Winter)
@@ -213,13 +221,15 @@ public class World : MonoBehaviour
         m_troutTotalPopulation = totalTroutPop;
         m_insectTotalPopulation = totalInsect;
 
-        DisplayTotalDacePopulationInUI();
         m_averageTemperature = Mathf.RoundToInt(totalTemp / (m_worldGenerator.m_rows * m_worldGenerator.m_columns));
         DisplayAverageTemperature();
 
         m_averageTurbidity = totalTurbidity / numberOfTurbidTiles;
         Debug.Log(m_averageTurbidity);
         DisplayAverageTurbidity();
+
+
+        DisplayDacePopulation();
     }
 
 
@@ -277,15 +287,20 @@ public class World : MonoBehaviour
         DisplayAverageTemperature();
     }
 
-    private void DisplayTotalDacePopulationInUI()
+    private void DisplayDacePopulation()
     {
-        //m_daceHealthScript.SetHealth(m_redDaceTotalPopulation);
-        // TODO: Share UI across scenes
-        if (m_redDacePopulationText != null)
-        {
-            m_redDacePopulationText.text = m_redDaceTotalPopulation.ToString();
-        }
 
+        for(int i =0; i<daceModels.Length; i++)
+        {
+            if (m_redDaceTotalPopulation > 200 * i)
+            {
+                daceModels[i].SetActive(true);
+            }
+            else
+            {
+                daceModels[i].SetActive(false);
+            }
+        }
         // TODO: Test that fail state is working accurately
         if (m_redDaceTotalPopulation <= 0)
         {

@@ -5276,7 +5276,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &260730634
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5766,7 +5766,14 @@ MonoBehaviour:
   m_troutTotalPopulation: 0
   m_insectTotalPopulation: 0
   pauseScreen: {fileID: 1736014201}
+  endResultsButton: {fileID: 260730633}
   m_endResultManager: {fileID: 1709745082}
+  daceModels:
+  - {fileID: 1067726735}
+  - {fileID: 1149524727}
+  - {fileID: 1218709878}
+  - {fileID: 902874483}
+  - {fileID: 731932687}
   seasonAnim: {fileID: 699310128}
   snow: {fileID: 423572183}
 --- !u!4 &279288159
@@ -6255,7 +6262,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 194.986, y: -160.2065}
+  m_AnchoredPosition: {x: 194.986, y: -204.97}
   m_SizeDelta: {x: 140.186, y: 36.285}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &312778789
@@ -31993,7 +32000,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 10
+  m_text: 15
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8acd6412807e8d948909bfaa27328225, type: 2}
   m_sharedMaterial: {fileID: -4879188010774483349, guid: 8acd6412807e8d948909bfaa27328225, type: 2}
@@ -34721,7 +34728,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 194.986, y: -73.083}
+  m_AnchoredPosition: {x: 194.986, y: -88.004166}
   m_SizeDelta: {x: 140.744, y: 34.37}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1039722185
@@ -40491,7 +40498,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 20
+  m_text: 30
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8acd6412807e8d948909bfaa27328225, type: 2}
   m_sharedMaterial: {fileID: -4879188010774483349, guid: 8acd6412807e8d948909bfaa27328225, type: 2}
@@ -44814,7 +44821,7 @@ GameObject:
   - component: {fileID: 1443961849}
   - component: {fileID: 1443961848}
   m_Layer: 5
-  m_Name: OtherAxisTitle (1)
+  m_Name: TempAxisTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44830,7 +44837,8 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0.7071073, w: 0.7071063}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1803625043}
   m_Father: {fileID: 2087778618}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
@@ -49552,6 +49560,19 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1050847541}
     m_Modifications:
+    - target: {fileID: 624663766000622483, guid: f4667d167d4114a4d8ae5604b81546e3, type: 3}
+      propertyPath: m_text
+      value: No CArd
+      objectReference: {fileID: 0}
+    - target: {fileID: 624663766000622483, guid: f4667d167d4114a4d8ae5604b81546e3, type: 3}
+      propertyPath: m_fontSize
+      value: 18.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126446338081193927, guid: f4667d167d4114a4d8ae5604b81546e3, type: 3}
+      propertyPath: m_text
+      value: "<b>Tiles affected:</b> \n0\n\n<b>Duration of effect: </b>\n6 years\n\n<b>NO
+        DELAY </b>\n3 years"
+      objectReference: {fileID: 0}
     - target: {fileID: 3061673781051091589, guid: f4667d167d4114a4d8ae5604b81546e3, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -49647,6 +49668,14 @@ PrefabInstance:
     - target: {fileID: 3061673781051091589, guid: f4667d167d4114a4d8ae5604b81546e3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3083320606079949166, guid: f4667d167d4114a4d8ae5604b81546e3, type: 3}
+      propertyPath: m_text
+      value: You didn't get a card this year
+      objectReference: {fileID: 0}
+    - target: {fileID: 3083320606079949166, guid: f4667d167d4114a4d8ae5604b81546e3, type: 3}
+      propertyPath: m_fontSize
+      value: 15.65
       objectReference: {fileID: 0}
     - target: {fileID: 5920284911728095577, guid: f4667d167d4114a4d8ae5604b81546e3, type: 3}
       propertyPath: m_Name
@@ -50830,6 +50859,7 @@ MonoBehaviour:
   chubNumText: {fileID: 1554182119}
   troutNumText: {fileID: 846736795}
   insectNumText: {fileID: 1786954026}
+  graphTempText: {fileID: 1443961846}
   xAxisNumbers:
   - {fileID: 2063822572}
   - {fileID: 307426305}
@@ -53124,19 +53154,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1803625042}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071073, w: 0.7071063}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 239073526}
   - {fileID: 884678403}
   - {fileID: 1251912738}
-  m_Father: {fileID: 2087778618}
-  m_RootOrder: 6
+  m_Father: {fileID: 1443961847}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 285, y: 28.931593}
+  m_AnchoredPosition: {x: -5.932129, y: -0.000062942505}
   m_SizeDelta: {x: 32.0827, y: 382.1368}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1803625044
@@ -54773,7 +54803,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 194.986, y: -334.67203}
+  m_AnchoredPosition: {x: 194.986, y: -319.75085}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1883803362
@@ -59282,7 +59312,6 @@ RectTransform:
   - {fileID: 1730299725}
   - {fileID: 1435517437}
   - {fileID: 1443961847}
-  - {fileID: 1803625043}
   m_Father: {fileID: 1709745079}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
