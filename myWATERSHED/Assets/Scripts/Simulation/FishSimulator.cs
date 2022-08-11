@@ -13,7 +13,9 @@ public class FishSimulator : MonoBehaviour
     [SerializeField]
     private CreekChubUpdateFlow m_creekChubUpdateFlow = new CreekChubUpdateFlow();
 
+#if UNITY_EDITOR
     private FaunaPopulationDebugDrawFlow m_populationDebugDraw = new FaunaPopulationDebugDrawFlow();
+#endif // #if UNITY_EDITOR
 
     private UpdateTotalFaunaPopulationFlow m_updateTotalFaunaPopulationFlow = new UpdateTotalFaunaPopulationFlow();
 
@@ -35,7 +37,9 @@ public class FishSimulator : MonoBehaviour
 
         m_updateTotalFaunaPopulationFlow.CopyCachedTiles(m_redDaceUpdateFlow);
 
+#if UNITY_EDITOR
         m_populationDebugDraw.CopyCachedTiles(m_redDaceUpdateFlow);
+#endif // #if UNITY_EDITOR
     }
 
     private void InitializeFaunaDistribution(int rows, int columns)
@@ -89,6 +93,8 @@ public class FishSimulator : MonoBehaviour
 
     public void OnDrawGizmos()
     {
+#if UNITY_EDITOR
         FlowUtils.SendOneStageFlow(m_populationDebugDraw);
+#endif // #if UNITY_EDITOR
     }
 }

@@ -2,6 +2,8 @@
 using UnityEngine;
 
 
+// TODO: These should probably be in the special Editor folder so they are automatically excluded from builds
+#if UNITY_EDITOR
 public class FaunaPopulationDebugDrawFlow : FlowStyle
 {
     private GUIStyle m_style;
@@ -43,3 +45,4 @@ public class FaunaPopulationDebugDrawFlow : FlowStyle
         throw new System.NotImplementedException();
     }
 }
+#endif // #if UNITY_EDITOR

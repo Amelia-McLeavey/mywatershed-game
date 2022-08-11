@@ -10,6 +10,9 @@ using UnityEngine.SceneManagement;
 
 using UnityEditor;
 
+// TODO: This should be inside the special Editor folder for scripts so that it is
+// automatically from builds
+#if UNITY_EDITOR
 public class DuplicateTimeline : MonoBehaviour
 {
     [MenuItem("Assets/Duplicate Timeline", true)]
@@ -119,6 +122,7 @@ public class DuplicateTimeline : MonoBehaviour
         }
     }
 }
+#endif // #if UNITY_EDITOR
 
 
 
