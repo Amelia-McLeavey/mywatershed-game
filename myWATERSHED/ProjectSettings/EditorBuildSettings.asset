@@ -23,9 +23,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DesktopMenuScene.unity
     guid: c42108aa7733c5e43bedf9c099959a67
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Tutorial.unity
     guid: 22540903c0c4b71458bad28bd4c84f6a
+  - enabled: 1
+    path: Assets/Scenes/NewTutorial.unity
+    guid: d76db361e349dd94ab09574626c1eaf4
   - enabled: 1
     path: Assets/Scenes/BUILD-V3.unity
     guid: 6b8fd48d8a07db04ab9efccb5dfd91db
